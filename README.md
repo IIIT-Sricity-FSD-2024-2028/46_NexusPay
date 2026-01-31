@@ -32,7 +32,8 @@ Nexus Pay is a digital payments and transactions coordination platform designed 
 - View transaction history
 - Make Scheduled Payments
 - preferences (changing language, theme,blocked contacts ,notifications )
-
+-split payment
+-core profile featurs 
 
 
 ### Bank Admin
