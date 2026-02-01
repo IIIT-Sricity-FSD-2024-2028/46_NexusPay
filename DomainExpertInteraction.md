@@ -5,8 +5,8 @@
 - **Problem Statement:** Digital Payments and Transaction Coordination Platform  
 - **Date of Interaction:** 01-02-2026  
 - **Mode of Interaction:** Video Call  
-- **Duration (in minutes):** 
-- **Publicly Accessible Video Link:** 
+- **Duration (in minutes):** 1 hour 15 mins
+- **Publicly Accessible Video Link:** https://drive.google.com/file/d/17zWAPcptskNtZ_Amh_0qEw-FXYLarUu5/view?usp=sharing
 
 ---
 
