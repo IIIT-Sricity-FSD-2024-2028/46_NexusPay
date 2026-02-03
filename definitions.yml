@@ -135,3 +135,14 @@ Terms:
     aliases:
       - Financial Insight
       - Usage Insight
+  - term: Retry Mechanism
+    definition: >
+      A controlled process that automatically re-attempts a failed payment or
+      system operation under predefined rules to ensure successful completion
+      without causing duplicate or inconsistent transactions.
+    examples:
+      - Reprocessing a failed UPI payment after a temporary bank timeout
+      - Retrying a transaction when the network connection is restored
+    aliases:
+      - Transaction Retry Logic
+      - Automatic Reattempt Process
