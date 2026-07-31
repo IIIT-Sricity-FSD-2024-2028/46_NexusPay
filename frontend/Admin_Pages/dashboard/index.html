@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="NexusPay Admin Dashboard — Revenue, transactions, user growth, and category analytics at a glance."
+    />
+    <title>Dashboard — NexusPay Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../sharedadmin/globals.css" />
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../shared/api-config.js"></script>
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="main-area">
+        <header id="header-bar"></header>
+        <main class="main-content">
+          <!-- ── STAT CARDS ──────────────────── -->
+          <div class="stat-cards-grid" id="statCards">
+            <div class="stat-card" id="statRevenue">
+              <div class="stat-icon stat-icon-purple">
+                <i data-lucide="indian-rupee"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">₹14,30,000</div>
+                <div class="stat-label">Total Revenue</div>
+              </div>
+              <div class="stat-trend stat-trend-up">
+                <i data-lucide="trending-up"></i> +15.2%
+              </div>
+            </div>
+            <div class="stat-card" id="statTransactions">
+              <div class="stat-icon stat-icon-green">
+                <i data-lucide="arrow-left-right"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">21,300</div>
+                <div class="stat-label">Total Transactions</div>
+              </div>
+              <div class="stat-trend stat-trend-up">
+                <i data-lucide="trending-up"></i> +23.5%
+              </div>
+            </div>
+            <div class="stat-card" id="statUsers">
+              <div class="stat-icon stat-icon-blue">
+                <i data-lucide="users"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">26,370</div>
+                <div class="stat-label">Active Users</div>
+              </div>
+              <div class="stat-trend stat-trend-up">
+                <i data-lucide="trending-up"></i> +11.7%
+              </div>
+            </div>
+            <div class="stat-card" id="statDisputes">
+              <div class="stat-icon stat-icon-red">
+                <i data-lucide="shield-alert"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Open Disputes</div>
+              </div>
+              <div class="stat-trend stat-trend-down">
+                <i data-lucide="trending-down"></i> -2.4%
+              </div>
+            </div>
+          </div>
+
+          <!-- ── CHART ROW 1: Revenue + Volume ── -->
+          <div class="charts-grid-2col">
+            <div class="chart-card">
+              <h2 class="chart-card__title">Revenue Trend</h2>
+              <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <h2 class="chart-card__title">Transaction Volume</h2>
+              <div class="chart-wrap"><canvas id="volumeChart"></canvas></div>
+            </div>
+          </div>
+
+          <!-- ── CHART ROW 2: User Growth ──── -->
+          <div class="chart-card" style="margin-bottom: 24px">
+            <h2 class="chart-card__title">User Growth</h2>
+            <div class="chart-wrap chart-wrap--tall">
+              <canvas id="growthChart"></canvas>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 12px;
+              "
+            >
+              <span
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  font-size: 13px;
+                  color: #64748b;
+                "
+                ><span
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: #10b981;
+                    display: inline-block;
+                  "
+                ></span
+                >Customers</span
+              >
+              <span
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  font-size: 13px;
+                  color: #64748b;
+                "
+                ><span
+                  style="
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: #8b5cf6;
+                    display: inline-block;
+                  "
+                ></span
+                >Merchants</span
+              >
+            </div>
+          </div>
+
+          <!-- ── CHART ROW 3: Category + Hourly ── -->
+          <div class="charts-grid-2col">
+            <div class="chart-card">
+              <h2 class="chart-card__title">Category Performance</h2>
+              <div class="chart-wrap chart-wrap--tall">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h2 class="chart-card__title">Hourly Transaction Activity</h2>
+              <div class="chart-wrap chart-wrap--tall">
+                <canvas id="hourlyChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── TOP PERFORMING CATEGORIES ────── -->
+          <div class="chart-card" style="margin-top: 24px">
+            <h2 class="chart-card__title">Top Performing Categories</h2>
+            <div id="categoriesList"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="../sharedadmin/js/components/folderSidebar.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

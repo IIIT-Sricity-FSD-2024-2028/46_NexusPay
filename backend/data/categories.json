@@ -1,0 +1,52 @@
+[
+  {
+    "id": "cat1",
+    "name": "Food & Dining",
+    "description": "Restaurants, delivery, groceries"
+  },
+  {
+    "id": "cat2",
+    "name": "Shopping",
+    "description": "E-commerce, retail purchases"
+  },
+  {
+    "id": "cat3",
+    "name": "Entertainment",
+    "description": "Movies, subscriptions, gaming"
+  },
+  {
+    "id": "cat4",
+    "name": "Transport",
+    "description": "Ride-hailing, fuel, public transport"
+  },
+  {
+    "id": "cat5",
+    "name": "Utilities",
+    "description": "Electricity, water, internet"
+  },
+  {
+    "id": "cat6",
+    "name": "Housing",
+    "description": "Rent, maintenance"
+  },
+  {
+    "id": "cat7",
+    "name": "Friends & Family",
+    "description": "P2P transfers"
+  },
+  {
+    "id": "cat8",
+    "name": "Retail",
+    "description": "In-store purchases"
+  },
+  {
+    "id": "cat9",
+    "name": "Services",
+    "description": "Professional services"
+  },
+  {
+    "id": "cat10",
+    "name": "Others",
+    "description": "Miscellaneous"
+  }
+]

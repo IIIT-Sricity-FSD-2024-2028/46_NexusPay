@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexusPay — Super User Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="SuperUserPanel.css">
+  <script src="../shared/api-config.js"></script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-row">
+      <div class="logo-icon">N</div>
+      <span class="logo-name">NexusPay</span>
+    </div>
+    <span class="logo-badge">Super User Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="navigate('dashboard', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
+      Dashboard
+    </div>
+
+    <div class="nav-section-label" style="margin-top:8px">Management</div>
+    <div class="nav-item" onclick="navigate('users', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="8" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M2 20c0-4 2.7-6 6-6s6 2 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M17 11c1.7 0 3 1.3 3 3s-1.3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M22 20c0-2-1-3.5-3-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Users
+    </div>
+    <div class="nav-item" onclick="navigate('transactions', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M2 10h20" stroke="currentColor" stroke-width="1.8"/></svg>
+      Transactions
+      <span class="nav-badge warn">12</span>
+    </div>
+    <div class="nav-item" onclick="navigate('disputes', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+      Disputes
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" onclick="navigate('roles', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+      Roles & Permissions
+    </div>
+    <div class="nav-item" onclick="navigate('fraud', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8.7-8 10C7.5 20.7 4 17 4 12V7l8-4z" stroke="currentColor" stroke-width="1.8"/></svg>
+      Fraud & Risk
+      <span class="nav-badge">3</span>
+    </div>
+
+    <div class="nav-section-label" style="margin-top:8px">System</div>
+    <div class="nav-item" onclick="navigate('analytics', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M3 17l5-6 5 3 5-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 21H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Analytics
+    </div>
+    <div class="nav-item" onclick="navigate('audit', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 12h6M9 16h4M7 4H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="9" y="2" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+      Audit Logs
+    </div>
+    <div class="nav-item" onclick="navigate('config', this)">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="1.8"/></svg>
+      System Config
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="sidebar-logout-btn" type="button" onclick="logoutAction()">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+        <div class="notif-btn" id="notifBtn">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="1.8"/></svg>
+      <div class="notif-dot"></div>
+    </div>
+    <div class="notif-popover" id="notifPopover" aria-hidden="true">
+      <div class="notif-popover-header">
+        <div>
+          <div class="notif-popover-title">Notifications</div>
+          <div class="notif-popover-sub">Recent admin activity</div>
+        </div>
+        <button class="notif-clear-btn" type="button" onclick="clearNotifications()">Clear</button>
+      </div>
+      <div class="notif-popover-list" id="notifList"></div>
+    </div>
+    <button class="topbar-user" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false">
+      <div class="tu-avatar">SU</div>
+      <div>
+        <div class="tu-name">Super Admin</div>
+        <div class="tu-email">su@nexuspay.com</div>
+      </div>
+    </button>
+    <div class="profile-popover" id="profilePopover" aria-hidden="true">
+      <div class="profile-popover-head">
+        <div class="profile-popover-avatar">S</div>
+        <div>
+          <div class="profile-popover-name">Suhaas</div>
+          <div class="profile-popover-email">suhaas@nexuspay.in</div>
+        </div>
+      </div>
+      <div class="profile-popover-links">
+        <a class="profile-popover-link" href="../Customer Pages/Settings.html#profile">
+          <i class="fa-regular fa-user"></i>
+          <span>My Profile</span>
+        </a>
+        <a class="profile-popover-link" href="../Customer Pages/Settings.html#help">
+          <i class="fa-regular fa-circle-question"></i>
+          <span>Help &amp; Support</span>
+        </a>
+        <button class="profile-popover-link" type="button" onclick="openProfileSettings()">
+          <i class="fa-solid fa-gear"></i>
+          <span>Settings</span>
+        </button>
+      </div>
+      <button class="profile-popover-logout" type="button" onclick="logoutAction()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>LogOut</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+    </div>
+
+    <!-- â•â• DASHBOARD â•â• -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--purple-soft)"><i class="fa-solid fa-chart-line" style="color:#6366f1"></i></div>
+          <div class="stat-growth">+15.2%</div>
+          <div class="stat-value purple">₹14,30,000</div>
+          <div class="stat-label">Total Revenue (7 months)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--green-bg)"><i class="fa-solid fa-receipt" style="color:#22c55e"></i></div>
+          <div class="stat-growth">+23.5%</div>
+          <div class="stat-value">21,300</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--pink-bg)"><i class="fa-solid fa-users" style="color:#ec4899"></i></div>
+          <div class="stat-growth">+11.7%</div>
+          <div class="stat-value">26,370</div>
+          <div class="stat-label">Total Active Users</div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--orange-bg)"><i class="fa-solid fa-circle-exclamation" style="color:#f59e0b"></i></div>
+          <div class="stat-growth neg" id="dashboardDisputesMeta">0 open</div>
+          <div class="stat-value" id="dashboardDisputesCount">0</div>
+          <div class="stat-label">All Disputes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--blue-bg)"><i class="fa-solid fa-building-columns" style="color:#3b82f6"></i></div>
+          <div class="stat-growth">+2.1%</div>
+          <div class="stat-value">₹9,84,200</div>
+          <div class="stat-label">Settled This Month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--red-bg)"><i class="fa-solid fa-triangle-exclamation" style="color:#ef4444"></i></div>
+          <div class="stat-growth neg">+3</div>
+          <div class="stat-value">3</div>
+          <div class="stat-label">Flagged / Frozen Accounts</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">Revenue Trend</div>
+          <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Transaction Volume</div>
+          <div class="chart-wrap"><canvas id="volumeChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card chart-card--full">
+          <div class="chart-title">New Users (Monthly)</div>
+          <div class="chart-wrap">
+            <canvas id="usersChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-header-title">Recent Transactions</span>
+          <button class="btn btn-sm" onclick="navigate('transactions', document.querySelector('[onclick*=transactions]'))">View All</button>
+        </div>
+        <table>
+          <thead><tr><th>TXN ID</th><th>User</th><th>Amount</th><th>Type</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="dashTxnBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- â•â• END DASHBOARD â•â• -->
+
+    <!-- â•â• USERS â•â• -->
+    <div class="page" id="page-users">
+      <div class="section-head">
+
+      </div>
+      <div class="filter-bar">
+        <input class="search-input" placeholder="Search by name, email, ID..." oninput="filterUsers(this.value)">
+        <select class="filter-select" onchange="filterUserRole(this.value)">
+          <option value="">All Roles</option>
+          <option>Customer</option>
+          <option>Merchant</option>
+          <option>NexusPay Admin</option>
+          <!-- <option>Bank Admin</option> -->
+          <option>Super User</option>
+        </select>
+        <select class="filter-select" onchange="filterUserStatus(this.value)">
+          <option value="">All Status</option>
+          <option>Active</option>
+          <option>Frozen</option>
+          <!-- <option>Suspended</option> -->
+        </select>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead><tr><th>User</th><th>Role</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- â•â• TRANSACTIONS â•â• -->
+    <div class="page" id="page-transactions">
+      <div class="section-head">
+        <!-- <h2>Transaction Management</h2> -->
+        <div style="display:flex;gap:8px">
+          <!-- <button class="btn">Export CSV</button>
+          <button class="btn btn-primary" onclick="showToast('Manual settlement triggered','success')">Run Settlement</button> -->
+        </div>
+      </div>
+      <div class="filter-bar">
+        <input class="search-input" placeholder="Search TXN ID, user, amount..." oninput="filterTxn(this.value)">
+        <select class="filter-select" onchange="filterTXNtype(this.value)">
+          <option value="">All Types</option>
+          <option>P2P</option>
+          <option>P2M</option>
+          <option>Split</option>
+          <option>Scheduled</option>
+        </select>
+        <select class="filter-select" onchange="filterTxnStatus(this.value)">
+          <option value="">All Status</option>
+          <option>Successful</option>
+          <option>Pending</option>
+          <option>Failed</option>
+        </select>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead><tr><th>TXN ID</th><th>Payer</th><th>Payee</th><th>Amount</th><th>Type</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="txnBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TXN Detail Modal -->
+    <div class="modal-overlay" id="txnDetailModal">
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">Transaction Details</span>
+          <button class="modal-close" onclick="closeModal('txnDetailModal')">✕</button>
+        </div>
+        <div class="modal-body" id="txnDetailContent"></div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeModal('txnDetailModal')">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- â•â• DISPUTES â•â• -->
+    <div class="page" id="page-disputes">
+      <!-- <div class="section-head"><h2>Dispute Management</h2></div> -->
+      <div class="tabs">
+        <div id="dispute-tab-all" class="tab active" onclick="filterDisputes(this,'All')">All (0)</div>
+        <div id="dispute-tab-pending" class="tab" onclick="filterDisputes(this,'Pending')">Pending (0)</div>
+        <div id="dispute-tab-review" class="tab" onclick="filterDisputes(this,'In Review')">In Review (0)</div>
+        <div id="dispute-tab-resolved" class="tab" onclick="filterDisputes(this,'Resolved')">Resolved (0)</div>
+      </div>
+      <div>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Dispute ID</th><th>Customer</th><th>TXN ID</th><th>Reason</th><th>Amount</th><th>Raised On</th><th>Assigned Admin</th><th>Status</th></tr></thead>
+            <tbody id="disputeBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="dispute-resolved" class="tab-pane" style="display:none">
+        <div class="table-card" style="padding:24px;text-align:center;color:var(--text-muted)">18 resolved disputes — all refunds processed.</div>
+      </div>
+      <div id="dispute-rejected" class="tab-pane" style="display:none">
+        <div class="table-card" style="padding:24px;text-align:center;color:var(--text-muted)">4 disputes rejected after review.</div>
+      </div>
+    </div>
+
+    <!-- â•â• ROLES â•â• -->
+    <div class="page" id="page-roles">
+      <div class="section-head section-head-end">
+        <!-- <h2>Roles & Permission Matrix</h2> -->
+        <button class="btn btn-primary" onclick="openModal('addRoleModal')">+ New Role</button>
+      </div>
+      <div class="table-card" style="margin-bottom:20px;overflow-x:auto">
+        <div class="table-header"><span class="table-header-title">Permission Matrix</span></div>
+        <div style="padding:16px;overflow-x:auto">
+          <table class="role-matrix" id="roleMatrix"></table>
+        </div>
+      </div>
+      <div class="table-card" style="margin-bottom:20px">
+        <div class="table-header"><span class="table-header-title">Manage Roles</span></div>
+        <div class="role-manager-list" id="roleManagerList"></div>
+      </div>
+    </div>
+
+    <!-- â•â• FRAUD â•â• -->
+    <div class="page" id="page-fraud">
+      <div class="section-head">
+        <!-- <h2>Fraud & Risk Management</h2> -->
+      </div>
+      <div class="config-grid">
+        <div class="config-card" id="detectionRulesCard">
+          <div class="config-card-title">⚙ï¸ Detection Rules</div>
+          <div class="config-row"><span class="config-row-label">Max single txn limit</span><span class="config-row-val">₹1,00,000</span></div>
+          <div class="config-row"><span class="config-row-label">Max daily txns/user</span><input id="ruleMaxDailyTxns" class="config-input" type="text" value="50" disabled></div>
+          <div class="config-row"><span class="config-row-label">Failed attempts threshold</span><input id="ruleFailedAttempts" class="config-input" type="text" value="5" disabled></div>
+          <div class="config-row"><span class="config-row-label">Velocity check window</span><input id="ruleVelocityWindow" class="config-input" type="text" value="15 min" disabled></div>
+          <button id="editDetectionRulesBtn" class="btn btn-sm" type="button" onclick="toggleDetectionRulesEdit()">Edit Rules</button>
+        </div>
+        <div class="config-card">
+          <div class="config-card-title">🔒 Auto-Actions</div>
+          <div class="config-row">
+            <span class="config-row-label">Auto-freeze on threshold breach</span>
+            <div class="toggle on" onclick="toggleSetting(this, 'Auto-freeze on threshold breach')"></div>
+          </div>
+          <div class="config-row">
+            <span class="config-row-label">Alert super user on freeze</span>
+            <div class="toggle on" onclick="toggleSetting(this, 'Alert super user on freeze')"></div>
+          </div>
+          <div class="config-row">
+            <span class="config-row-label">Block IPs after 10 fails</span>
+            <div class="toggle" onclick="toggleSetting(this, 'Block IPs after 10 fails')"></div>
+          </div>
+          <div class="config-row">
+            <span class="config-row-label">Log all flagged events</span>
+            <div class="toggle on" onclick="toggleSetting(this, 'Log all flagged events')"></div>
+          </div>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-header"><span class="table-header-title">Flagged Accounts</span></div>
+        <table>
+          <thead><tr><th>User</th><th>Risk Score</th><th>Reason</th><th>Status</th><th>Flagged On</th><th>Actions</th></tr></thead>
+          <tbody id="fraudBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- â•â• ANALYTICS â•â• -->
+    <div class="page" id="page-analytics">
+      <!-- <div class="section-head"><h2>Platform Analytics</h2></div> -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">Revenue by Category</div>
+          <div class="chart-wrap" style="height:220px"><canvas id="catChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Hourly Transaction Activity</div>
+          <div class="chart-wrap"><canvas id="hourlyTxnChart"></canvas></div>
+        </div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:20px">
+        <div class="stat-card"><div class="stat-value">94.2%</div><div class="stat-label">Payment Success Rate</div></div>
+        <div class="stat-card"><div class="stat-value">₹672</div><div class="stat-label">Avg Transaction Value</div></div>
+        <div class="stat-card"><div class="stat-value">1.4s</div><div class="stat-label">Avg Processing Time</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Daily Active Users (Last 30 Days)</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="dauChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- â•â• AUDIT LOGS â•â• -->
+    <div class="page" id="page-audit">
+      <div class="section-head section-head-end">
+        <!-- <h2>Audit Logs</h2> -->
+        <div style="display:flex;gap:8px">
+          <select class="filter-select"><option>All Actions</option><option>User Modified</option><option>Role Changed</option><option>Config Updated</option><option>Dispute Resolved</option></select>
+        </div>
+      </div>
+      <div class="table-card">
+        <div style="padding:4px 8px" id="auditList"></div>
+      </div>
+    </div>
+
+    <!-- â•â• CONFIG â•â• -->
+    <div class="page" id="page-config">
+      <!-- <div class="section-head"><h2>System Configuration</h2></div> -->
+      <div class="config-grid">
+        <div class="config-card">
+          <div class="config-card-title">💳 Transaction Limits</div>
+          <div class="config-row"><span class="config-row-label">Customer daily limit</span><span class="config-row-val">₹2,00,000</span></div>
+          <div class="config-row"><span class="config-row-label">Merchant daily limit</span><span class="config-row-val">₹50,00,000</span></div>
+          <div class="config-row"><span class="config-row-label">P2P single txn max</span><span class="config-row-val">₹1,00,000</span></div>
+          <div class="config-row"><span class="config-row-label">Split payment max members</span><span class="config-row-val">20</span></div>
+          <button class="btn btn-sm btn-primary" style="margin-top:10px" onclick="openModal('editLimitsModal')">Edit Limits</button>
+        </div>
+        <div class="config-card">
+          <div class="config-card-title">🔔 Notification Settings</div>
+          <div class="config-row"><span class="config-row-label">SMS on payment success</span><div class="toggle on" onclick="toggleSetting(this, 'SMS on payment success')"></div></div>
+          <div class="config-row"><span class="config-row-label">Email on dispute raised</span><div class="toggle on" onclick="toggleSetting(this, 'Email on dispute raised')"></div></div>
+          <div class="config-row"><span class="config-row-label">Push alert on fraud flag</span><div class="toggle on" onclick="toggleSetting(this, 'Push alert on fraud flag')"></div></div>
+          <div class="config-row"><span class="config-row-label">Scheduled payment reminders</span><div class="toggle" onclick="toggleSetting(this, 'Scheduled payment reminders')"></div></div>
+        </div>
+        <div class="config-card">
+          <div class="config-card-title">ðŸ¦ Payment Gateway</div>
+          <div class="config-row"><span class="config-row-label">Primary gateway</span><span class="config-row-val">NexusPay</span></div>
+          <div class="config-row"><span class="config-row-label">Fallback gateway</span><span class="config-row-val">NexusPay_FB</span></div>
+          <div class="config-row"><span class="config-row-label">Gateway Version</span><span class="config-row-val">v.4.1</span></div>
+          <div class="config-row"><span class="config-row-label">Updated On</span><span class="config-row-val">Jan, 2026</span></div>
+        </div>
+        <div class="config-card">
+          <div class="config-card-title">🧩 Feature Flags</div>
+          <div class="config-row"><span class="config-row-label">Split payments</span><div class="toggle on" onclick="toggleSetting(this, 'Split payments')"></div></div>
+          <div class="config-row"><span class="config-row-label">Scheduled payments</span><div class="toggle on" onclick="toggleSetting(this, 'Scheduled payments')"></div></div>
+          <div class="config-row"><span class="config-row-label">Spending analytics</span><div class="toggle on" onclick="toggleSetting(this, 'Spending analytics')"></div></div>
+          <div class="config-row"><span class="config-row-label">Dispute portal</span><div class="toggle on" onclick="toggleSetting(this, 'Dispute portal')"></div></div>
+        </div>
+      </div>
+      <!-- <div class="config-card" style="margin-bottom:20px">
+        <div class="config-card-title">⚠ï¸ Danger Zone</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-danger" onclick="confirmAction('Purge test data from production?', ()=>showToast('Test data purged','success'))">Purge Test Data</button>
+          <button class="btn btn-danger" onclick="confirmAction('Force all users to re-login?', ()=>showToast('Sessions invalidated','warn'))">Invalidate All Sessions</button>
+          <button class="btn btn-danger" onclick="confirmAction('Run full reconciliation cycle?', ()=>showToast('Reconciliation started','success'))">Run Reconciliation</button>
+          <button class="btn" onclick="showToast('Broadcast message sent to all users','success')">📢 Broadcast Message</button>
+        </div>
+      </div>
+    </div> -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- â•â• MODALS â•â• -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add New User</span>
+      <button class="modal-close" onclick="closeModal('addUserModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Rahul"></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Sharma"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" placeholder="rahul@example.com" type="email"></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" placeholder="+91 98765 43210"></div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-input">
+          <option>Customer</option><option>Merchant</option><option>NexusPay Admin</option><option>Bank Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addUserAction()">Create User</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addRoleModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="roleModalTitle">Create New Role</span>
+      <button class="modal-close" onclick="closeModal('addRoleModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Role Name</label><input class="form-input" id="roleNameInput" placeholder="e.g. Auditor"></div>
+      <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="roleDescriptionInput" placeholder="Brief description of this role"></div>
+      <div class="form-group">
+        <label class="form-label">Permissions</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px" id="permCheckboxes"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('addRoleModal')">Cancel</button>
+      <button class="btn btn-primary" id="roleModalActionBtn" onclick="addRoleAction()">Create Role</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editLimitsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Edit Transaction Limits</span>
+      <button class="modal-close" onclick="closeModal('editLimitsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Customer Daily Limit (₹)</label><input class="form-input" value="200000"></div>
+      <div class="form-group"><label class="form-label">Merchant Daily Limit (₹)</label><input class="form-input" value="5000000"></div>
+      <div class="form-group"><label class="form-label">P2P Single Txn Max (₹)</label><input class="form-input" value="100000"></div>
+      <div class="form-group"><label class="form-label">Split Payment Max Members</label><input class="form-input" value="20"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('editLimitsModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLimitsAction()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" style="width:380px">
+    <div class="modal-header">
+      <span class="modal-title">Confirm Action</span>
+      <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+    </div>
+    <div class="modal-body"><p id="confirmText" style="font-size:14px;color:var(--text-muted)"></p></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="SuperUserPanel.js"></script>
+</body>
+</html>
+

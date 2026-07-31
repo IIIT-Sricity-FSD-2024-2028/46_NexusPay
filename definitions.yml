@@ -1,0 +1,148 @@
+Domain: Fintech
+ProblemStatement: Digital Payments and Transaction Co-ordination Platform
+LastUpdated: "2026-01-31"
+
+Terms:
+  - term: Payer
+    definition: >
+      An individual or entity that authorizes and initiates a monetary transfer from an approved funding source.
+    examples:
+      - A person sending rent every month using scheduled payment
+    aliases:
+      - Remitter
+      - Sender
+
+  - term: Payee
+    definition: >
+      An individual or entity designated to receive funds in a payment transaction.
+    examples:
+      - Friend receiving money as part of a split expense
+    aliases:
+      - Beneficiary
+      - Recipient
+
+  - term: PaymentInstruction
+    definition: >
+      A formal directive that specifies amount, payee, funding source,and execution conditions for a payment.
+    examples:
+      - Instruction created for a monthly recurring transfer
+    aliases:
+      - Payment Request
+      - Transfer Instruction
+
+  - term: TransactionRecord
+    definition: >
+      A permanent ledger entry that captures the outcome and attributes of a payment execution.
+    examples:
+      - Record showing successful wallet-to-wallet transfer
+    aliases:
+      - Ledger Entry
+      - Transaction Entry
+
+  - term: TransactionState
+    definition: >
+      The lifecycle condition representing the progress or outcome of a payment transaction.
+    examples:
+      - Initiated
+      - Pending
+      - Successful
+      - Failed
+    aliases:
+      - Payment Status
+      - Execution State
+
+  - term: ScheduledPayment
+    definition: >
+      A recurring payment arrangement that automatically triggers a fund transfer on predefined dates.
+    examples:
+      - Monthly transfer to a family member
+    aliases:
+      - Recurring Payment
+      - Standing Instruction
+
+  - term: FundingSource
+    definition: >
+      An authorized financial account or wallet from which payment can be debited.
+    examples:
+      - Linked bank account
+      - Wallet balance
+    aliases:
+      - Source Account
+      - Debit Source
+
+  - term: ExpenseGroup
+    definition: >
+      A financial association formed to manage and coordinate shared expenses among multiple participants.
+    examples:
+      - Group created to split trip expenses
+    aliases:
+      - Shared Expense Group
+      - Payment Group
+
+  - term: SettlementStatus
+    definition: >
+      An indicator representing whether all obligations within a shared expense have been fulfilled.
+    examples:
+      - Settled
+      - Partially Settled
+    aliases:
+      - Completion Status
+      - Clearance Status
+
+  - term: DisputeCase
+    definition: >
+      A formally raised inquiry challenging the correctness or outcome of a payment transaction.
+    examples:
+      - Complaint raised for incorrect debit
+    aliases:
+      - Transaction Dispute
+      - Payment Complaint
+
+  - term: BalanceValidation
+    definition: >
+      A pre-execution verification ensuring sufficient available funds for payment processing.
+    examples:
+      - Wallet balance check before scheduled payment
+    aliases:
+      - Funds Verification
+      - Sufficiency Check
+
+  - term: PaymentNotification
+    definition: >
+      A domain message that informs participants about payment-related events.
+    examples:
+      - Alert sent after successful scheduled payment
+    aliases:
+      - Transaction Alert
+      - Payment Alert
+
+  - term: SpendingCategory
+    definition: >
+      A classification label applied to transactions for financial analysis.
+    examples:
+      - Rent
+      - Utilities
+      - Food
+    aliases:
+      - Expense Category
+      - Usage Category
+
+  - term: SpendingInsight
+    definition: >
+      A derived observation highlighting financial behavior or transaction trends.
+    examples:
+      - Monthly spending increase notification
+    aliases:
+      - Financial Insight
+      - Usage Insight
+  - term: Retry Mechanism
+    definition: >
+      A controlled process that automatically re-attempts a failed payment or
+      system operation under predefined rules to ensure successful completion
+      without causing duplicate or inconsistent transactions.
+    examples:
+      - Reprocessing a failed UPI payment after a temporary bank timeout
+      - Retrying a transaction when the network connection is restored
+    aliases:
+      - Transaction Retry Logic
+      - Automatic Reattempt Process

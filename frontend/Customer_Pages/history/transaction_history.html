@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusPay — Transaction History</title>
+  <meta name="description"
+    content="View and filter your NexusPay transaction history by type — P2P, P2M, Scheduled Payments, and Split Payments." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@100..800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="../../shared/api-config.js"></script>
+</head>
+
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <h1 class="brand-name">NexusPay</h1>
+    </div>
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link" href="../dashboard/dashboard.html">
+            <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../pay/pay.html">
+            <span class="nav-icon"><i data-lucide="send"></i></span>
+            <span class="nav-label">Pay</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="transaction_history.html">
+            <span class="nav-icon"><i data-lucide="history"></i></span>
+            <span class="nav-label">Transaction History</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../split/split.html">
+            <span class="nav-icon"><i data-lucide="split"></i></span>
+            <span class="nav-label">Split Payments</span>
+          </a>
+          <span class="nav-badge">3</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../scheduled/index.html">
+            <span class="nav-icon"><i data-lucide="calendar"></i></span>
+            <span class="nav-label">Scheduled Payments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../bank-accounts/index.html">
+            <span class="nav-icon"><i data-lucide="building2"></i></span>
+            <span class="nav-label">Bank Accounts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../spending/index.html">
+            <span class="nav-icon"><i data-lucide="trending-up"></i></span>
+            <span class="nav-label">Spending Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../raiseDispute/RaiseDispute.html">
+            <span class="nav-icon"><i data-lucide="circle-alert"></i></span>
+            <span class="nav-label">Raise Dispute</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../settings/Settings.html">
+            <span class="nav-icon"><i data-lucide="settings"></i></span>
+            <span class="nav-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../../Public_Pages/Signin.html?role=customer" class="logout-btn" id="logout-btn">
+        <span class="nav-icon"><i data-lucide="log-out"></i></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="dashboard-content">
+
+    <!-- Page top -->
+    <div class="page-top">
+      <div>
+        <h2 class="page-title">Transaction History</h2>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-container">
+        <span class="search-icon-wrap">
+          <i data-lucide="search" style="width:16px;height:16px;"></i>
+        </span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search by name or category…" />
+      </div>
+
+      <div class="filter-tabs" id="directionTabs">
+        <button class="tab-item tab-all active" data-direction="all">All</button>
+        <button class="tab-item tab-sent" data-direction="sent">Sent</button>
+        <button class="tab-item tab-received" data-direction="received">Received</button>
+      </div>
+    </div>
+
+    <!-- Type Filters -->
+    <div class="type-filters" id="typeFilters">
+      <button class="type-pill active" data-type="all">
+        <i data-lucide="layers" style="width:14px;height:14px;"></i>
+        All Types
+      </button>
+      <button class="type-pill" data-type="P2P">
+        <i data-lucide="users" style="width:14px;height:14px;"></i>
+        P2P
+      </button>
+      <button class="type-pill" data-type="P2M">
+        <i data-lucide="store" style="width:14px;height:14px;"></i>
+        P2M
+      </button>
+      <button class="type-pill" data-type="Scheduled">
+        <i data-lucide="calendar-clock" style="width:14px;height:14px;"></i>
+        Scheduled
+      </button>
+      <button class="type-pill" data-type="Split">
+        <i data-lucide="split" style="width:14px;height:14px;"></i>
+        Split
+      </button>
+    </div>
+
+    <!-- Transaction card -->
+    <div class="transaction-card">
+      <div class="transaction-list" id="transactionList"></div>
+    </div>
+
+  </main>
+
+
+
+  <!-- ── RECEIPT MODAL ── -->
+  <div id="receiptModal" class="modal-overlay">
+    <div class="modal-content receipt-card">
+      <div class="receipt-top-header">
+        <div class="entity-info">
+          <div id="receiptIcon" class="entity-logo">ðŸ•</div>
+          <div>
+            <h3 id="receiptName">Domino's Pizza</h3>
+            <p id="receiptVPA" class="entity-vpa">dominos@nexuspay</p>
+          </div>
+        </div>
+        <button class="close-modal">&times;</button>
+      </div>
+
+      <div class="amount-banner">
+        <p class="label" id="receiptAmountLabel">Amount Sent</p>
+        <h2 id="receiptAmount">-₹800</h2>
+        <div class="status-badge">
+          <span class="status-dot"></span> Completed
+        </div>
+      </div>
+
+      <div class="details-box">
+        <h4>Transaction Details</h4>
+        <div class="detail-row">
+          <span class="label" id="receiptDirectionLabel">Sent To</span>
+          <div class="value-group">
+            <span id="receiptNameDetail" class="value-main">Domino's Pizza</span>
+            <span id="receiptVPADetail" class="value-sub">dominos@nexuspay</span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span class="label">Category</span>
+          <span id="receiptCategory" class="value-main">Food & Dining</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Transaction Type</span>
+          <span id="receiptType" class="value-main type-badge-inline">P2M</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Date & Time</span>
+          <span id="receiptDateTime" class="value-main">Mar 9, 2026 • 2:30 PM</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Transaction ID</span>
+          <span id="receiptId" class="value-main">TXN9876543201</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="closeReceiptBtnAction"><i
+            style="width: 16px; height: 16px; margin-right: 6px;" data-lucide="x"></i> Close</button>
+        <button class="btn-primary" id="raiseDisputeBtn"><i style="width: 16px; height: 16px; margin-right: 6px;"
+            data-lucide="file-warning"></i> Raise Dispute</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>

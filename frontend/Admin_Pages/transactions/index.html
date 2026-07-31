@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NexusPay Admin — View, search and manage all platform transactions.">
+  <title>Transactions — NexusPay Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../sharedadmin/globals.css">
+  <link rel="stylesheet" href="transactions.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="main-area">
+      <header id="header-bar"></header>
+      <main class="main-content">
+
+        <!-- ── STAT CARDS ──────────────────── -->
+        <div class="stat-cards-grid" id="txnStats">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-purple"><i data-lucide="indian-rupee"></i></div>
+            <div class="stat-content">
+              <div class="stat-value">₹28,500</div>
+              <div class="stat-label">Today's Volume</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-green"><i data-lucide="check-circle"></i></div>
+            <div class="stat-content">
+              <div class="stat-value">156</div>
+              <div class="stat-label">Completed</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-yellow"><i data-lucide="clock"></i></div>
+            <div class="stat-content">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Pending</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-red"><i data-lucide="x-circle"></i></div>
+            <div class="stat-content">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Failed</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TRANSACTIONS TABLE ──────────── -->
+        <div class="crud-section">
+          <div class="crud-header">
+            <h2 class="crud-title">All Transactions</h2>
+            <div class="crud-actions">
+              <div class="search-box" id="searchBox">
+                <i data-lucide="search" style="width:16px;height:16px;color:#94a3b8;"></i>
+                <input type="text" id="searchInput" placeholder="Search transactions..." autocomplete="off" class="search-input">
+              </div>
+              <button class="btn btn-secondary" id="filterBtn"><i data-lucide="filter" style="width:16px;height:16px;"></i> Filter</button>
+            </div>
+          </div>
+
+          <div class="filter-dropdown" id="filterDropdown" style="display:none;">
+            <div class="filter-group">
+              <label class="filter-label">Status</label>
+              <div class="filter-chips" id="statusFilters">
+                <button class="filter-chip active" data-status="all">All</button>
+                <button class="filter-chip" data-status="completed">Completed</button>
+                <button class="filter-chip" data-status="pending">Pending</button>
+                <button class="filter-chip" data-status="failed">Failed</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Type</label>
+              <div class="filter-chips" id="typeFilters">
+                <button class="filter-chip active" data-type="all">All</button>
+                <button class="filter-chip" data-type="Transfer">Transfer</button>
+                <button class="filter-chip" data-type="Payment">Payment</button>
+                <button class="filter-chip" data-type="Refund">Refund</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="txnTable">
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Sender</th>
+                  <th>Receiver</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date & Time</th>
+                </tr>
+              </thead>
+              <tbody id="txnTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination" id="pagination">
+            <span class="pagination__info" id="paginationInfo">Showing 1–10 of 20</span>
+            <div class="pagination__controls">
+              <button class="pagination__btn" id="prevBtn" disabled><i data-lucide="chevron-left" style="width:16px;height:16px;"></i></button>
+              <div class="pagination__pages" id="pageNumbers"></div>
+              <button class="pagination__btn" id="nextBtn"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="txnModal">
+      <div class="modal__header">
+        <h2 class="modal__title">Transaction Details</h2>
+        <button class="modal__close" id="modalClose" aria-label="Close"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="../sharedadmin/js/components/folderSidebar.js"></script>
+  <script src="transactions.js"></script>
+</body>
+</html>

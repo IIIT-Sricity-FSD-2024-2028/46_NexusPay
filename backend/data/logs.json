@@ -1,0 +1,263 @@
+[
+  {
+    "id": "log29",
+    "timestamp": "2026-05-04 17:14:44",
+    "user": "CUST002",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN074: CUST002 → JOHN.C ₹10000 (Completed)"
+  },
+  {
+    "id": "log28",
+    "timestamp": "2026-05-04 17:02:27",
+    "user": "CUST002",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN073: CUST002 → JOHN.C ₹1000 (Completed)"
+  },
+  {
+    "id": "log27",
+    "timestamp": "2026-05-04 16:54:37",
+    "user": "Admin",
+    "action": "Dispute Status Changed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP009 moved to Solved"
+  },
+  {
+    "id": "log26",
+    "timestamp": "2026-05-04 16:54:26",
+    "user": "Admin",
+    "action": "Dispute Status Changed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP009 moved to In Review"
+  },
+  {
+    "id": "log25",
+    "timestamp": "2026-05-04 16:53:25",
+    "user": "John.c@nexuspay",
+    "action": "Dispute Created",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP009: John.c@nexuspay — ₹2000 (Settlement amount delayed)"
+  },
+  {
+    "id": "log24",
+    "timestamp": "2026-05-04 16:01:11",
+    "user": "CUST001",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN071: CUST001 → CUST004 ₹1000 (Completed)"
+  },
+  {
+    "id": "log23",
+    "timestamp": "2026-05-04 15:06:07",
+    "user": "alice.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN070: alice.c@nexuspay → john.c@nexuspay ₹4450 (Completed)"
+  },
+  {
+    "id": "log22",
+    "timestamp": "2026-05-04 14:30:03",
+    "user": "alice.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN069: alice.c@nexuspay → john.c@nexuspay ₹2500 (Completed)"
+  },
+  {
+    "id": "log21",
+    "timestamp": "2026-05-04 14:28:18",
+    "user": "alice.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN068: alice.c@nexuspay → john.c@nexuspay ₹10000 (Completed)"
+  },
+  {
+    "id": "log20",
+    "timestamp": "2026-05-04 11:53:50",
+    "user": "Admin",
+    "action": "Dispute Status Changed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP008 moved to Solved"
+  },
+  {
+    "id": "log19",
+    "timestamp": "2026-05-04 11:53:30",
+    "user": "Admin",
+    "action": "Dispute Status Changed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP008 moved to In Review"
+  },
+  {
+    "id": "log18",
+    "timestamp": "2026-05-04 11:53:21",
+    "user": "John",
+    "action": "Dispute Created",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP008: John — ₹500 (Wrong settlement amount received)"
+  },
+  {
+    "id": "log17",
+    "timestamp": "2026-05-04 11:48:51",
+    "user": "Admin",
+    "action": "Dispute Status Changed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP007 moved to Solved"
+  },
+  {
+    "id": "log16",
+    "timestamp": "2026-05-04 11:48:41",
+    "user": "Admin",
+    "action": "Dispute Status Changed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP007 moved to In Review"
+  },
+  {
+    "id": "log15",
+    "timestamp": "2026-05-04 11:45:22",
+    "user": "John",
+    "action": "Dispute Created",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP007: John — ₹500 (Wrong settlement amount received)"
+  },
+  {
+    "id": "log14",
+    "timestamp": "2026-05-04 11:21:30",
+    "user": "John",
+    "action": "Dispute Created",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "DSP007: John — ₹20000 (Settlement amount delayed)"
+  },
+  {
+    "id": "log13",
+    "timestamp": "2026-05-04 10:07:30",
+    "user": "john.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN067: john.c@nexuspay → amazon.m@nexuspay ₹20000 (Completed)"
+  },
+  {
+    "id": "log12",
+    "timestamp": "2026-05-04 10:06:32",
+    "user": "john.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN066: john.c@nexuspay → amazon.m@nexuspay ₹500 (Completed)"
+  },
+  {
+    "id": "log11",
+    "timestamp": "2026-05-04 08:59:11",
+    "user": "john.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN053: john.c@nexuspay → sneha.p@nexuspay ₹500 (Completed)"
+  },
+  {
+    "id": "log10",
+    "timestamp": "2026-05-03 16:17:52",
+    "user": "john.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN052: john.c@nexuspay → sarah.c@nexuspay ₹5000 (Completed)"
+  },
+  {
+    "id": "log9",
+    "timestamp": "2026-05-03 16:16:08",
+    "user": "john.c@nexuspay",
+    "action": "Transaction Created",
+    "module": "Transactions",
+    "severity": "info",
+    "details": "TXN051: john.c@nexuspay → emma.c@nexuspay ₹500 (Completed)"
+  },
+  {
+    "id": "log1",
+    "timestamp": "2024-03-28 14:30:00",
+    "user": "Admin User",
+    "action": "User Status Update",
+    "module": "Users",
+    "severity": "warning",
+    "details": "Changed user #4 status to Inactive"
+  },
+  {
+    "id": "log2",
+    "timestamp": "2024-03-28 14:15:00",
+    "user": "Admin User",
+    "action": "Dispute Reviewed",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "Dispute DSP003 moved to In Review"
+  },
+  {
+    "id": "log3",
+    "timestamp": "2024-03-28 13:45:00",
+    "user": "Super Admin",
+    "action": "Role Updated",
+    "module": "Roles",
+    "severity": "critical",
+    "details": "Changed permissions for admin role"
+  },
+  {
+    "id": "log4",
+    "timestamp": "2024-03-28 12:30:00",
+    "user": "Admin User",
+    "action": "Transaction Flagged",
+    "module": "Transactions",
+    "severity": "warning",
+    "details": "TXN015 flagged for review - high amount"
+  },
+  {
+    "id": "log5",
+    "timestamp": "2024-03-28 11:00:00",
+    "user": "System",
+    "action": "Backup Completed",
+    "module": "System",
+    "severity": "info",
+    "details": "Daily backup completed successfully"
+  },
+  {
+    "id": "log6",
+    "timestamp": "2024-03-28 10:30:00",
+    "user": "Super Admin",
+    "action": "New Merchant Added",
+    "module": "Users",
+    "severity": "info",
+    "details": "Merchant \"QuickMart\" registered"
+  },
+  {
+    "id": "log7",
+    "timestamp": "2024-03-27 16:45:00",
+    "user": "Admin User",
+    "action": "Dispute Resolved",
+    "module": "Disputes",
+    "severity": "info",
+    "details": "Dispute DSP005 marked as Solved"
+  },
+  {
+    "id": "log8",
+    "timestamp": "2024-03-27 15:15:00",
+    "user": "System",
+    "action": "Security Alert",
+    "module": "Security",
+    "severity": "critical",
+    "details": "Multiple failed login attempts detected for user #7"
+  }
+]

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusPay — Raise Dispute</title>
+  <meta name="description"
+    content="Raise a dispute for any transaction on NexusPay. Select a transaction, describe your issue, and track dispute status.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@100..800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="RaiseDispute.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <h1 class="brand-name">NexusPay</h1>
+    </div>
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link" href="../dashboard/dashboard.html">
+            <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../pay/pay.html">
+            <span class="nav-icon"><i data-lucide="send"></i></span>
+            <span class="nav-label">Pay</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../history/transaction_history.html">
+            <span class="nav-icon"><i data-lucide="history"></i></span>
+            <span class="nav-label">Transaction History</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../split/split.html">
+            <span class="nav-icon"><i data-lucide="split"></i></span>
+            <span class="nav-label">Split Payments</span>
+          </a>
+          <span class="nav-badge">3</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../scheduled/index.html">
+            <span class="nav-icon"><i data-lucide="calendar"></i></span>
+            <span class="nav-label">Scheduled Payments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../bank-accounts/index.html">
+            <span class="nav-icon"><i data-lucide="building2"></i></span>
+            <span class="nav-label">Bank Accounts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../spending/index.html">
+            <span class="nav-icon"><i data-lucide="trending-up"></i></span>
+            <span class="nav-label">Spending Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="../raiseDispute/RaiseDispute.html">
+            <span class="nav-icon"><i data-lucide="circle-alert"></i></span>
+            <span class="nav-label">Raise Dispute</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../settings/Settings.html">
+            <span class="nav-icon"><i data-lucide="settings"></i></span>
+            <span class="nav-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../../Public_Pages/Signin.html?role=customer" class="logout-btn" id="logout-btn">
+        <span class="nav-icon"><i data-lucide="log-out"></i></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <h1 class="page-title">Raise Dispute</h1>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Top Row: Select Transaction + Transaction Details -->
+      <div class="dispute-grid">
+        <!-- LEFT: Select Transaction -->
+        <div class="panel" id="selectTransactionPanel">
+          <h2 class="panel-title">Select Transaction</h2>
+          <div class="search-box" id="searchBox">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+              <path d="M20 20l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <input type="text" placeholder="Search by recipient or transaction ID" id="txnSearch">
+          </div>
+
+          <div class="txn-list" id="txnList">
+            <!-- Transaction cards rendered by JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT: Transaction Details + Dispute Form -->
+        <div class="panel" id="detailsPanel">
+          <h2 class="panel-title">Transaction Details</h2>
+
+          <!-- Details Table -->
+          <div class="details-table" id="detailsTable">
+            <div class="detail-row">
+              <span class="detail-label">Recipient</span>
+              <div class="detail-value">
+                <span class="detail-name" id="detailRecipient">Flipkart</span>
+                <span class="detail-sub" id="detailRecipientEmail">flipkart@nexuspay</span>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Amount</span>
+              <span class="detail-value detail-amount" id="detailAmount">₹1,299</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Date & Time</span>
+              <span class="detail-value" id="detailDate">Mar 7, 2026 • 02:34 PM</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Transaction ID</span>
+              <span class="detail-value detail-mono" id="detailTxnId">TXN9876543212</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Payment Method</span>
+              <span class="detail-value" id="detailMethod">HDFC Bank ••1234</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status</span>
+              <span class="detail-value detail-status completed" id="detailStatus">Completed</span>
+            </div>
+          </div>
+
+          <!-- Dispute Form -->
+          <div class="dispute-form" id="disputeForm">
+            <div class="form-group">
+              <label class="form-label">Select Issue <span class="required">*</span></label>
+              <div class="issue-options" id="issueOptions">
+                <label class="issue-option" id="issue-1">
+                  <input type="radio" name="issue" value="Money debited but transaction failed">
+                  <span class="issue-text">Money debited but transaction failed</span>
+                </label>
+                <label class="issue-option" id="issue-2">
+                  <input type="radio" name="issue" value="Unauthorized/Suspicious transaction">
+                  <span class="issue-text">Unauthorized/Suspicious transaction</span>
+                </label>
+                <label class="issue-option selected" id="issue-3">
+                  <input type="radio" name="issue" value="Other" checked>
+                  <span class="issue-text">Other</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Describe the Issue <span class="required">*</span></label>
+              <textarea class="form-textarea" placeholder="Describe your issue..." id="issueDescription"
+                rows="3"></textarea>
+              <span class="form-hint">Min 5 characters</span>
+            </div>
+            <button class="submit-btn" id="submitDisputeBtn">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+                <path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <circle cx="12" cy="16" r="1" fill="currentColor" />
+              </svg>
+              Submit Dispute
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dispute History -->
+      <div class="panel history-panel" id="historyPanel">
+        <div class="history-header">
+          <h2 class="panel-title">Dispute History</h2>
+          <div class="history-tabs" id="historyTabs">
+            <button class="history-tab active" data-filter="all">All</button>
+            <button class="history-tab" data-filter="pending">Pending</button>
+            <button class="history-tab" data-filter="under-review">Under Review</button>
+            <button class="history-tab" data-filter="resolved">Resolved</button>
+          </div>
+        </div>
+        <div class="history-list" id="historyList">
+          <!-- Dispute history items rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <!-- Dispute Details Modal -->
+  <div class="dispute-modal-backdrop" id="disputeModalBackdrop" aria-hidden="true">
+    <div class="dispute-modal" role="dialog" aria-modal="true" aria-labelledby="disputeModalTitle">
+      <div class="dispute-modal-header">
+        <div>
+          <div class="dispute-modal-title-row">
+            <h2 class="dispute-modal-title" id="disputeModalTitle">Dispute Details</h2>
+            <span class="dispute-modal-tag" id="disputeModalTag">Merchant Issue</span>
+          </div>
+          <p class="dispute-modal-id" id="disputeModalId">ID: D001</p>
+        </div>
+        <button class="dispute-modal-close" id="disputeModalClose" aria-label="Close dispute details">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="dispute-modal-body">
+        <div class="dispute-modal-meta">
+          <div class="dispute-modal-status" id="disputeModalStatusWrap">
+            <span class="dispute-modal-status-icon" id="disputeModalStatusIcon">✓</span>
+            <span class="dispute-modal-status-text" id="disputeModalStatusText">Resolved</span>
+          </div>
+          <div class="dispute-modal-submitted" id="disputeModalSubmitted">Submitted: Feb 26, 2026</div>
+        </div>
+
+        <section class="dispute-modal-card">
+          <h3 class="dispute-modal-card-title">Transaction Information</h3>
+          <div class="dispute-modal-info-grid">
+            <div class="dispute-modal-label-col">
+              <span>Recipient</span>
+              <span>Amount</span>
+              <span>Date &amp; Time</span>
+              <span>Transaction ID</span>
+              <span>Payment Method</span>
+            </div>
+            <div class="dispute-modal-value-col">
+              <div>
+                <strong id="disputeModalRecipient">Amazon</strong>
+                <span id="disputeModalRecipientEmail">amazon@nexuspay</span>
+              </div>
+              <strong id="disputeModalAmount">₹3,500</strong>
+              <strong id="disputeModalDateTime">Feb 25, 2026 • 03:20 PM</strong>
+              <strong id="disputeModalTxnId">TXN9876543220</strong>
+              <strong id="disputeModalMethod">HDFC Bank ••1234</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="dispute-modal-card">
+          <h3 class="dispute-modal-card-title">Dispute Information</h3>
+          <div class="dispute-modal-detail-block">
+            <span class="dispute-modal-detail-label">Issue Category</span>
+            <p class="dispute-modal-detail-text" id="disputeModalReason">Order not delivered/Cancelled</p>
+          </div>
+          <div class="dispute-modal-detail-block">
+            <span class="dispute-modal-detail-label">Description</span>
+            <p class="dispute-modal-detail-text" id="disputeModalDescription">Order was cancelled by merchant after
+              payment was successful. I have not received any refund yet.</p>
+          </div>
+        </section>
+
+        <section class="dispute-modal-resolution" id="disputeModalResolutionWrap">
+          <div class="dispute-modal-resolution-title">
+            <span class="dispute-modal-resolution-icon">✓</span>
+            <span>Resolution</span>
+          </div>
+          <p class="dispute-modal-resolution-text" id="disputeModalResolution">Refund has been initiated and will
+            reflect within 5-7 business days.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="RaiseDispute.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NexusPay Admin — Manage customers and merchants.">
+  <title>Users — NexusPay Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../sharedadmin/globals.css">
+  <link rel="stylesheet" href="users.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="main-area">
+      <header id="header-bar"></header>
+      <main class="main-content">
+
+        <!-- ── STAT CARDS ──────────────────── -->
+        <div class="stat-cards-grid" id="usrStats">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-purple"><i data-lucide="users"></i></div>
+            <div class="stat-content">
+              <div class="stat-value">24,847</div>
+              <div class="stat-label">Total Customers</div>
+              <div style="font-size:12px;color:#10b981;font-weight:600;margin-top:4px;">+8% this month</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-blue"><i data-lucide="store"></i></div>
+            <div class="stat-content">
+              <div class="stat-value">1,523</div>
+              <div class="stat-label">Total Merchants</div>
+              <div style="font-size:12px;color:#10b981;font-weight:600;margin-top:4px;">+12% this month</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-green"><i data-lucide="user-check"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" style="color:#10b981;">22,134</div>
+              <div class="stat-label">Active Users</div>
+              <div style="font-size:12px;color:#64748b;margin-top:4px;">89% active rate</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-red"><i data-lucide="user-x"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" style="color:#ef4444;">2,713</div>
+              <div class="stat-label">Inactive Users</div>
+              <div style="font-size:12px;color:#64748b;margin-top:4px;">11% inactive rate</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TABS ────────────────────────── -->
+        <div class="usr-tabs" id="usrTabs">
+          <button class="usr-tab active" data-tab="customers">Customers</button>
+          <button class="usr-tab" data-tab="merchants">Merchants</button>
+        </div>
+
+        <!-- ── TABLE PANEL ─────────────────── -->
+        <div class="crud-section">
+          <div class="crud-header">
+            <h2 class="crud-title" id="panelTitle">Customer Performance</h2>
+            <div class="crud-actions">
+              <div class="search-box">
+                <i data-lucide="search" style="width:16px;height:16px;color:#94a3b8;"></i>
+                <input type="text" id="searchInput" placeholder="Search customers..." class="search-input" autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="usrTable">
+              <thead><tr id="tableHead"></tr></thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination">
+            <span class="pagination__info" id="pagInfo"></span>
+            <div class="pagination__controls">
+              <button class="pagination__btn" id="prevBtn" disabled><i data-lucide="chevron-left" style="width:16px;height:16px;"></i></button>
+              <div class="pagination__pages" id="pageNumbers"></div>
+              <button class="pagination__btn" id="nextBtn"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- â•â•â• USER DETAIL MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="usrModal">
+      <div class="modal__header">
+        <h2 class="modal__title">User Details</h2>
+        <button class="modal__close" id="modalClose"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="../sharedadmin/js/components/folderSidebar.js"></script>
+  <script src="users.js"></script>
+</body>
+</html>
+

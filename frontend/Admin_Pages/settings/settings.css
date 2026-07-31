@@ -1,0 +1,115 @@
+/* ============================================================
+   NexusPay Admin — Settings Page Styles
+   Settings-specific styles only (shared styles in globals.css)
+   ============================================================ */
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.settings-section {
+  max-width: 680px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 24px;
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+.settings-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.settings-card-danger { border-color: rgba(220, 38, 38, 0.2); }
+
+.settings-card-header { padding: 24px 28px 0; }
+.settings-card-title { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0; }
+.settings-danger-title { color: var(--danger); }
+.settings-card-desc { font-size: 13px; color: var(--text-muted); margin: 4px 0 0; }
+.settings-card-body { padding: 20px 28px 28px; }
+
+.settings-avatar-row { display: flex; align-items: center; gap: 20px; margin-bottom: 8px; }
+
+.settings-avatar {
+  width: 72px; height: 72px; border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  color: #fff; font-size: 24px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.settings-avatar-actions { display: flex; flex-direction: column; gap: 6px; }
+.settings-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-full); }
+
+.btn-text-danger {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: none; border: none; color: var(--danger);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  padding: 2px 0; transition: opacity 0.15s;
+}
+.btn-text-danger:hover { opacity: 0.7; }
+.btn-text-danger svg { width: 14px; height: 14px; }
+
+.settings-hint { font-size: 12px; color: var(--text-muted); }
+
+.settings-remove-avatar {
+  background: none; border: none; color: var(--danger);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  padding: 0; text-align: left; transition: opacity 0.15s;
+}
+.settings-remove-avatar:hover { opacity: 0.7; text-decoration: underline; }
+
+.settings-divider { height: 1px; background: var(--border); margin: 16px 0 20px; }
+.settings-readonly { background: var(--bg-hover) !important; color: var(--text-muted) !important; cursor: not-allowed; }
+.settings-btn-row { display: flex; gap: 12px; margin-top: 20px; }
+
+.settings-logout-info {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; background: var(--bg-hover);
+  border-radius: var(--radius); margin-bottom: 16px;
+  font-size: 13px; color: var(--text-secondary);
+}
+.settings-info-icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--text-muted); }
+
+.settings-logout-btn-full {
+  width: 100%; padding: 12px; background: var(--danger); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.2s, transform 0.15s;
+}
+.settings-logout-btn-full:hover { background: #b91c1c; transform: translateY(-1px); }
+.settings-logout-btn-full svg { width: 18px; height: 18px; }
+
+/* Settings uses the same form styles as logs — include shared form inputs */
+.form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.form-row { display: flex; gap: 16px; }
+.form-label { font-family: var(--font-medium); font-weight: 500; font-size: 13px; color: var(--text-secondary); }
+
+.form-input {
+  padding: 9px 12px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 14px; font-family: var(--font);
+  color: var(--text-primary); outline: none; width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+.form-input::placeholder { color: var(--text-light); }
+
+/* ── Security & Access ── */
+.settings-security-list { display: flex; flex-direction: column; }
+
+.settings-security-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 0; border-bottom: 1px solid var(--bg-hover);
+}
+.settings-security-item:last-child { border-bottom: none; }
+
+.settings-security-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.settings-security-icon svg { width: 20px; height: 20px; }
+
+.settings-security-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.settings-security-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.settings-security-sub { font-size: 12px; color: var(--text-muted); }
+
+.settings-action-btn {
+  padding: 7px 18px !important; font-size: 13px !important; font-weight: 500 !important;
+  border-radius: 8px !important; flex-shrink: 0; cursor: pointer;
+}

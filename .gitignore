@@ -1,0 +1,260 @@
+# ==========================================================
+# Universal .gitignore
+# Suitable for Python, C/C++, Java, JS/TS, Node, Go, Rust,
+# .NET, ML, Data Science, and general software projects.
+# ==========================================================
+
+############################
+# OS Files
+############################
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100/
+.Trashes/
+ehthumbs.db
+
+############################
+# Editor / IDE
+############################
+.vscode/
+.idea/
+*.code-workspace
+
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+############################
+# Vim
+############################
+*.swp
+*.swo
+*~
+
+############################
+# Logs
+############################
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################
+# Environment Variables
+############################
+.env
+.env.*
+!.env.example
+
+############################
+# Secrets
+############################
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+
+############################
+# Python
+############################
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.so
+*.pyd
+
+build/
+dist/
+site/
+
+.eggs/
+*.egg
+*.egg-info/
+
+pip-wheel-metadata/
+
+.venv/
+venv/
+ENV/
+env/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+
+.ipynb_checkpoints/
+
+############################
+# Node.js
+############################
+node_modules/
+
+.npm/
+.pnpm-store/
+
+.yarn/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+.next/
+.nuxt/
+.svelte-kit/
+.parcel-cache/
+
+coverage/
+
+############################
+# React / Vite
+############################
+vite.svg
+
+############################
+# Java / Kotlin
+############################
+.gradle/
+out/
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+############################
+# C / C++
+############################
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+*.app
+
+*.dSYM/
+
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+compile_commands.json
+Makefile
+
+############################
+# Rust
+############################
+target/
+Cargo.lock
+# Uncomment if building an application:
+#! Cargo.lock
+
+############################
+# Go
+############################
+bin/
+pkg/
+*.test
+
+############################
+# .NET
+############################
+bin/
+obj/
+
+############################
+# Swift / Xcode
+############################
+.build/
+DerivedData/
+
+############################
+# Terraform
+############################
+.terraform/
+*.tfstate
+*.tfstate.*
+
+############################
+# Docker
+############################
+*.pid
+*.seed
+
+############################
+# Archives
+############################
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+*.bz2
+
+############################
+# Temporary Files
+############################
+tmp/
+temp/
+*.tmp
+*.bak
+*.old
+
+############################
+# Cache
+############################
+.cache/
+.cache-loader/
+
+############################
+# Machine Learning
+############################
+wandb/
+mlruns/
+tensorboard/
+runs/
+checkpoints/
+checkpoints-*/
+*.ckpt
+*.pth
+*.pt
+*.h5
+
+############################
+# Data Files (Optional)
+# Uncomment if datasets should not be tracked
+############################
+# data/
+# datasets/
+# *.csv
+# *.parquet
+# *.feather
+
+############################
+# Images (Optional)
+# Uncomment if generated automatically
+############################
+# *.png
+# *.jpg
+# *.jpeg
+
+############################
+# Misc
+############################
+*.pid
+*.lock
+*.orig

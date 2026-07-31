@@ -1,0 +1,14 @@
+[
+  {
+    "id": "b10",
+    "userId": "alice.c@nexuspay",
+    "name": "john",
+    "beneficiaryId": "john.c@nexuspay"
+  },
+  {
+    "id": "b11",
+    "userId": "john.c@nexuspay",
+    "name": "Alice Mehta",
+    "beneficiaryId": "alice.c@nexuspay"
+  }
+]

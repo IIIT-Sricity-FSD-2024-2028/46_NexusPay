@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NexusPay Admin Settings — Manage your profile and preferences" />
+    <title>NexusPay Admin — Settings</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../sharedadmin/globals.css" />
+    <link rel="stylesheet" href="./settings.css" />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+<body>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar"></aside>
+
+        <!-- Main Content -->
+        <div class="main-area">
+            <!-- Header -->
+            <header id="header-bar"></header>
+
+            <!-- Settings Content -->
+            <main class="main-content" id="settings-container"></main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../sharedadmin/js/utils/helpers.js"></script>
+    <script src="../sharedadmin/js/utils/auth.js"></script>
+    <script src="../sharedadmin/js/services/dataService.js"></script>
+    <script src="../sharedadmin/js/components/toast.js"></script>
+    <script src="../sharedadmin/js/components/sidebar.js"></script>
+    <script src="../sharedadmin/js/components/roleSwitcher.js"></script>
+    <script src="./settings.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            Sidebar.render('settings');
+            HeaderBar.render('header-bar', 'Settings', { showRoleSwitcher: false });
+            SettingsUI.render('settings-container');
+        });
+    </script>
+</body>
+</html>

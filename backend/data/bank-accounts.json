@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ba1",
+    "userId": "john.c@nexuspay",
+    "bankName": "HDFC Bank",
+    "holderName": "Rajesh Kumar",
+    "accountNum": "1234",
+    "ifsc": "HDFC0001234",
+    "balance": 82700.5,
+    "primary": true
+  },
+  {
+    "id": "ba2",
+    "userId": "john.c@nexuspay",
+    "bankName": "ICICI Bank",
+    "holderName": "Rajesh Kumar",
+    "accountNum": "5678",
+    "ifsc": "ICIC0005678",
+    "balance": 43200,
+    "primary": false
+  },
+  {
+    "id": "ba3",
+    "userId": "john.c@nexuspay",
+    "bankName": "State Bank of India",
+    "holderName": "Rajesh Kumar",
+    "accountNum": "9012",
+    "ifsc": "SBIN0009012",
+    "balance": 28750,
+    "primary": false
+  },
+  {
+    "id": "ba4",
+    "userId": "amazon.m@nexuspay",
+    "bankName": "HDFC Bank",
+    "holderName": "Amazon India Pvt Ltd",
+    "accountNum": "4401",
+    "ifsc": "HDFC0004401",
+    "balance": 547300,
+    "primary": true
+  },
+  {
+    "id": "ba5",
+    "userId": "amazon.m@nexuspay",
+    "bankName": "ICICI Bank",
+    "holderName": "Amazon India Pvt Ltd",
+    "accountNum": "7823",
+    "ifsc": "ICIC0007823",
+    "balance": 218500,
+    "primary": false
+  },
+  {
+    "id": "ba6",
+    "userId": "amazon.m@nexuspay",
+    "bankName": "Axis Bank",
+    "holderName": "Amazon India Pvt Ltd",
+    "accountNum": "3356",
+    "ifsc": "UTIB0003356",
+    "balance": 97200,
+    "primary": false
+  },
+  {
+    "id": "ba7",
+    "userId": "amazon.m@nexuspay",
+    "bankName": "State Bank of India",
+    "holderName": "ruvan reddy",
+    "accountNum": "4512",
+    "ifsc": "SBIN8906546",
+    "balance": 0,
+    "primary": false
+  }
+]

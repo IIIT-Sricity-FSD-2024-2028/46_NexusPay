@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexusPay - Merchant Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<link rel="stylesheet" href="merchant.css">
+
+  <script src="../shared/api-config.js"></script>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">N</div>
+      <div class="login-logo-text">NexusPay</div>
+    </div>
+    <div class="login-title">Merchant Login</div>
+    <div class="login-sub">Sign in to your merchant dashboard</div>
+    <div class="login-field">
+      <label class="login-label">Merchant ID / Email</label>
+      <input class="login-input" id="loginEmail" type="text" placeholder="merchant@yourbusiness" value="merchant@techcorp.nexuspay">
+    </div>
+    <div class="login-field">
+      <label class="login-label">Password</label>
+      <input class="login-input" id="loginPass" type="password" placeholder="Enter your password" value="password123">
+    </div>
+    <div class="login-err" id="loginErr">Invalid credentials. Please try again.</div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-footer">NexusPay Merchant Platform · v2.4.1</div>
+  </div>
+</div>
+
+<div class="container" id="appContainer">
+
+<!-- ======== SIDEBAR ======== -->
+<div class="sidebar">
+  <div class="sidebar-top">
+    <div class="logo-section">
+      <div class="logo">
+        <div class="logo-icon">N</div>
+        <div class="logo-text"><h2>NexusPay</h2></div>
+      </div>
+    </div>
+    <ul class="nav-menu">
+      <li><button class="nav-item active" onclick="go('dashboard',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</button></li>
+      <li><button class="nav-item" onclick="go('transactions',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Transactions</button></li>
+      <li><button class="nav-item" onclick="go('customers',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Customers</button></li>
+      <li><button class="nav-item" onclick="go('bankaccounts',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 10h10M7 14h10"/></svg>Bank Accounts</button></li>
+      <li><button class="nav-item" onclick="go('analytics',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="M7 17V9"/><path d="M12 17V5"/><path d="M17 17V11"/></svg>Analytics</button></li>
+      <li><button class="nav-item" onclick="go('dispute',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Raise Dispute</button></li>
+      <li><button class="nav-item" onclick="go('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/><path d="M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24"/><path d="M1 12h6m6 0h6"/><path d="M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>Settings</button></li>
+    </ul>
+  </div>
+  <div class="sidebar-bottom">
+    <button class="logout-btn" onclick="openLogoutModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</button>
+  </div>
+</div>
+
+<!-- ======== MAIN ======== -->
+<div class="main-content">
+  <div class="topbar">
+    <button class="icon-btn" onclick="toggleNotif(event)" id="notifBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge" id="notifDot"></span>
+    </button>
+    <button class="icon-btn profile-btn" onclick="toggleProfile(event)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    </button>
+    <div class="notif-dropdown" id="notifDropdown">
+      <div class="notif-head"><h4>Notifications</h4><button class="notif-clear" onclick="clearNotifs()">Clear all</button></div>
+      <div class="notif-list" id="notifList"></div>
+    </div>
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="profile-head">
+        <div class="profile-name">TechCorp Solutions</div>
+        <div class="profile-email">merchant@techcorp.nexuspay</div>
+      </div>
+      <button class="profile-menu-item" onclick="go('settings',null);closeDD()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/><path d="M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24"/><path d="M1 12h6m6 0h6"/><path d="M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>Settings</button>
+      <button class="profile-menu-item" onclick="closeDD();showToast('Help center opening...','blue')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>Help</button>
+      <button class="profile-menu-item danger" onclick="openLogoutModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard" class="section active">
+      <div class="page-title">Dashboard</div>
+      <div class="metrics-grid-5">
+        <div class="metric-card"><div class="metric-label">This Month</div><div class="metric-value">₹45,850</div><div class="metric-change">↑ 12.5% growth</div></div>
+        <div class="metric-card"><div class="metric-label">Pending Settlement</div><div class="metric-value">₹8,500</div><div class="metric-change muted">Next: Mar 30</div></div>
+        <div class="metric-card"><div class="metric-label">Total Transactions</div><div class="metric-value">847</div><div class="metric-change">↑ 24 this month</div></div>
+        <div class="metric-card"><div class="metric-label">Success Rate</div><div class="metric-value">99.2%</div><div class="metric-change">Excellent</div></div>
+        <div class="metric-card"><div class="metric-label">Total Customers</div><div class="metric-value">1,248</div><div class="metric-change">+8.2% this month</div></div>
+      </div>
+      <div class="commission-banner">
+        <div class="commission-info">
+          <h4>Total Transaction Fee (0.5%)</h4>
+          <div class="val">₹229.25</div>
+          <div class="commission-sub">Deducted from ₹45,850 this month · Auto-transferred</div>
+        </div>
+        <div class="commission-right">
+          <div class="label">Per transaction fee</div>
+          <div class="big">0.5%</div>
+        </div>
+      </div>
+      <!-- 3 INTERACTIVE GRAPHS -->
+      <div class="three-charts">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div><div class="chart-title">Revenue Trend</div><div class="chart-sub" id="revHover">Hover for details</div></div>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateRev(7,this)">7D</button>
+              <button class="chart-btn" onclick="updateRev(30,this)">30D</button>
+              <button class="chart-btn" onclick="updateRev(90,this)">90D</button>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="revChart"></canvas></div>
+        </div>
+        <!-- CHANGED: Monthly Growth now matches Analytics (6M/12M) -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Monthly Growth</div>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateGrowth('6m',this)">6M</button>
+              <button class="chart-btn" onclick="updateGrowth('12m',this)">12M</button>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="growthChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Success vs Failed</div>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateDashVol(7,this)">7D</button>
+              <button class="chart-btn" onclick="updateDashVol(14,this)">14D</button>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="volChart"></canvas></div>
+        </div>
+      </div>
+      <!-- BOTTOM: recent transactions + top customers -->
+      <div class="dash-bottom">
+        <div class="table-section" style="margin-bottom:0;">
+          <div class="table-header">
+            <div class="table-title">Recent Transactions</div>
+            <button class="view-all-btn" onclick="go('transactions',null)">View all →</button>
+          </div>
+          <table>
+            <thead><tr><th>Customer</th><th>NexusPay ID</th><th>Amount</th><th>Txn Fee</th><th>Status</th></tr></thead>
+            <tbody id="recentTxnBody"></tbody>
+          </table>
+        </div>
+        <div class="top-customers-card">
+          <div class="tc-header">
+            <div class="tc-title">Top Customers</div>
+            <button class="view-all-btn" onclick="go('customers',null)">View all →</button>
+          </div>
+          <div class="cust-row"><div class="rank-badge r1">1</div><div class="cust-av">AR</div><div class="cust-info"><div class="cust-name">Anjali Rao</div><div class="cust-id">anjali.r@nexuspay</div></div><div class="cust-amt"><div class="cust-amt-val">₹42,000</div><div class="cust-txns">20 txns</div></div></div>
+          <div class="cust-row"><div class="rank-badge r2">2</div><div class="cust-av" style="background:rgba(139,92,246,.1);color:#8b5cf6;">SK</div><div class="cust-info"><div class="cust-name">Shreya Kumar</div><div class="cust-id">shreya.k@nexuspay</div></div><div class="cust-amt"><div class="cust-amt-val">₹35,800</div><div class="cust-txns">14 txns</div></div></div>
+          <div class="cust-row"><div class="rank-badge r3">3</div><div class="cust-av" style="background:#fef3c7;color:#92400e;">SG</div><div class="cust-info"><div class="cust-name">Sneha Gupta</div><div class="cust-id">sneha.g@nexuspay</div></div><div class="cust-amt"><div class="cust-amt-val">₹28,500</div><div class="cust-txns">15 txns</div></div></div>
+          <div class="cust-row"><div class="rank-badge rn">4</div><div class="cust-av" style="background:#ede9fe;color:#6d28d9;">AP</div><div class="cust-info"><div class="cust-name">Arjun Patel</div><div class="cust-id">arjun.p@nexuspay</div></div><div class="cust-amt"><div class="cust-amt-val">₹22,400</div><div class="cust-txns">11 txns</div></div></div>
+          <div class="cust-row"><div class="rank-badge rn">5</div><div class="cust-av" style="background:#d1fae5;color:#065f46;">RS</div><div class="cust-info"><div class="cust-name">Rahul Sharma</div><div class="cust-id">rahul.k@nexuspay</div></div><div class="cust-amt"><div class="cust-amt-val">₹15,600</div><div class="cust-txns">12 txns</div></div></div>
+          <div class="cust-row"><div class="rank-badge rn">6</div><div class="cust-av" style="background:#fce7f3;color:#9d174d;">NP</div><div class="cust-info"><div class="cust-name">Neha Patel</div><div class="cust-id">neha.p@nexuspay</div></div><div class="cust-amt"><div class="cust-amt-val">₹13,200</div><div class="cust-txns">9 txns</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TRANSACTIONS ===== -->
+    <div id="transactions" class="section">
+      <div class="page-title">Transactions</div>
+      <div class="pay-link-bar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B5BFF" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span class="plink-label">Pay Link</span>
+        <span class="plink-url">pay.nexuspay.in/merchant@techcorp</span>
+        <button class="btn-copy" onclick="copyLink()">COPY</button>
+        <button class="btn-share-sm" onclick="openModal('shareLinkModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>
+      </div>
+      <div class="table-section">
+        <div class="table-header">
+          <div class="table-title">Transaction History</div>
+          <div class="table-controls">
+            <input type="text" class="search-input" placeholder="Search customer or NexusPay ID..." id="txnSearch" oninput="filterTxns()">
+            <select class="filter-select" id="txnFilter" onchange="filterTxns()">
+              <option value="">All Status</option>
+              <option value="Success">Success</option>
+              <option value="Failed">Failed</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Date</th><th>Customer</th><th>NexusPay ID</th><th>Amount</th><th>Transaction Fee</th><th>Net Received</th><th>Status</th></tr></thead>
+          <tbody id="txnBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== CUSTOMERS ===== -->
+    <div id="customers" class="section">
+      <div class="page-title">Customers</div>
+      <div class="metrics-grid-3">
+        <div class="metric-card"><div class="metric-label">Total Customers</div><div class="metric-value">1,248</div><div class="metric-change">+8.2% this month</div></div>
+        <div class="metric-card"><div class="metric-label">Active Customers</div><div class="metric-value">892</div><div class="metric-change muted">Last 30 days</div></div>
+        <div class="metric-card"><div class="metric-label">Avg. Customer Value</div><div class="metric-value">₹18,420</div><div class="metric-change">+12.5% this month</div></div>
+      </div>
+      <div class="table-section">
+        <div class="table-header">
+          <div class="table-title">Customer Directory</div>
+          <div class="table-controls">
+            <input type="text" class="search-input" placeholder="Search customer or NexusPay ID..." id="custSearch" oninput="filterCusts()">
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Customer</th><th>NexusPay ID</th><th>Total Payments</th><th>Last Payment</th><th>Total Spent</th></tr></thead>
+          <tbody id="custBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== BANK ACCOUNTS ===== -->
+    <div id="bankaccounts" class="section">
+      <div class="page-title">Bank Accounts</div>
+      <div class="bank-section">
+        <div class="bank-sec-head">
+          <div class="bank-sec-title">Your Accounts</div>
+          <div class="bank-actions-row">
+            <button class="btn-view" onclick="toggleBalances()" id="viewBalBtn">ðŸ‘ View Balance</button>
+            <button class="btn-add" onclick="openModal('addBankModal')">+ Add Bank Account</button>
+          </div>
+        </div>
+        <div class="bank-items" id="bankList"></div>
+      </div>
+    </div>
+
+    <!-- ===== ANALYTICS ===== -->
+    <div id="analytics" class="section">
+      <div class="page-title">Analytics</div>
+      <div class="metrics-grid">
+        <div class="metric-card"><div class="metric-label">Total Revenue</div><div class="metric-value">₹1.24L</div><div class="metric-change">↑ 24.5% growth</div></div>
+        <div class="metric-card"><div class="metric-label">Avg Transaction</div><div class="metric-value">₹2,850</div><div class="metric-change muted">2,847 txns</div></div>
+        <div class="metric-card"><div class="metric-label">Success Rate</div><div class="metric-value">99.2%</div><div class="metric-change">↑ 0.5% up</div></div>
+        <div class="metric-card"><div class="metric-label">New Customers</div><div class="metric-value">124</div><div class="metric-change muted">This month</div></div>
+      </div>
+      <div class="chart-card" style="margin-bottom:16px;">
+        <div class="chart-header">
+          <div><div class="chart-title">Revenue Over Time</div><div class="chart-sub">Gross revenue before 0.5% commission deduction</div></div>
+          <div class="chart-controls">
+            <button class="chart-btn active" onclick="updateAn1(7,this)">7D</button>
+            <button class="chart-btn" onclick="updateAn1(30,this)">30D</button>
+            <button class="chart-btn" onclick="updateAn1(90,this)">90D</button>
+          </div>
+        </div>
+        <div class="chart-container-lg"><canvas id="an1Chart"></canvas></div>
+      </div>
+      <div class="two-charts">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Daily Success vs Failed</div>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateAn3(7,this)">7D</button>
+              <button class="chart-btn" onclick="updateAn3(14,this)">14D</button>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="an3Chart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Monthly Revenue Growth</div>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateAn4('6m',this)">6M</button>
+              <button class="chart-btn" onclick="updateAn4('12m',this)">12M</button>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="an4Chart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DISPUTE ===== -->
+    <div id="dispute" class="section">
+      <div class="page-title">Raise Dispute</div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event,'newDispute')">Raise New Dispute</button>
+        <button class="tab-btn" onclick="switchTab(event,'disputeHistory')">Dispute History</button>
+      </div>
+      <div id="newDispute" class="dispute-tab active">
+        <div class="dispute-container">
+          <div class="dispute-panel">
+            <div class="dispute-panel-title">Select a Transaction</div>
+            <div class="dispute-search"><input type="text" placeholder="Search by customer or NexusPay ID..." oninput="filterDTxns(this.value)"></div>
+            <div id="dTxnList" style="max-height:420px;overflow-y:auto;"></div>
+          </div>
+          <div class="dispute-panel">
+            <div class="dispute-panel-title">Raise Dispute</div>
+            <div class="sel-txn-box">
+              <div class="sel-txn-lbl">Selected Transaction</div>
+              <div class="sel-txn-val" id="selTxnVal">No transaction selected</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Select Issue Type *</label>
+              <div class="form-option" onclick="pickIssue(this,'Settlement amount delayed')">Settlement amount delayed</div>
+              <div class="form-option" onclick="pickIssue(this,'Wrong settlement amount received')">Wrong settlement amount received</div>
+              <div class="form-option" onclick="pickIssue(this,'Duplicate charge')">Duplicate charge</div>
+              <div class="form-option" onclick="pickIssue(this,'Other')">Other</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Describe the Issue *</label>
+              <textarea class="form-textarea" id="disputeDesc" placeholder="Provide detailed information (min 20 chars)..."></textarea>
+              <small style="color:#9ca3af;font-size:11px;margin-top:4px;display:block;">Minimum 20 characters</small>
+            </div>
+            <button class="btn-submit" onclick="submitDispute()">Submit Dispute</button>
+          </div>
+        </div>
+      </div>
+      <div id="disputeHistory" class="dispute-tab">
+        <div id="dHistList"></div>
+      </div>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div id="settings" class="section">
+      <div class="page-title">Settings</div>
+      <div class="settings-layout">
+        <div class="settings-nav">
+          <button class="snav-item active" onclick="switchSettingsTab('Business Profile',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+            Business Profile <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('Security & Privacy',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Security & Privacy <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('Notifications',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Notifications <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('Language',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Language <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('Help & Support',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+            Help & Support <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('About',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8h.01M12 12v4"/></svg>
+            About <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('Privacy Policy',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Privacy Policy <span class="snav-arrow">›</span>
+          </button>
+          <button class="snav-item" onclick="switchSettingsTab('Terms & Conditions',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Terms & Conditions <span class="snav-arrow">›</span>
+          </button>
+          <div class="snav-divider"></div>
+          <button class="snav-item snav-logout" onclick="openLogoutModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </button>
+        </div>
+        <div class="settings-panel">
+          <div id="stab-Business Profile" class="stab active">
+            <div class="stab-title">Business Profile</div>
+            <div class="stab-profile-head">
+              <div class="stab-avatar">TC</div>
+              <div>
+                <div class="stab-biz-name">TechCorp Solutions</div>
+                <div class="stab-biz-email">business@techcorp.com</div>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value="TechCorp Solutions"></div>
+            <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" value="business@techcorp.com"></div>
+            <div class="form-group"><label class="form-label">GST Number</label><input class="form-input" value="22AAAAA0000A1Z5"></div>
+            <div class="form-group">
+              <label class="form-label">Business Category</label>
+              <select class="form-select">
+                <option>Retail</option><option>Food & Beverage</option><option>Services</option><option>Healthcare</option><option>Education</option><option>Technology</option><option>Manufacturing</option><option>Other</option>
+              </select>
+            </div>
+            <div class="stab-status-box">
+              <div class="stab-status-label">Account Status</div>
+              <div class="stab-status-val">✓ Verified Merchant</div>
+            </div>
+            <button class="btn-submit" onclick="showToast('Profile updated!','green')">Save Changes</button>
+          </div>
+          <div id="stab-Security & Privacy" class="stab">
+            <div class="stab-title">Security & Privacy</div>
+            <div class="settings-row"><div><div class="settings-row-label">Two-Factor Auth</div><div class="settings-row-sub">Extra security on login</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-row-label">Login Notifications</div><div class="settings-row-sub">Alert on new device login</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div style="margin-top:16px;">
+              <div class="form-group"><label class="form-label">Change Password</label><input class="form-input" type="password" placeholder="New password"></div>
+              <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-input" type="password" placeholder="Confirm new password"></div>
+              <button class="btn-submit" onclick="showToast('Password updated!','green')">Update Password</button>
+            </div>
+          </div>
+          <div id="stab-Notifications" class="stab">
+            <div class="stab-title">Notifications</div>
+            <div class="settings-row"><div><div class="settings-row-label">Transaction Alerts</div><div class="settings-row-sub">Notify on every payment received</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-row-label">Failed Payments</div><div class="settings-row-sub">Alert when payment fails</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-row-label">Bank Account Updates</div><div class="settings-row-sub">Notify when bank account changes</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-row-label">Settlement Updates</div><div class="settings-row-sub">Daily settlement notifications</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-row-label">Marketing Emails</div><div class="settings-row-sub">Product updates and offers</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+          </div>
+          <div id="stab-Language" class="stab">
+            <div class="stab-title">Language</div>
+            <div class="form-group"><label class="form-label">App Language</label>
+              <select class="form-select"><option>English</option><option>Hindi</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Marathi</option></select>
+            </div>
+            <button class="btn-submit" onclick="showToast('Language updated!','green')">Save</button>
+          </div>
+          <div id="stab-Help & Support" class="stab">
+            <div class="stab-title">Help & Support</div>
+            <div class="settings-row" style="cursor:pointer" onclick="showToast('Opening chat support...','blue')"><div><div class="settings-row-label">Chat Support</div><div class="settings-row-sub">Talk to our support team</div></div><span style="color:#9ca3af">›</span></div>
+            <div class="settings-row" style="cursor:pointer" onclick="showToast('Opening FAQs...','blue')"><div><div class="settings-row-label">FAQs</div><div class="settings-row-sub">Frequently asked questions</div></div><span style="color:#9ca3af">›</span></div>
+            <div class="settings-row" style="cursor:pointer" onclick="showToast('Raising ticket...','blue')"><div><div class="settings-row-label">Raise a Ticket</div><div class="settings-row-sub">Submit a support request</div></div><span style="color:#9ca3af">›</span></div>
+            <div class="settings-row" style="cursor:pointer"><div><div class="settings-row-label">Email Support</div><div class="settings-row-sub">support@nexuspay.in</div></div><span style="color:#9ca3af">›</span></div>
+          </div>
+          <div id="stab-About" class="stab">
+            <div class="stab-title">About NexusPay</div>
+            <div class="settings-row"><div><div class="settings-row-label">App Version</div><div class="settings-row-sub">v2.4.1</div></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Build</div><div class="settings-row-sub">20260331</div></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Company</div><div class="settings-row-sub">NexusPay Technologies Pvt. Ltd.</div></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Website</div><div class="settings-row-sub">www.nexuspay.in</div></div></div>
+          </div>
+          <div id="stab-Privacy Policy" class="stab">
+            <div class="stab-title">Privacy Policy</div>
+            <p style="font-size:13px;color:#6b7280;line-height:1.7;">NexusPay is committed to protecting your privacy. We collect only necessary data required to process payments and improve our service. Your financial data is encrypted and never shared with third parties without consent.</p>
+            <p style="font-size:13px;color:#6b7280;line-height:1.7;margin-top:12px;">For full privacy policy details, visit <span style="color:#5B5BFF;font-weight:600;">www.nexuspay.in/privacy</span></p>
+          </div>
+          <div id="stab-Terms & Conditions" class="stab">
+            <div class="stab-title">Terms & Conditions</div>
+            <p style="font-size:13px;color:#6b7280;line-height:1.7;">By using NexusPay merchant services, you agree to our terms of service. Merchants are responsible for maintaining accurate business information and complying with applicable laws.</p>
+            <p style="font-size:13px;color:#6b7280;line-height:1.7;margin-top:12px;">For full terms, visit <span style="color:#5B5BFF;font-weight:600;">www.nexuspay.in/terms</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ===== TRANSACTION MODAL ===== -->
+<div class="modal" id="txnModal" onclick="if(event.target===this)closeModal('txnModal')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div><div class="modal-title" id="tmName"></div><div style="font-size:12px;color:#9ca3af;" id="tmNid"></div></div>
+      <button class="modal-close" onclick="closeModal('txnModal')">×</button>
+    </div>
+    <div class="amt-box" id="tmBox">
+      <div class="amt-lbl">Amount</div>
+      <div class="amt-val" id="tmAmt"></div>
+      <div class="amt-status" id="tmStat"></div>
+    </div>
+    <div class="comm-detail" id="tmCommRow">
+      <div class="lbl">Transaction Fee (0.5%)</div>
+      <div class="val" id="tmComm"></div>
+    </div>
+    <div class="detail-grid">
+      <div><div class="dl">Received From</div><div class="dv" id="tmFrom"></div></div>
+      <div><div class="dl">Category</div><div class="dv" id="tmCat"></div></div>
+      <div><div class="dl">Date & Time</div><div class="dv" id="tmDate"></div></div>
+      <div><div class="dl">Transaction ID</div><div class="dv" id="tmTxnId"></div></div>
+      <div><div class="dl">Net Received</div><div class="dv" id="tmNet"></div></div>
+      <div><div class="dl">Payment Method</div><div class="dv">NexusPay</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-ms" onclick="closeModal('txnModal')">Close</button>
+      <button class="btn-mp" onclick="closeModal('txnModal');go('dispute',null)">Raise Dispute</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD BANK MODAL ===== -->
+<div class="modal" id="addBankModal" onclick="if(event.target===this)closeModal('addBankModal')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Add Bank Account</div>
+      <button class="modal-close" onclick="closeModal('addBankModal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Bank Name *</label>
+      <select class="form-select" id="bkName">
+        <option value="">Select bank</option>
+        <option>State Bank of India</option>
+        <option>HDFC Bank</option>
+        <option>ICICI Bank</option>
+        <option>Axis Bank</option>
+        <option>Kotak Mahindra Bank</option>
+        <option>Punjab National Bank</option>
+        <option>Canara Bank</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Account Holder Name *</label><input class="form-input" id="bkHolder" placeholder="Full name as per bank" minlength="5"></div>
+    <div class="form-group"><label class="form-label">Account Number *</label><input class="form-input" id="bkAccNo" type="password" inputmode="numeric" maxlength="12" placeholder="Enter 12-digit account number"></div>
+    <div class="form-group"><label class="form-label">IFSC Code *</label><input class="form-input" id="bkIFSC" maxlength="11" placeholder="e.g. SBIN0001234"></div>
+    <div class="form-group"><label class="form-label">Account Type</label><select class="form-select" id="bkType"><option>Business Current</option><option>Business Savings</option><option>Current</option><option>Savings</option></select></div>
+    <div class="modal-btns">
+      <button class="btn-ms" onclick="closeModal('addBankModal')">Cancel</button>
+      <button class="btn-mp" onclick="addBank()">Add Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SHARE LINK MODAL ===== -->
+<div class="modal" id="shareLinkModal" onclick="if(event.target===this)closeModal('shareLinkModal')">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <div class="modal-title">Share Payment Link</div>
+      <button class="modal-close" onclick="closeModal('shareLinkModal')">×</button>
+    </div>
+    <p style="font-size:13px;color:#9ca3af;margin-bottom:12px;">Customers pay you directly via your NexusPay Merchant ID.</p>
+    <div class="share-url-box">pay.nexuspay.in/merchant@techcorp</div>
+    <button class="btn-mp" style="width:100%;margin-bottom:14px;" onclick="copyLink()">Copy Link</button>
+    <div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Share via</div>
+    <div class="share-chips">
+      <button class="share-chip" onclick="shareVia('WhatsApp')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>WhatsApp</button>
+      <button class="share-chip" onclick="shareVia('Email')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</button>
+      <button class="share-chip" onclick="shareVia('SMS')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>SMS</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="logoutModal" onclick="if(event.target===this)closeModal('logoutModal')">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <div class="modal-title">Log Out</div>
+      <button class="modal-close" type="button" aria-label="Close logout dialog" onclick="closeModal('logoutModal')">&times;</button>
+    </div>
+    <p style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:16px;">Are you sure you want to log out of your merchant account?</p>
+    <div class="modal-btns">
+      <button class="btn-ms" onclick="closeModal('logoutModal')">Stay Logged In</button>
+      <button class="btn-mp" onclick="confirmLogout()">Log Out</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<script src="merchant.js"></script>
+
+</body>
+</html>

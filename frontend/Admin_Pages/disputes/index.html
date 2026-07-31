@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NexusPay Admin — Manage and resolve transaction disputes.">
+  <title>Disputes — NexusPay Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../sharedadmin/globals.css">
+  <link rel="stylesheet" href="disputes.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="main-area">
+      <header id="header-bar"></header>
+      <main class="main-content">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+          <div></div>
+          <button class="btn btn-secondary" id="resetBtn" onclick="resetDisputes()">
+            <i data-lucide="refresh-cw" style="width:15px;height:15px;"></i> Reset Demo Data
+          </button>
+        </div>
+
+        <!-- ── STAT CARDS ──────────────────── -->
+        <div class="stat-cards-grid" id="dspStats">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-purple"><i data-lucide="file-warning"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="valTotal">6</div>
+              <div class="stat-label">Total Disputes</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-yellow"><i data-lucide="clock"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="valPending">2</div>
+              <div class="stat-label">Pending</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-blue"><i data-lucide="search"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="valReview">2</div>
+              <div class="stat-label">In Review</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-green"><i data-lucide="check-circle"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="valSolved">2</div>
+              <div class="stat-label">Solved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TABS ────────────────────────── -->
+        <div class="dsp-tabs" id="dspTabs">
+          <button class="dsp-tab active" data-tab="open">Open Disputes</button>
+          <button class="dsp-tab" data-tab="pending">Pending (<span id="tabPendingCount">2</span>)</button>
+          <button class="dsp-tab" data-tab="review">In Review (<span id="tabReviewCount">2</span>)</button>
+          <button class="dsp-tab" data-tab="solved">Solved (<span id="tabSolvedCount">2</span>)</button>
+        </div>
+
+        <!-- ── DISPUTE CARDS GRID ──────────── -->
+        <div class="dsp-grid" id="dspGrid"></div>
+
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState" style="display:none;text-align:center;padding:60px 20px;">
+          <i data-lucide="info" style="width:48px;height:48px;color:#94a3b8;"></i>
+          <div style="font-size:16px;font-weight:600;color:#334155;margin-top:12px;">No disputes here</div>
+          <div style="font-size:14px;color:#94a3b8;margin-top:4px;">There are no disputes in this category right now.</div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- â•â•â• DETAIL MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="dspModal">
+      <div class="modal__header">
+        <h2 class="modal__title">Dispute Details</h2>
+        <button class="modal__close" id="modalClose"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script src="../sharedadmin/js/components/folderSidebar.js"></script>
+  <script src="disputes.js"></script>
+</body>
+</html>
+

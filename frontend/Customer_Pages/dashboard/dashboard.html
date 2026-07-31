@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusPay Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@100..800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <h1 class="brand-name">NexusPay</h1>
+    </div>
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <a class="nav-link" href="dashboard.html">
+            <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../pay/pay.html">
+            <span class="nav-icon"><i data-lucide="send"></i></span>
+            <span class="nav-label">Pay</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../history/transaction_history.html">
+            <span class="nav-icon"><i data-lucide="history"></i></span>
+            <span class="nav-label">Transaction History</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../split/split.html">
+            <span class="nav-icon"><i data-lucide="split"></i></span>
+            <span class="nav-label">Split Payments</span>
+          </a>
+          <span class="nav-badge">3</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../scheduled/index.html">
+            <span class="nav-icon"><i data-lucide="calendar"></i></span>
+            <span class="nav-label">Scheduled Payments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../bank-accounts/index.html">
+            <span class="nav-icon"><i data-lucide="building2"></i></span>
+            <span class="nav-label">Bank Accounts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../spending/index.html">
+            <span class="nav-icon"><i data-lucide="trending-up"></i></span>
+            <span class="nav-label">Spending Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../raiseDispute/RaiseDispute.html">
+            <span class="nav-icon"><i data-lucide="circle-alert"></i></span>
+            <span class="nav-label">Raise Dispute</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../settings/Settings.html">
+            <span class="nav-icon"><i data-lucide="settings"></i></span>
+            <span class="nav-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../../Public_Pages/Signin.html?role=customer" class="logout-btn" id="logout-btn">
+        <span class="nav-icon"><i data-lucide="log-out"></i></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <h1>Welcome back, Suhaas</h1>
+      <div class="topbar-actions">
+
+        <!-- Notification Button + Panel -->
+        <div class="notif-wrapper" id="notifWrapper">
+          <button class="notif-btn" id="notifBtn" title="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+            </svg>
+            <span class="notif-dot" id="notifDot"></span>
+          </button>
+
+          <div class="notif-panel" id="notifPanel">
+            <div class="notif-panel-header">
+              <span class="notif-panel-title">Notifications</span>
+              <button class="notif-mark-all" id="markAllRead">Mark all read</button>
+            </div>
+            <div class="notif-list">
+              <div class="notif-row unread" data-id="2"
+                onclick="window.location.href='../history/transaction_history.html?txnId=2'" style="cursor: pointer;">
+                <div class="notif-row-icon" style="background:#ecfdf5;color:#10b981"><i
+                    data-lucide="arrow-down-left"></i></div>
+                <div class="notif-row-body">
+                  <div class="notif-row-title">Payment Received</div>
+                  <div class="notif-row-desc">Priya Sharma sent you <strong>₹1,500</strong></div>
+                  <div class="notif-row-time">1:15 PM</div>
+                </div>
+                <div class="notif-unread-dot"></div>
+              </div>
+              <div class="notif-row unread" data-id="6"
+                onclick="window.location.href='../history/transaction_history.html?txnId=6'" style="cursor: pointer;">
+                <div class="notif-row-icon" style="background:#eef2ff;color:#6366f1"><i
+                    data-lucide="arrow-up-right"></i></div>
+                <div class="notif-row-body">
+                  <div class="notif-row-title">Split Payment</div>
+                  <div class="notif-row-desc">You paid Rahul Kumar <strong>₹2,000</strong> for split</div>
+                  <div class="notif-row-time">11:30 AM</div>
+                </div>
+                <div class="notif-unread-dot"></div>
+              </div>
+              <div class="notif-row unread" data-id="5"
+                onclick="window.location.href='../history/transaction_history.html?txnId=5'" style="cursor: pointer;">
+                <div class="notif-row-icon" style="background:#eef2ff;color:#6366f1"><i data-lucide="shopping-bag"></i>
+                </div>
+                <div class="notif-row-body">
+                  <div class="notif-row-title">Purchase Successful</div>
+                  <div class="notif-row-desc">You paid Amazon <strong>₹1,250</strong></div>
+                  <div class="notif-row-time">3:20 PM</div>
+                </div>
+                <div class="notif-unread-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Button + Dropdown -->
+        <div class="profile-wrapper" id="profileWrapper">
+          <div class="user-btn" id="profileBtn">S</div>
+
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="profile-header">
+              <div class="profile-avatar-lg">S</div>
+              <div class="profile-info">
+                <div class="profile-name">Suhaas</div>
+                <div class="profile-email">suhaas@nexuspay.in</div>
+              </div>
+            </div>
+            <div class="profile-menu">
+              <a class="profile-menu-item" href="../settings/Settings.html?section=profile">
+                <span class="pm-icon"><i data-lucide="user"></i></span> My Profile
+              </a>
+              <a class="profile-menu-item" href="../settings/Settings.html?section=help">
+                <span class="pm-icon"><i data-lucide="help-circle"></i></span> Help & Support
+              </a>
+              <a class="profile-menu-item" href="../settings/Settings.html?section=security">
+                <span class="pm-icon"><i data-lucide="settings"></i></span> Settings
+              </a>
+
+            </div>
+            <div class="profile-footer">
+              <button class="profile-logout-btn" id="logoutBtn">
+                <span class="pm-icon"><i data-lucide="log-out"></i></span> LogOut
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stat-grid">
+      <div class="stat-card primary">
+        <div class="stat-label">Total Spent</div>
+        <div class="stat-value" id="mainWalletBalance">₹9,850</div>
+        <div class="stat-badge">This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Split Requests</div>
+        <div class="stat-num" id="mainTotalSpent">24</div>
+        <div class="stat-change up">+8 this Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Transactions</div>
+        <div class="stat-num">156</div>
+        <div class="stat-change purple">+2 this month</div>
+      </div>
+    </div>
+
+    <!-- Spending Analytics -->
+    <div class="analytics-card">
+      <div class="section-header">
+        <h2>Spending Analytics</h2>
+        <select class="period-select" id="periodSelect">
+          <option>This Month</option>
+          <option>Last Month</option>
+          <option>Last 3 Months</option>
+        </select>
+      </div>
+      <div class="analytics-inner">
+        <div class="pie-wrap">
+          <canvas id="pieChart" width="200" height="200"></canvas>
+          <div class="pie-center-label">
+            <div class="amount">₹9,850</div>
+            <div class="sublabel">Total Spent</div>
+          </div>
+        </div>
+        <div class="category-grid">
+          <div class="cat-item" data-cat="0">
+            <div class="cat-header">
+              <div class="cat-name-wrap"><span class="cat-emoji">&#127829;</span> Food & Dining</div>
+              <span class="cat-change up">+12%</span>
+            </div>
+            <div class="cat-amount">₹2,400</div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" style="width:0%;background:#6366f1"></div>
+            </div>
+          </div>
+          <div class="cat-item" data-cat="1">
+            <div class="cat-header">
+              <div class="cat-name-wrap"><span class="cat-emoji">&#128717;&#65039;</span> Shopping</div>
+              <span class="cat-change down">-5%</span>
+            </div>
+            <div class="cat-amount">₹2,100</div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" style="width:0%;background:#10b981"></div>
+            </div>
+          </div>
+          <div class="cat-item" data-cat="2">
+            <div class="cat-header">
+              <div class="cat-name-wrap"><span class="cat-emoji">🎬</span> Entertainment</div>
+              <span class="cat-change up">+8%</span>
+            </div>
+            <div class="cat-amount">₹1,800</div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" style="width:0%;background:#a855f7"></div>
+            </div>
+          </div>
+          <div class="cat-item" data-cat="3">
+            <div class="cat-header">
+              <div class="cat-name-wrap"><span class="cat-emoji">🚗</span> Transport</div>
+              <span class="cat-change down">-15%</span>
+            </div>
+            <div class="cat-amount">₹1,500</div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" style="width:0%;background:#f59e0b"></div>
+            </div>
+          </div>
+          <div class="cat-item" data-cat="4">
+            <div class="cat-header">
+              <div class="cat-name-wrap"><span class="cat-emoji">&#127978;</span> Retail</div>
+              <span class="cat-change up">+3%</span>
+            </div>
+            <div class="cat-amount">₹1,200</div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" style="width:0%;background:#ec4899"></div>
+            </div>
+          </div>
+          <div class="cat-item" data-cat="5">
+            <div class="cat-header">
+              <div class="cat-name-wrap"><span class="cat-emoji">&#128230;</span> Others</div>
+              <span class="cat-change up">+2%</span>
+            </div>
+            <div class="cat-amount">₹800</div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" style="width:0%;background:#94a3b8"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Monthly Trend + Recent Transactions -->
+    <div class="bottom-grid">
+      <div class="chart-card">
+        <div class="section-header">
+          <h2>Monthly Trend</h2>
+        </div>
+        <canvas id="lineChart" height="160"></canvas>
+      </div>
+
+      <div class="txn-card">
+        <div class="txn-header">
+          <h2>Recent Transactions</h2>
+          <a href="../history/transaction_history.html" class="view-all">View All</a>
+        </div>
+        <div class="txn-list" id="dashboardTxnList">
+          <!-- Rendered via script.js -->
+        </div>
+      </div><!-- /.txn-card -->
+    </div><!-- /.bottom-grid -->
+
+  </main>
+
+  <!-- Transaction Receipt Popup -->
+  <div id="receipt-popup" class="popup-overlay">
+    <div class="popup-content receipt-content">
+      <div class="popup-header">
+        <h3>Transaction Receipt</h3>
+        <button id="close-receipt-popup" class="close-btn">&times;</button>
+      </div>
+      <div class="receipt-body">
+        <div class="receipt-icon" id="receipt-icon">&#9749;</div>
+        <div class="receipt-details">
+          <h4 id="receipt-merchant">Starbucks Coffee</h4>
+          <div class="receipt-meta">
+            <span id="receipt-date">Today, 2:30 PM</span>
+            <span id="receipt-category">Food & Dining</span>
+          </div>
+        </div>
+        <div class="receipt-amount" id="receipt-amount">-₹450</div>
+
+        <div class="receipt-info">
+          <div class="info-row">
+            <span>Transaction ID</span>
+            <span id="receipt-txn-id">TXN-2026-03-28-001</span>
+          </div>
+          <div class="info-row">
+            <span>Status</span>
+            <span class="status-success" id="receipt-status">Completed</span>
+          </div>
+        </div>
+
+        <div class="receipt-actions">
+          <button class="btn-primary" id="raise-dispute-receipt">Raise Dispute</button>
+          <button class="btn-secondary" id="done-receipt">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="logout-popup" class="popup-overlay">
+    <div class="popup-content logout-popup-content">
+      <div class="popup-header">
+        <h3>Log Out</h3>
+        <button id="close-logout-popup" class="close-btn">&times;</button>
+      </div>
+      <div class="logout-popup-body">
+        <p>Are you sure you want to log out of your customer account?</p>
+        <div class="logout-popup-actions">
+          <button class="btn-secondary" id="cancel-logout-btn">Stay Logged In</button>
+          <button class="logout-confirm-btn" id="confirm-logout-btn">Log Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

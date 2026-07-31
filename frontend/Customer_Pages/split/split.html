@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Split Payment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@100..800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="../../shared/api-config.js"></script>
+</head>
+
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <h1 class="brand-name">NexusPay</h1>
+    </div>
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link" href="../dashboard/dashboard.html">
+            <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../pay/pay.html">
+            <span class="nav-icon"><i data-lucide="send"></i></span>
+            <span class="nav-label">Pay</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../history/transaction_history.html">
+            <span class="nav-icon"><i data-lucide="history"></i></span>
+            <span class="nav-label">Transaction History</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="split.html">
+            <span class="nav-icon"><i data-lucide="split"></i></span>
+            <span class="nav-label">Split Payments</span>
+          </a>
+          <span class="nav-badge">3</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../scheduled/index.html">
+            <span class="nav-icon"><i data-lucide="calendar"></i></span>
+            <span class="nav-label">Scheduled Payments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../bank-accounts/index.html">
+            <span class="nav-icon"><i data-lucide="building2"></i></span>
+            <span class="nav-label">Bank Accounts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../spending/index.html">
+            <span class="nav-icon"><i data-lucide="trending-up"></i></span>
+            <span class="nav-label">Spending Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../raiseDispute/RaiseDispute.html">
+            <span class="nav-icon"><i data-lucide="circle-alert"></i></span>
+            <span class="nav-label">Raise Dispute</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../settings/Settings.html">
+            <span class="nav-icon"><i data-lucide="settings"></i></span>
+            <span class="nav-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../../Public_Pages/Signin.html?role=customer" class="logout-btn" id="logout-btn">
+        <span class="nav-icon"><i data-lucide="log-out"></i></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+      <h1>Split Payment</h1>
+
+      <div class="notif-wrapper" id="notifWrapper">
+        <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="notif-badge" id="notifBadge">2</span>
+        </button>
+
+        <!-- Notification Dropdown -->
+        <div class="notif-panel" id="notifPanel" style="display: none;">
+          <div class="notif-panel-header">
+            <span class="notif-panel-title">Notifications</span>
+            <button class="notif-mark-all" id="markAllRead">Mark all as read</button>
+          </div>
+          <div class="notif-list">
+            <div class="notif-row unread">
+              <div class="notif-icon"><i data-lucide="split"></i></div>
+              <div class="notif-content">
+                <b>Rajesh Kumar</b> requested <b>₹350</b> for "Dinner at Olive".
+              </div>
+              <div class="notif-actions">
+                <button class="btn-primary-sm" onclick="acceptSplit(this)">Pay</button>
+                <button class="btn-secondary-sm" onclick="declineSplit(this)">Decline</button>
+              </div>
+            </div>
+            <div class="notif-row unread">
+              <div class="notif-icon"><i data-lucide="split"></i></div>
+              <div class="notif-content">
+                <b>Sneha Gupta</b> requested <b>₹1,200</b> for "Airbnb Split".
+              </div>
+              <div class="notif-actions">
+                <button class="btn-primary-sm" onclick="acceptSplit(this)">Pay</button>
+                <button class="btn-secondary-sm" onclick="declineSplit(this)">Decline</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- LEFT: Transaction List -->
+      <div class="panel">
+        <div class="panel-title">Select Transaction</div>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" class="search-input" id="txnSearch" placeholder="Search transaction…">
+        </div>
+        <div class="txn-list" id="txnList"></div>
+      </div>
+
+      <!-- RIGHT: Split Config -->
+      <div class="panel split-panel" id="splitPanel">
+        <div class="selected-txn-card" id="selectedTxnCard"></div>
+        <div class="split-type-section">
+          <div class="split-type-label">Split Type</div>
+          <div class="split-toggle">
+            <button class="split-btn active" id="equalBtn" onclick="setSplitType('equal')">Equal Split</button>
+            <button class="split-btn" id="customBtn" onclick="setSplitType('custom')">Custom Split</button>
+          </div>
+        </div>
+        <div class="bene-header">
+          <span class="bene-label" id="beneCountLabel">Beneficiaries (2)</span>
+          <div class="bene-actions">
+            <button class="bene-btn" onclick="openModal()">+ Add People</button>
+          </div>
+        </div>
+        <div class="bene-list" id="beneList"></div>
+        <div class="split-summary" id="splitSummary"></div>
+        <div class="contribution-banner" id="contribBanner">
+          <div class="contribution-label">YOUR CONTRIBUTION</div>
+          <div class="contribution-amount" id="contribAmount">₹0.00</div>
+        </div>
+        <div class="message-row" id="messageRow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span id="messageLabel">Add a message (optional)</span>
+          <input type="text" id="messageInput" placeholder="What's this for?"
+            style="display: none; border: none; background: transparent; outline: none; font-family: inherit; font-size: 13px; color: var(--text-dark); width: 100%;">
+        </div>
+        <button class="proceed-btn" id="proceedBtn" onclick="proceed()">Proceed to Split</button>
+      </div>
+    </div>
+
+    <!-- ── SPLIT HISTORY SECTION ── -->
+    <div class="history-section-wrapper" style="margin-top: 48px;">
+      <div class="history-header">
+        <div>
+          <h2 class="history-title">Split History</h2>
+          <p class="history-subtitle">Track your sent and received split requests</p>
+        </div>
+        <div class="filter-tabs-pill">
+          <button class="pill-tab active" data-filter="all">All</button>
+          <button class="pill-tab" data-filter="sent">Sent</button>
+          <button class="pill-tab" data-filter="received">Received</button>
+        </div>
+      </div>
+      <div class="split-history-list" id="splitHistoryList">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ───── ADD PERSON MODAL ───── -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Add Person</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" class="modal-search" id="modalSearch" placeholder="Search by name or handle…"
+          oninput="filterPeople(this.value)">
+      </div>
+      <div class="people-list" id="peopleList"></div>
+    </div>
+  </div>
+
+  <!-- ───── SPLIT DETAIL MODAL ───── -->
+  <div class="modal-overlay" id="splitDetailModalOverlay">
+    <div class="modal split-detail-modal">
+      <div class="modal-header-simple">
+        <div id="modalIcon" class="detail-icon">ðŸ•</div>
+        <div class="detail-header-info">
+          <h3 id="modalTitle">Starbucks</h3>
+          <p id="modalSubTitle">₹420 • 4 people</p>
+        </div>
+        <button class="modal-close-simple" id="closeDetailModal">&times;</button>
+      </div>
+      <div class="detail-comment" id="modalComment">"Coffee catch-up!"</div>
+      <div class="detail-status-row">
+        <div class="status-marker pending">
+          <i data-lucide="clock"></i>
+          <span>Pending payments</span>
+        </div>
+        <span class="status-time">Today</span>
+      </div>
+      <div class="participant-list" id="participantList"></div>
+      <div class="detail-footer">
+        <span>Your share</span>
+        <span id="modalYourShare" class="footer-amount">₹105</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── PIN POPUP ───── -->
+  <div id="pin-popup" class="modal-overlay">
+    <div class="modal pin-popup-content">
+      <div class="pin-header">
+        <div class="pin-icon-box">
+          <i data-lucide="indian-rupee"></i>
+        </div>
+        <h2>Enter Your PIN</h2>
+        <p>Enter your 4-digit security PIN to authorize this payment</p>
+      </div>
+
+      <div class="payment-summary-box">
+        <div class="summary-row">
+          <span class="summary-label">Paying to</span>
+          <span class="summary-value" id="summary-recipient-name">Rajesh Kumar</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Amount</span>
+          <span class="summary-value amount-value" id="summary-amount">₹350</span>
+        </div>
+      </div>
+
+      <div class="pin-input-container">
+        <input type="password" maxlength="1" class="pin-digit" id="pin-1" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-digit" id="pin-2" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-digit" id="pin-3" inputmode="numeric">
+        <input type="password" maxlength="1" class="pin-digit" id="pin-4" inputmode="numeric">
+      </div>
+
+      <button id="close-pin-popup" class="btn-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ───── ENHANCED STATUS POPUP ───── -->
+  <div class="modal-overlay" id="status-popup">
+    <div class="modal status-enhanced-content">
+      <div id="status-success-view" style="display: none;">
+        <div class="status-header">
+          <div class="status-icon-circle success">
+            <i data-lucide="check"></i>
+          </div>
+          <h2>Payment Successful!</h2>
+          <p>Your transaction has been completed</p>
+        </div>
+
+        <div class="amount-paid-card">
+          <span class="label">Amount Paid</span>
+          <h1 id="success-amount-display">₹500</h1>
+        </div>
+
+        <div class="split-request-card" id="split-request-card" style="display: none;">
+          <div class="split-request-title">People who need to pay you</div>
+          <div class="split-request-list" id="split-request-list"></div>
+        </div>
+
+        <div class="transaction-details-box">
+          <div class="detail-row">
+            <span class="detail-label">Paid to</span>
+            <div class="detail-value-group">
+              <span class="detail-value" id="success-recipient-name">Priya Sharma</span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Transaction ID</span>
+            <span class="detail-value mono" id="success-txn-id">TXN7SV30C63M</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Date & Time</span>
+            <span class="detail-value" id="success-date-time">3/31/2026 • 11:23 AM</span>
+          </div>
+        </div>
+
+        <div class="status-actions">
+          <button class="btn-ghost"
+            onclick="document.getElementById('status-popup').classList.remove('open')">Dismiss</button>
+          <button id="status-ok-btn" class="btn-primary-solid"
+            onclick="document.getElementById('status-popup').classList.remove('open')">Done</button>
+        </div>
+      </div>
+
+      <div id="status-failure-view" style="display: none;">
+        <div class="status-header">
+          <div class="status-icon-circle failure">
+            <i data-lucide="circle-alert"></i>
+          </div>
+          <h2>Payment Failed</h2>
+          <p>We couldn't process your transaction</p>
+        </div>
+
+        <div class="amount-failed-card">
+          <span class="label">Failed Amount</span>
+          <h1 id="failure-amount-display">₹1000</h1>
+        </div>
+
+        <div class="transaction-details-box">
+          <div class="detail-row">
+            <span class="detail-label">Attempted to pay</span>
+            <div class="detail-value-group">
+              <span class="detail-value" id="failure-recipient-name">Anjali Mehta</span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Transaction ID</span>
+            <span class="detail-value mono" id="failure-txn-id">TXNH8KTVVKXV</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Date & Time</span>
+            <span class="detail-value" id="failure-date-time">3/31/2026 • 11:38 AM</span>
+          </div>
+        </div>
+
+        <div class="status-actions">
+          <button id="failure-done-btn" class="btn-ghost"
+            onclick="document.getElementById('status-popup').classList.remove('open')">Close</button>
+          <button id="try-again-btn" class="btn-primary-solid"
+            onclick="document.getElementById('status-popup').classList.remove('open'); document.getElementById('pin-popup').classList.add('open')">Try
+            Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="toast-container" class="toast-container"></div>
+
+</body>
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>lucide.createIcons();</script>
+
+</html>

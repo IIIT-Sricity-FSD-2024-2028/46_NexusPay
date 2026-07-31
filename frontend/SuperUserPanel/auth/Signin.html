@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NexusPay Admin — Sign in or create your admin account.">
+  <title>Sign In — Super User</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Signin.css">
+  <script src="../../shared/api-config.js"></script>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- â•â•â• LEFT HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="hero" id="hero">
+
+      <!-- Phone mockup -->
+      <div class="phone" id="phoneMockup">
+        <div class="phone__notch">
+          <span class="phone__time">9:41</span>
+          <span class="phone__camera"></span>
+        </div>
+        <div class="phone__screen">
+          <div class="phone__logo-wrap">
+            <div class="phone__check">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6C5DD3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="phone__brand">NexusPay</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero text -->
+      <div class="hero__text" id="heroText">
+        <h1 class="hero__title">NexusPay</h1>
+        <p class="hero__sub">Pay, Split &amp; Schedule Payments</p>
+        <ul class="hero__features">
+          <li>Analytics</li>
+          <li>Real-time Monitoring</li>
+          <li>Dispute Resolution</li>
+        </ul>
+      </div>
+
+      <!-- Stats bar -->
+      <div class="stats-bar" id="statsBar">
+        <div class="stats-bar__item">
+          <span class="stats-bar__value">10M+</span>
+          <span class="stats-bar__label">Active Users</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__value">₹500Cr+</span>
+          <span class="stats-bar__label">Transactions Daily</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__value">99.9%</span>
+          <span class="stats-bar__label">Uptime</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__value">24/7</span>
+          <span class="stats-bar__label">Support</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- â•â•â• RIGHT FORM â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="form-side" id="formSide">
+
+      <!-- Logo -->
+      <div class="form-logo" id="formLogo">
+        <span class="form-logo__icon">N</span>
+        <span class="form-logo__text">NexusPay</span>
+      </div>
+
+      <!-- ── SIGN IN FORM ────────────────── -->
+      <form class="auth-card" id="signinForm" autocomplete="off">
+        <div class="auth-card__badge" id="signinBadge">Super User</div>
+
+        <div class="field" id="signinIdField">
+          <label class="field__label" for="signinId">EMAIL</label>
+          <div class="field__wrap">
+            <span class="field__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <input type="email" id="signinId" placeholder="superuser@nexuspay.com" required autocomplete="username">
+          </div>
+          <p id="signinIdError" class="field__error"></p>
+        </div>
+
+        <div class="field" id="signinPassField">
+          <label class="field__label" for="signinPass">Password</label>
+          <div class="field__wrap">
+            <span class="field__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </span>
+            <input type="password" id="signinPass" placeholder="••••••••" required minlength="6" autocomplete="current-password">
+            <button type="button" class="field__toggle" id="toggleSigninPass" aria-label="Toggle password visibility">
+              <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <p id="signinPassError" class="field__error"></p>
+        </div>
+
+        <button type="submit" class="btn-submit" id="signinBtn">Sign In</button>
+      </form>
+
+
+
+      <p class="footer-text" id="footerText">© 2026 NexusPay. All rights reserved.</p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script src="Signin.js"></script>
+</body>
+</html>

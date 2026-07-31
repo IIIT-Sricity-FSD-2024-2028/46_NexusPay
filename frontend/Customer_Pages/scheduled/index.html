@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>NexusPay — Scheduled Payments</title>
+    <link rel="stylesheet" href="../assets/css/global.css" />
+    <link rel="stylesheet" href="../customershared/styles.css" />
+    <link rel="stylesheet" href="./scheduled.css" />
+  <script src="../../shared/api-config.js"></script>
+</head>
+
+<body>
+
+
+
+    <!-- ====== SCHEDULE MODAL ====== -->
+    <div id="schedule-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Create Schedule</h3>
+                <button type="button" class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <form id="schedule-form" novalidate>
+                <div class="modal-body">
+                    <!-- Recipient -->
+                    <div class="form-group">
+                        <div class="recipient-header">
+                            <span class="form-label">Recipient</span>
+                            <div class="recipient-tabs">
+                                <div class="r-tab r-tab-active" data-tab="saved">From Saved</div>
+                                <div class="r-tab" data-tab="manual">Enter ID</div>
+                            </div>
+                        </div>
+                        <!-- From Saved panel -->
+                        <div class="recipient-panel" id="panel-saved">
+                            <label class="contact-card">
+                                <div class="contact-avatar" style="background:#7c3aed">RK</div>
+                                <div class="contact-info"><span class="contact-name">Rajesh Kumar</span><span
+                                        class="contact-email">rajesh.kumar@nexuspay</span></div>
+                                <input type="radio" name="saved-contact" value="rajesh.kumar@nexuspay"
+                                    class="contact-radio" />
+                            </label>
+                            <label class="contact-card">
+                                <div class="contact-avatar" style="background:#6366f1">PS</div>
+                                <div class="contact-info"><span class="contact-name">Priya Sharma</span><span
+                                        class="contact-email">priya.sharma@nexuspay</span></div>
+                                <input type="radio" name="saved-contact" value="priya.sharma@nexuspay"
+                                    class="contact-radio" />
+                            </label>
+                        </div>
+                        <!-- Enter ID panel -->
+                        <div class="recipient-panel hidden" id="panel-manual">
+                            <input class="form-input" type="email" id="field-contact"
+                                placeholder="e.g., rahul.k@nexuspay" />
+                        </div>
+                    </div>
+
+                    <!-- Payment For -->
+                    <div class="form-group">
+                        <span class="form-label">Payment For</span>
+                        <div class="category-grid">
+                            <label class="cat-card"><input type="radio" name="payment-cat" value="🔑" hidden /><span
+                                    class="cat-icon">🔑</span><span class="cat-label">Room Rent</span></label>
+                            <label class="cat-card"><input type="radio" name="payment-cat" value="📶" hidden /><span
+                                    class="cat-icon">📶</span><span class="cat-label">WiFi Bill</span></label>
+                            <label class="cat-card"><input type="radio" name="payment-cat" value="💰" hidden /><span
+                                    class="cat-icon">💰</span><span class="cat-label">Pocket Money</span></label>
+                            <label class="cat-card"><input type="radio" name="payment-cat" value="💼" hidden /><span
+                                    class="cat-icon">💼</span><span class="cat-label">Freelancing</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Name -->
+                    <div class="form-group">
+                        <input class="form-input" type="text" id="field-title" placeholder="Enter schedule name"
+                            maxlength="50" oninput="this.value=this.value.replace(/[^a-zA-Z\s]/g,'')" />
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="form-group">
+                        <span class="form-label">Amount</span>
+                        <input class="form-input" type="number" id="field-amount" placeholder="₹ 0" min="1"
+                            max="10000000" />
+                    </div>
+
+                    <!-- Frequency -->
+                    <div class="form-group">
+                        <span class="form-label">Frequency</span>
+                        <div class="freq-grid">
+                            <label class="freq-option"><input type="radio" name="frequency" value="One-Time" /><span
+                                    class="freq-label">One-Time</span></label>
+                            <label class="freq-option freq-option-active"><input type="radio" name="frequency"
+                                    value="Monthly" checked /><span class="freq-label">Monthly</span></label>
+                            <label class="freq-option"><input type="radio" name="frequency" value="Yearly" /><span
+                                    class="freq-label">Yearly</span></label>
+                            <label class="freq-option"><input type="radio" name="frequency" value="Custom" /><span
+                                    class="freq-label">Custom</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Start Date / End Date -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <span class="form-label">Start Date</span>
+                            <input class="form-input" type="date" id="field-start-date" placeholder="dd-mm-yyyy" />
+                        </div>
+                        <div class="form-group">
+                            <span class="form-label">End Date</span>
+                            <input class="form-input" type="date" id="field-end-date" placeholder="dd-mm-yyyy" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer-custom">
+                    <button type="submit" class="send-request-btn" id="modal-submit-btn">Send Request</button>
+                    <button type="button" class="cancel-link" id="modal-cancel-btn"><i data-lucide="x"></i>
+                        Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== TOAST CONTAINER ====== -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ====== SIDEBAR ====== -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">N</div>
+            <h1 class="brand-name">NexusPay</h1>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a class="nav-link" href="../dashboard/dashboard.html">
+                        <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pay/pay.html">
+                        <span class="nav-icon"><i data-lucide="send"></i></span>
+                        <span class="nav-label">Pay</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../history/transaction_history.html">
+                        <span class="nav-icon"><i data-lucide="history"></i></span>
+                        <span class="nav-label">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../split/split.html">
+                        <span class="nav-icon"><i data-lucide="split"></i></span>
+                        <span class="nav-label">Split Payments</span>
+                    </a>
+                    <span class="nav-badge">3</span>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="../scheduled/index.html">
+                        <span class="nav-icon"><i data-lucide="calendar"></i></span>
+                        <span class="nav-label">Scheduled Payments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../bank-accounts/index.html">
+                        <span class="nav-icon"><i data-lucide="building2"></i></span>
+                        <span class="nav-label">Bank Accounts</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../spending/index.html">
+                        <span class="nav-icon"><i data-lucide="trending-up"></i></span>
+                        <span class="nav-label">Spending Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../raiseDispute/RaiseDispute.html">
+                        <span class="nav-icon"><i data-lucide="circle-alert"></i></span>
+                        <span class="nav-label">Raise Dispute</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../settings/Settings.html">
+                        <span class="nav-icon"><i data-lucide="settings"></i></span>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="../../Public_Pages/Signin.html?role=customer" class="logout-btn" id="logout-btn">
+                <span class="nav-icon"><i data-lucide="log-out"></i></span>
+                <span class="nav-label">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ====== MAIN APP ====== -->
+    <main class="main">
+        <div class="topbar">
+            <h1>Scheduled Payments</h1>
+            <div class="topbar-actions">
+                <div class="notif-wrapper" id="notifWrapper">
+                    <button class="notif-btn" id="bell-icon" title="Notifications">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 01-3.46 0" />
+                        </svg>
+                        <span class="red-dot"></span>
+                    </button>
+                </div>
+                <div class="profile-wrapper" id="profileWrapper">
+                    <div class="user-btn" id="profile-icon">
+                        <i data-lucide="user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content-wrapper" style="display:flex; flex-direction:column; gap:24px; padding: 24px 32px;">
+
+            <!-- PENDING REQUESTS -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Pending Requests</h2>
+                    <div class="filter-tabs" id="pending-filter-tabs">
+                        <button class="tab-item active" data-p-filter="all">All Requests</button>
+                        <button class="tab-item" data-p-filter="incoming">Approval Required</button>
+                        <button class="tab-item" data-p-filter="outgoing">Pending Approval</button>
+                    </div>
+                </div>
+                <div class="grid-layout" id="pending-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;">
+                    <!-- Dynamically rendered by JS -->
+                </div>
+            </div>
+
+            <!-- ACTIVE SCHEDULES -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Active Schedules</h2>
+                    <div class="filter-tabs" id="schedule-filter-tabs">
+                        <button class="tab-item active" data-filter="all">All</button>
+                        <button class="tab-item" data-filter="outgoing">Outgoing</button>
+                        <button class="tab-item" data-filter="incoming">Incoming</button>
+                    </div>
+                </div>
+                <div class="grid-layout" id="schedules-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;">
+                    <!-- Dynamically rendered by JS -->
+                </div>
+            </div>
+
+            <!-- SCHEDULE HISTORY -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Schedule History</h2>
+                </div>
+                <div class="history-list" id="history-list" style="display:flex; flex-direction:column; gap:8px;">
+                    <!-- Dynamically rendered by JS -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FAB -->
+    <div class="button-9">
+        <div class="icon-3"><i data-lucide="plus"></i></div>
+    </div>
+
+
+
+    <!-- ====== DRAWER OVERLAY & PANELS ====== -->
+    <div id="drawer-overlay" class="drawer-overlay hidden"></div>
+
+    <!-- Notifications Drawer -->
+    <div id="popover-notif" class="popover-panel hidden">
+        <div class="popover-header">
+            <div class="ph-info">
+                <span class="ph-title">Notifications</span>
+                <span class="ph-sub">You have 3 unread notifications</span>
+            </div>
+            <button class="close-popover">&times;</button>
+        </div>
+        <div class="popover-body">
+            <div class="notif-card">
+                <div class="notif-icon" style="color:#10b981; background:#ecfdf5;"><i data-lucide="indian-rupee"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">Payment Received <span class="blue-dot"></span></div>
+                    <div class="notif-desc">₹2,500 from Priya Sharma</div>
+                    <div class="notif-time">2 minutes ago</div>
+                </div>
+            </div>
+            <div class="notif-card">
+                <div class="notif-icon" style="color:#4f46e5; background:#eef2ff;"><i data-lucide="check-circle-2"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">Split Payment Completed <span class="blue-dot"></span></div>
+                    <div class="notif-desc">Dinner split with 4 people settled</div>
+                    <div class="notif-time">1 hour ago</div>
+                </div>
+            </div>
+            <div class="notif-card">
+                <div class="notif-icon" style="color:#a855f7; background:#faf5ff;"><i data-lucide="calendar"></i></div>
+                <div class="notif-content">
+                    <div class="notif-title">Scheduled Payment Request <span class="blue-dot"></span></div>
+                    <div class="notif-desc">Amit Singh requested monthly rent schedule</div>
+                    <div class="notif-time">3 hours ago</div>
+                </div>
+            </div>
+        </div>
+        <div class="popover-footer">
+            <span class="mark-read-btn">Mark all as read</span>
+        </div>
+    </div>
+
+    <!-- Profile Drawer -->
+    <div id="popover-profile" class="popover-panel hidden">
+        <div class="prof-header" style="background: linear-gradient(90deg, #615fff, #9810fa);">
+            <div class="prof-header-top">
+                <span style="color:#fff; font-weight:600; font-size:16px;">Profile</span>
+                <button class="close-popover" style="background:#ffffff33; color:#fff;">&times;</button>
+            </div>
+            <div class="prof-header-user">
+                <div class="prof-avatar"><i data-lucide="user"></i></div>
+                <div class="prof-info">
+                    <span class="prof-name">Rahul Kumar</span>
+                    <span class="prof-email">rahul.k@nexuspay</span>
+                </div>
+            </div>
+        </div>
+        <div class="prof-body">
+            <span class="prof-section-title">ACCOUNT INFORMATION</span>
+            <div class="prof-card">
+                <i data-lucide="user" class="pc-icon"></i>
+                <div class="pc-info"><span class="pc-label">Full Name</span><span class="pc-val">Rahul Kumar</span>
+                </div>
+            </div>
+            <div class="prof-card">
+                <i data-lucide="mail" class="pc-icon"></i>
+                <div class="pc-info"><span class="pc-label">NexusPay ID</span><span
+                        class="pc-val">rahul.k@nexuspay</span></div>
+            </div>
+            <span class="prof-section-title" style="margin-top:10px;">QUICK ACTIONS</span>
+            <div class="prof-card action-card">
+                <i data-lucide="user" class="pc-icon"></i><span class="pc-val">Edit Profile</span>
+            </div>
+            <div class="prof-card action-card">
+                <i data-lucide="key" class="pc-icon"></i><span class="pc-val">Change Password</span>
+            </div>
+            <div class="logout-btn-container" id="popover-logout" style="margin-top:16px;">
+                <i data-lucide="log-out"></i> Logout
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== DELETE CONFIRM MODAL ====== -->
+    <div id="delete-schedule-modal" class="modal-overlay hidden">
+        <div class="modal-content modal-confirm">
+            <div class="modal-confirm-icon">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+            <h3 class="modal-confirm-title">Delete Schedule</h3>
+            <p class="modal-confirm-desc">Are you sure you want to delete this scheduled payment? This action cannot be
+                undone.</p>
+            <div class="modal-confirm-actions">
+                <button class="btn-modal-cancel" id="delete-sched-cancel">Cancel</button>
+                <button class="btn-modal-delete" id="delete-sched-confirm">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== RECEIPT MODAL ====== -->
+    <div id="receipt-modal" class="modal-overlay hidden">
+        <div class="receipt-modal-content">
+            <div class="receipt-header-strip"></div>
+            <button class="receipt-close-btn" id="receipt-close-btn">&times;</button>
+            <div class="receipt-body">
+                <div class="receipt-logo">
+                    <div class="receipt-logo-icon">N</div>
+                    <span class="receipt-logo-text">NexusPay</span>
+                </div>
+                <div class="receipt-status-badge" id="receipt-status-badge">Paid</div>
+                <div class="receipt-amount-display" id="receipt-amount-display">₹12,000</div>
+                <div class="receipt-divider"></div>
+                <div class="receipt-details">
+                    <div class="receipt-detail-row">
+                        <span class="receipt-label">Description</span>
+                        <span class="receipt-value" id="receipt-title-val">Rent Payment</span>
+                    </div>
+                    <div class="receipt-detail-row">
+                        <span class="receipt-label">Recipient</span>
+                        <span class="receipt-value" id="receipt-recipient-val">rajesh.kumar@nexuspay</span>
+                    </div>
+                    <div class="receipt-detail-row">
+                        <span class="receipt-label">Scheduled On</span>
+                        <span class="receipt-value" id="receipt-date-val">Feb 20, 2026</span>
+                    </div>
+                    <div class="receipt-detail-row">
+                        <span class="receipt-label">Completed On</span>
+                        <span class="receipt-value" id="receipt-completed-val">Mar 5, 2026</span>
+                    </div>
+                    <div class="receipt-detail-row">
+                        <span class="receipt-label">Transaction ID</span>
+                        <span class="receipt-value receipt-mono" id="receipt-txn-val">TXN2026030500001</span>
+                    </div>
+                    <div class="receipt-detail-row">
+                        <span class="receipt-label">Status</span>
+                        <span class="receipt-value" id="receipt-status-val">Paid</span>
+                    </div>
+                </div>
+                <div class="receipt-divider"></div>
+                <div class="receipt-footer-note">
+                    <i data-lucide="shield-check" style="width:16px;height:16px;color:#10b981;"></i>
+                    <span>This is a verified NexusPay transaction</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+    <script type="module" src="./main.js"></script>
+
+</body>
+
+</html>

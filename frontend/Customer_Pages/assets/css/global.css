@@ -1,0 +1,207 @@
+/* ══════════════════════════════════════════
+   GLOBAL VARIABLES & TOKENS
+══════════════════════════════════════════ */
+:root {
+  /* Layout */
+  --sidebar-width: 260px;
+  --radius: 16px;
+  --radius-sm: 12px;
+  
+  /* Core Colors */
+  --primary-bg: #ffffff;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --bg: #f6f8fb;
+  --border-color: #e5e7eb;
+  --border: #e5e7eb;
+  
+  /* Interactions */
+  --hover-bg: #f4f4f5;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+
+  /* Branding */
+  --primary: #6c3bff;
+  --primary-light: #ede8ff;
+  --purple: #7c3aed;
+  --brand-gradient: linear-gradient(117deg, #615fff 0%, #9810fa 100%);
+  --primary-grad: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --purple-grad: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+
+  /* Navigation */
+  --text-nav-default: #364153;
+  --text-nav-active: #ffffff;
+  --bg-nav-active: #7c3aed;
+  
+  /* Typography Colors */
+  --text: #0f172a;
+  --text2: #64748b;
+  --text3: #94a3b8;
+  --text-dark: #101828;
+  --text-mid: #64748b;
+  --text-light: #94a3b8;
+
+  /* Accent Colors */
+  --badge-bg: #fb2c36;
+  --badge-text: #ffffff;
+  --red: #ef4444;
+  --red-light: #fff1f0;
+  --green: #10b981;
+}
+
+/* ══════════════════════════════════════════
+   BASE RESET & TYPOGRAPHY
+══════════════════════════════════════════ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure Headings default to Sora if desired, but default to inherit */
+h1, h2, h3, h4, h5, h6, .brand-name, .modal-title, .status-title {
+  font-family: 'Sora', sans-serif;
+  color: var(--text-dark);
+}
+
+/* Amount Typography - set to Sora globally per user request */
+.amount, .receipt-amount, .pbc-value, .balance-val, [class*="amount"], [class*="Amount"], [id*="amount"], [id*="Amount"], .total-amt {
+  font-family: 'Sora', sans-serif !important;
+}
+
+/* ══════════════════════════════════════════
+   UNIFIED SIDEBAR & NAV
+══════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  background: var(--brand-gradient);
+  color: white;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.nav-list {
+  list-style: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+  color: var(--text-nav-default);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.nav-item:hover {
+  background: var(--hover-bg);
+}
+
+.nav-item.active {
+  background: var(--bg-nav-active);
+  color: var(--text-nav-active);
+  font-weight: 600;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  gap: 10px;
+}
+
+.nav-label {
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+.nav-badge {
+  font-size: 11px;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  padding: 3px 8px;
+  border-radius: 999px;
+  min-width: 22px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  color: inherit;
+  flex-shrink: 0;
+}
+.nav-icon svg { width: 100%; height: 100%; stroke-width: 2px; }
+
+.sidebar-footer { 
+  margin-top: auto; 
+  padding-top: 16px; 
+  border-top: 1px solid var(--border-color); 
+}
+.logout-btn {
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  padding: 10px 14px;
+  border-radius: 12px; 
+  color: var(--red); 
+  text-decoration: none;
+  font-weight: 600; 
+  font-size: 14px; 
+  transition: all 0.18s;
+}
+.logout-btn:hover { background: var(--red-light); }

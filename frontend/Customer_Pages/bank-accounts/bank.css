@@ -1,0 +1,320 @@
+/* ===============================================================
+   BANK ACCOUNTS — Page-Level Layout Overrides
+   =============================================================== */
+body {
+    display: flex !important;
+    flex-direction: row !important;
+    min-height: 100vh;
+    overflow: hidden !important;
+    background: #f3f4f6;
+    margin: 0;
+}
+
+.main {
+    margin-left: 0px !important;
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: linear-gradient(117deg, #f9fafb 0%, #f3f4f6 100%);
+    box-sizing: border-box;
+}
+
+main.minimal-design {
+    display: block !important;
+    min-height: unset !important;
+    background: linear-gradient(117deg, #f9fafb 0%, #f3f4f6 100%) !important;
+}
+
+main.main > div {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ================== BANK ACCOUNTS PAGE ================== */
+
+/* Page Header */
+.ba-page-header {
+    display: flex; align-items: center; justify-content: space-between;
+}
+.ba-page-title {
+    font-weight: 700; color: #101828; font-size: 28px; line-height: 36px;
+    font-family: "Inter", sans-serif;
+}
+.ba-fab {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 12px; border: none;
+    background: linear-gradient(90deg, #615fff 0%, #9810fa 100%);
+    color: #fff; font-weight: 600; font-size: 14px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(97, 95, 255, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.ba-fab:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(97, 95, 255, 0.5); }
+.ba-fab i { width: 18px; height: 18px; }
+
+/* Content Area */
+.ba-content-area {
+    display: flex; gap: 20px; align-items: flex-start;
+}
+.ba-accounts-section {
+    flex: 1; display: flex; flex-direction: column; gap: 14px; min-width: 0;
+}
+
+/* Section Header */
+.ba-section-header {
+    display: flex; align-items: center; justify-content: space-between;
+}
+.ba-section-title {
+    font-weight: 700; font-size: 20px; color: #101828;
+}
+.ba-eye-toggle {
+    background: none; border: none; cursor: pointer; padding: 6px;
+    color: #94a3b8; transition: color 0.2s;
+}
+.ba-eye-toggle:hover { color: #475569; }
+.ba-eye-toggle i { width: 22px; height: 22px; }
+
+/* Bank Cards */
+.ba-cards-list {
+    display: flex; flex-direction: column; gap: 10px;
+}
+.ba-card {
+    background: #fff; border-radius: 14px; border: 1px solid #e5e7eb;
+    padding: 18px; position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.ba-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08); border-color: #cbd5e1; transform: translateY(-2px);
+}
+.ba-card-top {
+    display: flex; align-items: center; gap: 12px;
+}
+.ba-bank-logo {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 12px; color: #fff;
+    flex-shrink: 0; letter-spacing: 0.5px;
+}
+.ba-bank-info {
+    display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0;
+}
+.ba-bank-name-row {
+    display: flex; align-items: center; gap: 10px;
+}
+.ba-bank-name {
+    font-weight: 700; font-size: 16px; color: #101828;
+}
+.ba-primary-badge {
+    display: inline-flex; padding: 3px 10px; border-radius: 9999px;
+    font-weight: 600; font-size: 12px; color: #10b981; background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+}
+.ba-account-num {
+    font-size: 14px; color: #94a3b8; letter-spacing: 1px;
+}
+.ba-card-menu-btn {
+    background: none; border: none; cursor: pointer; padding: 6px;
+    color: #94a3b8; border-radius: 8px; transition: background 0.15s;
+    position: relative;
+}
+.ba-card-menu-btn:hover { background: #f1f5f9; }
+.ba-card-menu-btn i { width: 20px; height: 20px; }
+
+/* Balance Row */
+.ba-balance-section {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9;
+}
+.ba-balance-label {
+    font-size: 12px; color: #94a3b8; margin-bottom: 2px; display: block; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.ba-balance-amount {
+    font-weight: 800; font-size: 22px; color: #101828; letter-spacing: -0.5px;
+}
+
+/* Dropdown Menu */
+.ba-dropdown {
+    position: absolute; top: 50px; right: 16px; z-index: 50;
+    background: #fff; border-radius: 12px; min-width: 180px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #e5e7eb;
+    overflow: hidden; animation: toast-in 0.15s ease;
+}
+.ba-dropdown-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; font-size: 14px; font-weight: 500; color: #374151;
+    cursor: pointer; transition: background 0.15s;
+}
+.ba-dropdown-item:hover { background: #f3f4f6; }
+.ba-dropdown-item i { width: 16px; height: 16px; }
+.ba-dropdown-danger { color: #dc2626; }
+.ba-dropdown-danger:hover { background: #fef2f2; }
+
+/* Total Balance Card */
+.ba-total-card {
+    background: linear-gradient(135deg, #615fff 0%, #9810fa 100%);
+    border-radius: 16px; padding: 22px 24px;
+    color: #fff; max-width: 500px;
+    box-shadow: 0 8px 30px rgba(97, 95, 255, 0.3);
+}
+.ba-total-label {
+    font-size: 12px; font-weight: 500; opacity: 0.85; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px;
+}
+.ba-total-amount {
+    font-weight: 800; font-size: 26px; letter-spacing: -0.5px; display: block; margin-bottom: 14px;
+}
+.ba-total-row {
+    display: flex; gap: 32px;
+}
+.ba-total-stat {
+    display: flex; flex-direction: column; gap: 2px;
+}
+.ba-stat-label {
+    font-size: 12px; font-weight: 500; opacity: 0.8;
+}
+.ba-stat-value {
+    font-weight: 800; font-size: 18px;
+}
+
+/* ================== LINK BANK PANEL ================== */
+.ba-link-panel {
+    width: 380px; min-width: 360px; max-width: 400px;
+    background: #fff; border-radius: 16px; border: 1px solid #e5e7eb;
+    padding: 22px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    position: sticky; top: 24px;
+    animation: panel-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes panel-in {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.ba-link-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.ba-link-title {
+    font-weight: 700; font-size: 20px; color: #101828; margin: 0;
+}
+.ba-link-close {
+    background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; cursor: pointer; color: #64748b; transition: 0.15s;
+    padding: 0; line-height: 1;
+}
+.ba-link-close:hover { background: #e2e8f0; }
+
+.ba-link-secure {
+    display: flex; align-items: center; gap: 10px;
+    background: #ecfdf5; border-radius: 10px; padding: 10px 14px;
+    margin-bottom: 16px;
+}
+
+/* Form */
+.ba-form-group {
+    display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;
+}
+.ba-form-label {
+    font-size: 13px; font-weight: 600; color: #374151;
+}
+.ba-form-input {
+    padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 10px;
+    font-size: 14px; font-family: "Inter", sans-serif; color: #101828;
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+    background: #fff;
+}
+.ba-form-input:focus {
+    border-color: #615fff; box-shadow: 0 0 0 3px rgba(97, 95, 255, 0.1);
+}
+.ba-form-input::placeholder { color: #94a3b8; }
+.ba-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+.ba-form-input.ba-input-error {
+    border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+.ba-field-error {
+    font-size: 12px; color: #ef4444; margin-top: 2px;
+}
+
+.ba-submit-btn {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    background: linear-gradient(90deg, #615fff 0%, #9810fa 100%);
+    color: #fff; font-weight: 700; font-size: 15px; cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(97, 95, 255, 0.3);
+}
+.ba-submit-btn:hover { opacity: 0.92; box-shadow: 0 6px 20px rgba(97, 95, 255, 0.4); }
+
+/* Empty State */
+.ba-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px 0; color: #94a3b8; gap: 8px;
+}
+.ba-empty i { width: 48px; height: 48px; opacity: 0.4; }
+.ba-empty span { font-size: 15px; }
+
+/* ================== DELETE CONFIRM MODAL ================== */
+.modal-overlay {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+    animation: fade-in 0.15s ease;
+}
+.modal-overlay.hidden { display: none; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-content.modal-confirm {
+    background: #fff; border-radius: 20px;
+    padding: 32px; max-width: 400px; width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: modal-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modal-pop {
+    from { opacity: 0; transform: scale(0.9) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-confirm-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #fef2f2; color: #ef4444;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+}
+.modal-confirm-icon i { width: 28px; height: 28px; }
+
+.modal-confirm-title {
+    font-weight: 700; font-size: 20px; color: #101828;
+    margin: 0 0 8px;
+}
+.modal-confirm-desc {
+    font-size: 14px; color: #64748b; line-height: 1.5;
+    margin: 0 0 24px;
+}
+.modal-confirm-actions {
+    display: flex; gap: 12px; justify-content: center;
+}
+.btn-modal-cancel {
+    padding: 10px 24px; border-radius: 10px;
+    border: 1px solid #e5e7eb; background: #fff;
+    font-weight: 600; font-size: 14px; color: #374151;
+    cursor: pointer; transition: background 0.15s;
+    font-family: "Inter", sans-serif;
+}
+.btn-modal-cancel:hover { background: #f9fafb; }
+.btn-modal-delete {
+    padding: 10px 24px; border-radius: 10px;
+    border: none; background: #ef4444;
+    font-weight: 600; font-size: 14px; color: #fff;
+    cursor: pointer; transition: background 0.15s;
+    font-family: "Inter", sans-serif;
+}
+.btn-modal-delete:hover { background: #dc2626; }
+

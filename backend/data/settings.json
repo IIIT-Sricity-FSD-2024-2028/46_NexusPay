@@ -1,0 +1,32 @@
+[
+  {
+    "userId": "john.c@nexuspay",
+    "name": "Rajesh Kumar",
+    "email": "rajesh@nexuspay.com",
+    "theme": "dark",
+    "privacy": {
+      "showProfile": true,
+      "showTransactions": false
+    }
+  },
+  {
+    "userId": "admin.a@nexuspay",
+    "name": "Admin User",
+    "email": "admin@nexuspay.com",
+    "theme": "dark",
+    "privacy": {
+      "showProfile": true,
+      "showTransactions": true
+    }
+  },
+  {
+    "userId": "super.s@nexuspay",
+    "name": "Super Admin",
+    "email": "super@nexuspay.com",
+    "theme": "dark",
+    "privacy": {
+      "showProfile": true,
+      "showTransactions": true
+    }
+  }
+]

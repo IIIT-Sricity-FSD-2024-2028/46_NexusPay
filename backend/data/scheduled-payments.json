@@ -1,0 +1,35 @@
+[
+  {
+    "id": "sp1",
+    "userId": "john.c@nexuspay",
+    "title": "Rent Payment",
+    "receiverId": "amazon.m@nexuspay",
+    "amount": 15000,
+    "frequency": "monthly",
+    "nextPayment": "2026-04-01",
+    "status": "active",
+    "type": "outgoing"
+  },
+  {
+    "id": "sp2",
+    "userId": "john.c@nexuspay",
+    "title": "Electricity Bill",
+    "receiverId": "swiggy.m@nexuspay",
+    "amount": 2400,
+    "frequency": "monthly",
+    "nextPayment": "2026-04-05",
+    "status": "active",
+    "type": "outgoing"
+  },
+  {
+    "id": "sp3",
+    "userId": "john.c@nexuspay",
+    "title": "Netflix Subscription",
+    "receiverId": "flipkart.m@nexuspay",
+    "amount": 649,
+    "frequency": "monthly",
+    "nextPayment": "2026-04-07",
+    "status": "active",
+    "type": "outgoing"
+  }
+]

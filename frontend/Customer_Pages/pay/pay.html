@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Funds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@100..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/global.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../shared/api-config.js"></script>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">N</div>
+            <h1 class="brand-name">NexusPay</h1>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a class="nav-link" href="../dashboard/dashboard.html">
+                        <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="pay.html">
+                        <span class="nav-icon"><i data-lucide="send"></i></span>
+                        <span class="nav-label">Pay</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../history/transaction_history.html">
+                        <span class="nav-icon"><i data-lucide="history"></i></span>
+                        <span class="nav-label">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../split/split.html">
+                        <span class="nav-icon"><i data-lucide="split"></i></span>
+                        <span class="nav-label">Split Payments</span>
+                    </a>
+                    <span class="nav-badge">3</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../scheduled/index.html">
+                        <span class="nav-icon"><i data-lucide="calendar"></i></span>
+                        <span class="nav-label">Scheduled Payments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../bank-accounts/index.html">
+                        <span class="nav-icon"><i data-lucide="building2"></i></span>
+                        <span class="nav-label">Bank Accounts</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../spending/index.html">
+                        <span class="nav-icon"><i data-lucide="trending-up"></i></span>
+                        <span class="nav-label">Spending Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../raiseDispute/RaiseDispute.html">
+                        <span class="nav-icon"><i data-lucide="circle-alert"></i></span>
+                        <span class="nav-label">Raise Dispute</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../settings/Settings.html">
+                        <span class="nav-icon"><i data-lucide="settings"></i></span>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="../../Public_Pages/Signin.html?role=customer" class="logout-btn" id="logout-btn">
+                <span class="nav-icon"><i data-lucide="log-out"></i></span>
+                <span class="nav-label">Logout</span>
+            </a>
+        </div>
+    </aside>
+    <main class="content">
+        <header class="main-header">
+            <div class="title-section">
+                <h1>Pay</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary"><i data-lucide="user-plus" class="icon-sm"></i> Add Beneficiary</button>
+                <button id="header-pay-btn" class="btn-primary"><i data-lucide="send" class="icon-sm"></i> Pay</button>
+            </div>
+        </header>
+
+        <div class="grid-container">
+            <section class="card payment-form">
+                <div class="form-section">
+                    <label for="amount-select">Select Amount</label>
+                    <div class="amount-chips" id="amount-chips">
+                        <button data-amount="500">₹500</button>
+                        <button data-amount="1000">₹1,000</button>
+                        <button data-amount="2000">₹2,000</button>
+                        <button data-amount="5000">₹5,000</button>
+                        <button data-amount="10000">₹10,000</button>
+                        <button data-amount="20000">₹20,000</button>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label for="custom-amount">Enter Custom Amount</label>
+                    <div class="input-wrapper amount-input">
+                        <span class="currency-tag">₹</span>
+                        <input type="number" id="custom-amount" value="500" min="0" step="1">
+                    </div>
+                    <div id="amount-error" class="error-message"
+                        style="display: none; color: #ef4444; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">
+                        Enter valid amount below</div>
+                </div>
+
+                <div class="form-section">
+                    <label for="pay-to">Pay To</label>
+                    <div class="input-wrapper pay-to-input">
+                        <i data-lucide="search" class="icon-sm"></i>
+                        <input type="text" id="pay-to" placeholder="Search by name or NexusPay ID" readonly>
+                        <i data-lucide="chevron-down" class="icon-sm dropdown-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label for="payment-note">Add Note (Optional)</label>
+                    <div class="input-wrapper note-wrapper">
+                        <i data-lucide="message-square" class="icon-sm note-icon"></i>
+                        <textarea id="payment-note" placeholder="What's this payment for?"></textarea>
+                    </div>
+                </div>
+
+                <button id="send-money-btn" class="btn-primary send-btn">
+                    <i data-lucide="send" class="icon-sm"></i>
+                    Send Money
+                </button>
+            </section>
+
+            <aside class="side-lists">
+                <div class="card">
+                    <h3><i data-lucide="star" style="fill: #f59e0b; color: #f59e0b;" class="icon-sm"></i> Favorites</h3>
+                    <div class="user-item">
+                        <div class="avatar gradient-purple">AM</div>
+                        <div class="user-info"><strong>Anjali Mehta</strong><br><span>anjali.m@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="remove-favorite">
+                                    <i data-lucide="star-off" class="icon-sm"></i>
+                                    Remove from Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="avatar gradient-blue">RK</div>
+                        <div class="user-info"><strong>Rahul Kumar</strong><br><span>rahul.k@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="remove-favorite">
+                                    <i data-lucide="star-off" class="icon-sm"></i>
+                                    Remove from Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="avatar gradient-purple">SP</div>
+                        <div class="user-info"><strong>Sneha Patel</strong><br><span>sneha.p@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="remove-favorite">
+                                    <i data-lucide="star-off" class="icon-sm"></i>
+                                    Remove from Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="avatar gradient-blue">VS</div>
+                        <div class="user-info"><strong>Vikram Singh</strong><br><span>vikram.s@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="remove-favorite">
+                                    <i data-lucide="star-off" class="icon-sm"></i>
+                                    Remove from Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i data-lucide="clock" class="icon-sm"></i> Beneficiaries </h3>
+                    <div class="user-item">
+                        <div class="avatar gradient-blue">PS</div>
+                        <div class="user-info"><strong>Priya Sharma</strong><br><span>priya.s@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="add-favorite">
+                                    <i data-lucide="star" class="icon-sm"></i>
+                                    Add to Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="avatar gradient-purple">KJ</div>
+                        <div class="user-info"><strong>Kavita Joshi</strong><br><span>kavita.j@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="add-favorite">
+                                    <i data-lucide="star" class="icon-sm"></i>
+                                    Add to Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="avatar gradient-blue">AN</div>
+                        <div class="user-info"><strong>Arjun Nair</strong><br><span>arjun.n@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="add-favorite">
+                                    <i data-lucide="star" class="icon-sm"></i>
+                                    Add to Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="avatar gradient-purple">MR</div>
+                        <div class="user-info"><strong>Meera Reddy</strong><br><span>meera.r@nexuspay</span></div>
+                        <div class="dropdown-container">
+                            <button class="icon-btn dropdown-trigger"><i data-lucide="more-vertical"
+                                    class="icon-muted"></i></button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" data-action="add-favorite">
+                                    <i data-lucide="star" class="icon-sm"></i>
+                                    Add to Favorites
+                                </button>
+                                <button class="dropdown-item" data-action="view-profile">
+                                    <i data-lucide="user" class="icon-sm"></i>
+                                    View Profile
+                                </button>
+                                <button class="dropdown-item" data-action="send-money">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    Send Money
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- User Search Popup -->
+    <div id="user-popup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>Select Recipient</h3>
+                <button id="close-popup" class="close-btn">&times;</button>
+            </div>
+            <div class="popup-search">
+                <input type="text" id="search-input" placeholder="Search by name or NexusPay ID">
+            </div>
+            <div id="user-list" class="user-list">
+                <!-- Users will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Beneficiary Popup -->
+    <div id="add-beneficiary-popup" class="popup-overlay">
+        <div class="popup-content form-popup" role="dialog" aria-modal="true" aria-labelledby="add-beneficiary-title">
+            <div class="popup-header">
+                <h3 id="add-beneficiary-title">Add New Beneficiary</h3>
+                <button id="close-add-popup" class="close-btn">&times;</button>
+            </div>
+            <form id="add-beneficiary-form" class="beneficiary-form">
+                <div class="form-group">
+                    <label for="beneficiary-name">Full Name *</label>
+                    <input id="beneficiary-name" type="text" placeholder="Enter full name" required pattern="[A-Za-z ]+">
+                    <div id="beneficiary-name-error" class="beneficiary-error-message" aria-live="polite"></div>
+                </div>
+                <div class="form-group">
+                    <label for="beneficiary-id">NexusPay ID *</label>
+                    <input id="beneficiary-id" type="text" placeholder="username@nexuspay" required>
+                    <div id="beneficiary-id-error" class="beneficiary-error-message" aria-live="polite"></div>
+                </div>
+                <div class="form-group">
+                    <label for="beneficiary-nick">Nickname (Optional)</label>
+                    <input id="beneficiary-nick" type="text" placeholder="e.g., Mom, Best Friend, etc.">
+                </div>
+                <button type="submit" class="btn-primary">Add Beneficiary</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- New PIN Popup -->
+    <div id="pin-popup" class="popup-overlay">
+        <div class="popup-content pin-popup-content">
+            <div class="pin-header">
+                <div class="pin-icon-box">
+                    <i data-lucide="indian-rupee"></i>
+                </div>
+                <h2>Enter Your PIN</h2>
+                <p>Enter your 4-digit security PIN to authorize this payment</p>
+            </div>
+
+            <div class="payment-summary-box">
+                <div class="summary-row">
+                    <span class="summary-label">Paying to</span>
+                    <span class="summary-value" id="summary-recipient-name">Priya Sharma</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Amount</span>
+                    <span class="summary-value amount-value" id="summary-amount">₹500</span>
+                </div>
+            </div>
+
+            <div class="pin-input-container">
+                <input type="password" maxlength="1" class="pin-digit" id="pin-1" inputmode="numeric">
+                <input type="password" maxlength="1" class="pin-digit" id="pin-2" inputmode="numeric">
+                <input type="password" maxlength="1" class="pin-digit" id="pin-3" inputmode="numeric">
+                <input type="password" maxlength="1" class="pin-digit" id="pin-4" inputmode="numeric">
+            </div>
+
+            <button id="close-pin-popup" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Enhanced Payment Status Popup -->
+    <div id="status-popup" class="popup-overlay">
+        <div class="popup-content status-enhanced-content">
+            <div id="status-success-view" style="display: none;">
+                <div class="status-header">
+                    <div class="status-icon-circle success">
+                        <i data-lucide="check"></i>
+                    </div>
+                    <h2>Payment Successful!</h2>
+                    <p>Your transaction has been completed</p>
+                </div>
+
+                <div class="amount-paid-card">
+                    <span class="label">Amount Paid</span>
+                    <h1 id="success-amount-display">₹500</h1>
+                </div>
+
+                <div class="transaction-details-box">
+                    <div class="detail-row">
+                        <span class="detail-label">Paid to</span>
+                        <div class="detail-value-group">
+                            <span class="detail-value" id="success-recipient-name">Priya Sharma</span>
+                            <span class="detail-sub-value" id="success-recipient-id">priya.s@nexuspay</span>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction ID</span>
+                        <span class="detail-value mono" id="success-txn-id">TXN7SV30C63M</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value" id="success-date-time">3/31/2026 • 11:23 AM</span>
+                    </div>
+                </div>
+
+                <div class="status-actions">
+                    <button id="done-btn" class="btn-primary-solid">Done</button>
+                </div>
+            </div>
+
+            <div id="status-failure-view" style="display: none;">
+                <div class="status-header">
+                    <div class="status-icon-circle failure">
+                        <i data-lucide="circle-alert"></i>
+                    </div>
+                    <h2>Payment Failed</h2>
+                    <p>We couldn't process your transaction</p>
+                </div>
+
+                <div class="amount-failed-card">
+                    <span class="label">Failed Amount</span>
+                    <h1 id="failure-amount-display">₹1000</h1>
+                </div>
+
+                <div class="transaction-details-box">
+                    <div class="detail-row">
+                        <span class="detail-label">Attempted to pay</span>
+                        <div class="detail-value-group">
+                            <span class="detail-value" id="failure-recipient-name">Anjali Mehta</span>
+                            <span class="detail-sub-value" id="failure-recipient-id">anjali.m@nexuspay</span>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction ID</span>
+                        <span class="detail-value mono" id="failure-txn-id">TXNH8KTVVKXV</span>
+                        <div class="detail-row">
+                            <span class="detail-label">Date & Time</span>
+                            <span class="detail-value" id="failure-date-time">3/31/2026 • 11:38 AM</span>
+                        </div>
+                    </div>
+
+                    <div class="status-actions">
+                        <button id="failure-done-btn" class="btn-ghost">Close</button>
+                        <button id="try-again-btn" class="btn-primary-solid">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="data.js"></script>
+        <script src="script.js"></script>
+</body>
+
+</html>
