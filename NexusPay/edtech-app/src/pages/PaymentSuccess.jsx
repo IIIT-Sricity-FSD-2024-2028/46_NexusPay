@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { 
   CheckCircle, 
   Download, 
-  PlayCircle, 
+  Play, 
   ArrowRight, 
   BookOpen, 
   ShieldCheck, 
@@ -100,7 +100,7 @@ export default function PaymentSuccess() {
               to="/player"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-bold text-sm shadow-elevation-1 transition-all"
             >
-              <PlayCircle className="w-5 h-5 fill-current" />
+              <Play className="w-4 h-4 fill-white" />
               <span>Start Learning Now</span>
             </Link>
 
