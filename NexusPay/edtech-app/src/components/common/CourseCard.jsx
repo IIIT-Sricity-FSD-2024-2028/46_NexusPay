@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, BarChart, Bookmark, PlayCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Clock, BarChart, Bookmark, PlayCircle, ArrowRight } from 'lucide-react';
 import RatingStars from './RatingStars';
 import Badge from './Badge';
 import { LinearProgressBar } from './ProgressBar';

@@ -5,10 +5,10 @@ import {
   Download, 
   PlayCircle, 
   ArrowRight, 
-  FileText, 
   BookOpen, 
   ShieldCheck, 
-  Sparkles 
+  Sparkles,
+  ChevronRight
 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import CourseCard from '../components/common/CourseCard';
@@ -18,9 +18,9 @@ export default function PaymentSuccess() {
   const location = useLocation();
   const state = location.state || {};
 
-  const courseTitle = state.courseTitle || "Advanced API Integrations for Enterprise Payments";
+  const courseTitle = state.courseTitle || "Advanced Enterprise Architecture & Payment Systems";
   const amount = state.amount || "$89.99";
-  const transactionId = state.transactionId || "#NX-12345";
+  const transactionId = state.transactionId || "#NX-48291";
   const date = state.date || "October 24, 2024";
 
   const recommendedCourses = coursesData.slice(2, 5);
@@ -31,35 +31,49 @@ export default function PaymentSuccess() {
 
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto px-margin-desktop py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
-        {/* Success Box Hero */}
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 text-xs text-outline mb-6 font-medium">
+          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <Link to="/checkout" className="hover:text-primary transition-colors">Checkout</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-primary font-semibold">Payment Success</span>
+        </nav>
+
+        {/* Success Confirmation Card */}
         <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-8 md:p-12 text-center shadow-elevation-2 mb-12 relative overflow-hidden">
           
-          <div className="w-20 h-20 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mx-auto mb-6 shadow-elevation-1 animate-bounce">
-            <CheckCircle className="w-10 h-10 text-secondary" />
+          <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-6 shadow-elevation-1 animate-bounce">
+            <CheckCircle className="w-10 h-10 text-emerald-600" />
           </div>
 
-          <h1 className="text-display-lg text-3xl md:text-4xl font-bold text-on-surface tracking-tight mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold mb-3 border border-emerald-200">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Enrollment Confirmed & Verified</span>
+          </div>
+
+          <h1 className="text-2xl md:text-4xl font-bold text-on-surface tracking-tight mb-2">
             Payment Successful!
           </h1>
-          <p className="text-body-lg text-on-surface-variant max-w-md mx-auto mb-8">
-            Thank you for your purchase. Your enrollment is complete and all course resources are unlocked.
+          <p className="text-xs md:text-sm text-on-surface-variant max-w-md mx-auto mb-8">
+            Thank you for your purchase. Your payment has been processed and all course modules and certificate milestones are now unlocked.
           </p>
 
-          {/* Receipt Card */}
+          {/* Receipt Voucher Summary Box */}
           <div className="max-w-lg mx-auto bg-surface-container-low border border-outline-variant rounded-2xl p-6 text-left mb-8 shadow-ambient">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant mb-4">
               <span className="text-xs font-bold text-outline uppercase tracking-wider">Transaction Receipt</span>
-              <span className="text-xs font-bold text-secondary flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> Verified
+              <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5" /> Verified by NexusPay
               </span>
             </div>
 
             <div className="space-y-3 text-xs">
               <div className="flex justify-between">
                 <span className="text-outline">Enrolled Course:</span>
-                <span className="font-bold text-on-surface text-right max-w-[240px] truncate">{courseTitle}</span>
+                <span className="font-bold text-on-surface text-right max-w-[260px] truncate">{courseTitle}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-outline">Amount Paid:</span>
@@ -75,7 +89,7 @@ export default function PaymentSuccess() {
               </div>
               <div className="flex justify-between">
                 <span className="text-outline">Payment Method:</span>
-                <span className="font-medium text-on-surface">Mastercard •••• 4242</span>
+                <span className="font-medium text-on-surface">Visa •••• 4242</span>
               </div>
             </div>
           </div>
@@ -113,8 +127,8 @@ export default function PaymentSuccess() {
         <section>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-headline-md font-bold text-on-surface">Next Recommended Courses</h2>
-              <p className="text-xs text-on-surface-variant">Learners who bought this also enrolled in</p>
+              <h2 className="text-lg font-bold text-on-surface">Next Recommended Courses</h2>
+              <p className="text-xs text-on-surface-variant">Learners who enrolled in this also studied</p>
             </div>
             <Link to="/explore" className="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
               <span>View Catalog</span>

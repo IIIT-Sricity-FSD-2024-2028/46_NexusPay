@@ -11,13 +11,10 @@ import {
   CheckCircle2, 
   Sparkles, 
   ChevronRight,
-  Target,
-  Users,
-  Compass
+  Target
 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import CourseCard from '../components/common/CourseCard';
-import RatingStars from '../components/common/RatingStars';
 import Badge from '../components/common/Badge';
 import { LinearProgressBar } from '../components/common/ProgressBar';
 import { coursesData } from '../data/coursesData';
@@ -32,8 +29,8 @@ export default function Dashboard() {
     <PageLayout>
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
         
-        {/* Welcome Banner & Quick Stats */}
-        <section className="bg-gradient-to-r from-primary via-primary-container to-[#004182] text-white rounded-3xl p-6 md:p-8 shadow-elevation-2 relative overflow-hidden">
+        {/* Welcome Banner & Quick Stats (Soft Muted Blue Gradient) */}
+        <section className="bg-gradient-to-r from-[#205295] via-[#2C66A9] to-[#173F74] text-white rounded-3xl p-6 md:p-8 shadow-elevation-2 relative overflow-hidden">
           <div className="absolute top-0 right-0 transform translate-x-12 -translate-y-12 w-80 h-80 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
 
           <div className="relative z-10 max-w-2xl">

@@ -5,7 +5,6 @@ import {
   X,
   Search, 
   Bell, 
-  ShoppingCart, 
   User, 
   BookOpen, 
   Award, 
@@ -19,8 +18,7 @@ import {
   Flame,
   LayoutDashboard,
   ShieldCheck,
-  Video,
-  FileCheck
+  Video
 } from 'lucide-react';
 import { userData } from '../../data/userData';
 import { coursesData } from '../../data/coursesData';
@@ -98,12 +96,11 @@ export default function Navbar() {
     { name: 'Graded Quiz', path: '/quiz', icon: FileQuestion },
     { name: 'Certificates', path: '/certificates', icon: Award },
     { name: 'Checkout', path: '/checkout', icon: CreditCard },
-    { name: 'Payment Receipt', path: '/payment-success', icon: FileCheck },
   ];
 
   const accountPages = [
     { name: 'Profile & Settings', path: '/profile', icon: User },
-    { name: 'Billing & Invoices', path: '/profile', icon: CreditCard },
+    { name: 'Billing & Payment Details', path: '/profile', icon: CreditCard },
     { name: 'Notification Preferences', path: '/profile', icon: Bell },
   ];
 
@@ -226,7 +223,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Right: Notifications, Cart, Profile */}
+          {/* Right: Notifications, Profile */}
           <div className="flex items-center gap-3 flex-shrink-0">
             
             {/* Notifications */}
@@ -266,18 +263,6 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-
-            {/* Cart Icon */}
-            <Link
-              to="/checkout"
-              className="p-2.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors relative"
-              aria-label="Shopping Cart"
-            >
-              <ShoppingCart className="w-4 h-4" />
-              <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                1
-              </span>
-            </Link>
 
             {/* User Profile Avatar with Dropdown */}
             <div className="relative">
@@ -324,6 +309,10 @@ export default function Navbar() {
                     <Link to="/certificates" className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors">
                       <Award className="w-3.5 h-3.5" />
                       <span>Certificates</span>
+                    </Link>
+                    <Link to="/checkout" className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors">
+                      <CreditCard className="w-3.5 h-3.5" />
+                      <span>Checkout</span>
                     </Link>
                   </div>
 
@@ -407,7 +396,7 @@ export default function Navbar() {
               {/* Main Pages */}
               <div>
                 <span className="text-[10px] font-bold text-outline uppercase tracking-wider block px-2 mb-2">
-                  All 11 Application Pages
+                  All Application Pages
                 </span>
                 <div className="space-y-1">
                   {mainPages.map((item) => {

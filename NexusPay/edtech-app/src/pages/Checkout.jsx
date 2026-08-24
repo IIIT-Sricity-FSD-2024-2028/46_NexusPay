@@ -11,7 +11,11 @@ import {
   AlertCircle,
   Sparkles,
   Zap,
-  RotateCcw
+  RotateCcw,
+  Smartphone,
+  CheckCircle2,
+  X,
+  KeyRound
 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import RatingStars from '../components/common/RatingStars';
@@ -27,6 +31,13 @@ export default function Checkout() {
   const [couponError, setCouponError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // 3D Secure / OTP Verification Modal State
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [resendTimer, setResendTimer] = useState(45);
+
   const originalPrice = 99.99;
   const discountAmount = appliedCoupon ? appliedCoupon.discount : 0.00;
   const totalPrice = Math.max(0, originalPrice - discountAmount);
@@ -40,6 +51,38 @@ export default function Checkout() {
     country: 'United States',
     zipCode: '94107'
   });
+
+  const [formErrors, setFormErrors] = useState({});
+
+  // Detect card brand from first digit
+  const getCardBrand = (num) => {
+    const clean = num.replace(/\s+/g, '');
+    if (clean.startsWith('4')) return 'Visa';
+    if (clean.startsWith('5')) return 'Mastercard';
+    if (clean.startsWith('3')) return 'Amex';
+    return 'NexusPay Card';
+  };
+
+  const handleCardNumberChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').slice(0, 16);
+    // Format as groups of 4
+    let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+    setFormData(prev => ({ ...prev, cardNumber: formatted }));
+    if (formErrors.cardNumber) {
+      setFormErrors(prev => ({ ...prev, cardNumber: '' }));
+    }
+  };
+
+  const handleExpiryChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (val.length >= 3) {
+      val = `${val.slice(0, 2)}/${val.slice(2)}`;
+    }
+    setFormData(prev => ({ ...prev, expDate: val }));
+    if (formErrors.expDate) {
+      setFormErrors(prev => ({ ...prev, expDate: '' }));
+    }
+  };
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
@@ -63,12 +106,99 @@ export default function Checkout() {
     }
   };
 
-  const handleCompleteOrder = (e) => {
+  // Validate form fields before initiating verification
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.cardName.trim() || formData.cardName.trim().length < 3) {
+      errors.cardName = 'Please enter full name as printed on card';
+    }
+    const cleanNum = formData.cardNumber.replace(/\s+/g, '');
+    if (cleanNum.length < 15) {
+      errors.cardNumber = 'Please enter a valid 16-digit card number';
+    }
+    if (!formData.expDate || !formData.expDate.includes('/') || formData.expDate.length < 5) {
+      errors.expDate = 'Valid MM/YY required';
+    }
+    if (!formData.cvv || formData.cvv.length < 3) {
+      errors.cvv = '3-digit CVV required';
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleInitiatePayment = (e) => {
     e.preventDefault();
-    setIsProcessing(true);
-    addToast('Processing payment through 256-bit secure gateway...', 'info');
+
+    if (paymentMethod === 'card') {
+      if (!validateForm()) {
+        addToast('Please correct the highlighted card details', 'error');
+        return;
+      }
+      // Open 3DS Bank OTP verification modal
+      setShowOtpModal(true);
+      setOtpCode(['', '', '', '', '', '']);
+      setOtpError('');
+      addToast('Security verification code sent to +1 (•••) •••-4291', 'info');
+    } else {
+      // Direct checkout for PayPal / Wallet
+      setIsProcessing(true);
+      setTimeout(() => {
+        navigate('/payment-success', {
+          state: {
+            courseTitle: "Advanced Enterprise Architecture & Payment Systems",
+            amount: `$${totalPrice.toFixed(2)}`,
+            transactionId: `#NX-${Math.floor(10000 + Math.random() * 90000)}`,
+            date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+          }
+        });
+      }, 1000);
+    }
+  };
+
+  // OTP input handler
+  const handleOtpChange = (index, value) => {
+    if (!/^\d*$/.test(value)) return;
+    const newOtp = [...otpCode];
+    newOtp[index] = value.slice(-1);
+    setOtpCode(newOtp);
+    setOtpError('');
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-input-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otpCode[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-input-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const handleAutoFillOtp = () => {
+    setOtpCode(['1', '2', '3', '4', '5', '6']);
+    setOtpError('');
+    addToast('Demo OTP 123456 auto-filled', 'info');
+  };
+
+  const handleVerifyOtpAndPay = (e) => {
+    e.preventDefault();
+    const fullCode = otpCode.join('');
+    if (fullCode.length < 6) {
+      setOtpError('Please enter all 6 digits of the verification code.');
+      return;
+    }
+
+    setIsVerifyingOtp(true);
+    addToast('Verifying 3D Secure 2.0 cryptographic signature...', 'info');
 
     setTimeout(() => {
+      setIsVerifyingOtp(false);
+      setShowOtpModal(false);
+      addToast('Payment authenticated & approved!', 'success');
+
       navigate('/payment-success', {
         state: {
           courseTitle: "Advanced Enterprise Architecture & Payment Systems",
@@ -82,7 +212,7 @@ export default function Checkout() {
 
   return (
     <PageLayout>
-      <div className="max-w-max-width mx-auto px-margin-desktop py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Breadcrumb Nav */}
         <nav className="flex items-center gap-2 text-xs text-outline mb-6 font-medium">
@@ -95,7 +225,7 @@ export default function Checkout() {
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-headline-lg font-bold text-on-surface tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-on-surface tracking-tight">
               Review & Place Order
             </h1>
             <p className="text-xs text-on-surface-variant mt-1">
@@ -109,14 +239,14 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Column: Order Summary & Interactive Card Preview (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Realistic Interactive Bank Card Widget */}
+            {/* Soft Muted Interactive Bank Card Widget */}
             {paymentMethod === 'card' && (
-              <div className="w-full aspect-[1.586/1] rounded-3xl p-6 bg-gradient-to-tr from-slate-900 via-primary to-[#0056D2] text-white shadow-elevation-3 relative overflow-hidden flex flex-col justify-between select-none">
+              <div className="w-full aspect-[1.586/1] rounded-3xl p-6 bg-gradient-to-tr from-slate-900 via-[#255ea6] to-[#3a75bb] text-white shadow-elevation-2 relative overflow-hidden flex flex-col justify-between select-none">
                 <div className="absolute top-0 right-0 transform translate-x-12 -translate-y-12 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                 
                 <div className="flex justify-between items-start relative z-10">
@@ -124,7 +254,9 @@ export default function Checkout() {
                     <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-extrabold text-sm">
                       N
                     </div>
-                    <span className="font-bold text-xs tracking-wider uppercase text-white/90">NexusPay Visa</span>
+                    <span className="font-bold text-xs tracking-wider uppercase text-white/90">
+                      {getCardBrand(formData.cardNumber)}
+                    </span>
                   </div>
                   <span className="px-2.5 py-1 rounded-full bg-white/15 text-[10px] font-mono tracking-widest backdrop-blur-md">
                     DEBIT / GOLD
@@ -133,7 +265,7 @@ export default function Checkout() {
 
                 <div className="relative z-10 my-2">
                   <div className="text-[10px] uppercase text-white/60 tracking-widest font-semibold mb-1">Card Number</div>
-                  <div className="font-mono text-lg tracking-widest font-bold drop-shadow">
+                  <div className="font-mono text-lg md:text-xl tracking-widest font-bold drop-shadow">
                     {formData.cardNumber || '•••• •••• •••• ••••'}
                   </div>
                 </div>
@@ -299,69 +431,106 @@ export default function Checkout() {
                   }`}
                 >
                   <Wallet className="w-5 h-5 text-secondary" />
-                  <span>NexusPay Balance</span>
+                  <span>Checkout</span>
                 </button>
               </div>
 
               {/* Card Form */}
-              <form onSubmit={handleCompleteOrder} className="space-y-4">
+              <form onSubmit={handleInitiatePayment} className="space-y-4">
                 
                 <div>
-                  <label className="text-xs font-bold text-on-surface block mb-1.5">
-                    Name on Card
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-bold text-on-surface">
+                      Name on Card
+                    </label>
+                    {formErrors.cardName && (
+                      <span className="text-[11px] text-error font-medium">{formErrors.cardName}</span>
+                    )}
+                  </div>
                   <input
                     type="text"
                     required
+                    placeholder="e.g. Alex Chen"
                     value={formData.cardName}
-                    onChange={(e) => setFormData({ ...formData, cardName: e.target.value })}
-                    className="w-full px-4 py-3 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary font-medium text-on-surface"
+                    onChange={(e) => {
+                      setFormData({ ...formData, cardName: e.target.value });
+                      if (formErrors.cardName) setFormErrors({ ...formErrors, cardName: '' });
+                    }}
+                    className={`w-full px-4 py-3 text-xs bg-surface-container-low border rounded-xl focus:outline-none font-medium text-on-surface ${
+                      formErrors.cardName ? 'border-error focus:border-error ring-1 ring-error/20' : 'border-outline-variant focus:border-primary'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-on-surface block mb-1.5">
-                    Card Number
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-bold text-on-surface">
+                      Card Number
+                    </label>
+                    {formErrors.cardNumber && (
+                      <span className="text-[11px] text-error font-medium">{formErrors.cardNumber}</span>
+                    )}
+                  </div>
                   <div className="relative">
                     <CreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-outline" />
                     <input
                       type="text"
                       required
+                      placeholder="4242 •••• •••• 4242"
                       value={formData.cardNumber}
-                      onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary font-mono text-on-surface"
+                      onChange={handleCardNumberChange}
+                      className={`w-full pl-10 pr-4 py-3 text-xs bg-surface-container-low border rounded-xl focus:outline-none font-mono text-on-surface ${
+                        formErrors.cardNumber ? 'border-error focus:border-error ring-1 ring-error/20' : 'border-outline-variant focus:border-primary'
+                      }`}
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-on-surface block mb-1.5">
-                      Expiry Date
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-on-surface">
+                        Expiry Date
+                      </label>
+                      {formErrors.expDate && (
+                        <span className="text-[10px] text-error font-medium">{formErrors.expDate}</span>
+                      )}
+                    </div>
                     <input
                       type="text"
                       required
                       value={formData.expDate}
-                      onChange={(e) => setFormData({ ...formData, expDate: e.target.value })}
+                      onChange={handleExpiryChange}
                       placeholder="MM/YY"
-                      className="w-full px-4 py-3 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary font-mono text-on-surface"
+                      maxLength={5}
+                      className={`w-full px-4 py-3 text-xs bg-surface-container-low border rounded-xl focus:outline-none font-mono text-on-surface ${
+                        formErrors.expDate ? 'border-error focus:border-error ring-1 ring-error/20' : 'border-outline-variant focus:border-primary'
+                      }`}
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-on-surface block mb-1.5">
-                      Security Code (CVV)
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-on-surface">
+                        Security Code (CVV)
+                      </label>
+                      {formErrors.cvv && (
+                        <span className="text-[10px] text-error font-medium">{formErrors.cvv}</span>
+                      )}
+                    </div>
                     <input
                       type="password"
                       maxLength={4}
                       required
                       value={formData.cvv}
-                      onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
-                      placeholder="123"
-                      className="w-full px-4 py-3 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary font-mono text-on-surface"
+                      onChange={(e) => {
+                        setFormData({ ...formData, cvv: e.target.value.replace(/\D/g, '') });
+                        if (formErrors.cvv) setFormErrors({ ...formErrors, cvv: '' });
+                      }}
+                      placeholder="•••"
+                      className={`w-full px-4 py-3 text-xs bg-surface-container-low border rounded-xl focus:outline-none font-mono text-on-surface ${
+                        formErrors.cvv ? 'border-error focus:border-error ring-1 ring-error/20' : 'border-outline-variant focus:border-primary'
+                      }`}
                     />
                   </div>
                 </div>
@@ -421,12 +590,12 @@ export default function Checkout() {
                     {isProcessing ? (
                       <span className="inline-flex items-center gap-2.5">
                         <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        <span>Authorizing Transaction...</span>
+                        <span>Connecting to Bank Gateway...</span>
                       </span>
                     ) : (
                       <>
                         <Lock className="w-4 h-4" />
-                        <span>Authorize & Pay ${totalPrice.toFixed(2)}</span>
+                        <span>Verify & Pay ${totalPrice.toFixed(2)}</span>
                       </>
                     )}
                   </button>
@@ -434,7 +603,7 @@ export default function Checkout() {
 
                 <p className="text-center text-[11px] text-outline pt-2 flex items-center justify-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-secondary" />
-                  <span>Verified by Visa & Mastercard Identity Check. PCI-DSS Level 1.</span>
+                  <span>Verified by Visa & Mastercard Identity Check. 3D-Secure 2.0 Enabled.</span>
                 </p>
 
               </form>
@@ -446,6 +615,129 @@ export default function Checkout() {
         </div>
 
       </div>
+
+      {/* 3D-Secure / Bank 2-Factor OTP Verification Modal */}
+      {showOtpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in"
+            onClick={() => setShowOtpModal(false)}
+          />
+
+          <div className="relative w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-3xl shadow-2xl p-6 md:p-8 z-10 animate-in zoom-in-95 duration-200">
+            
+            {/* Close modal button */}
+            <button
+              onClick={() => setShowOtpModal(false)}
+              className="absolute top-4 right-4 p-2 rounded-xl text-outline hover:text-on-surface hover:bg-surface-container transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="flex items-center gap-3 pb-4 border-b border-outline-variant/60 mb-5">
+              <div className="w-10 h-10 rounded-2xl bg-primary text-white flex items-center justify-center font-bold shadow-xs">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm text-on-surface">3D Secure Bank Verification</h3>
+                <p className="text-[11px] text-outline">Verified by Visa / Mastercard Identity Check</p>
+              </div>
+            </div>
+
+            {/* Transaction metadata */}
+            <div className="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/60 mb-5 space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-outline">Merchant:</span>
+                <span className="font-bold text-on-surface">NexusPay Enterprise Academy</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-outline">Card Number:</span>
+                <span className="font-mono font-semibold text-on-surface">{formData.cardNumber.slice(-9) || '•••• 4242'}</span>
+              </div>
+              <div className="flex justify-between items-baseline pt-1 border-t border-outline-variant/40">
+                <span className="text-outline font-medium">Authorization Amount:</span>
+                <span className="text-base font-extrabold text-primary">${totalPrice.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Instruction */}
+            <div className="text-center mb-4">
+              <p className="text-xs text-on-surface-variant font-medium">
+                Enter the 6-digit one-time passcode (OTP) sent to your registered mobile number ending in <strong>•••• 4291</strong>
+              </p>
+            </div>
+
+            {/* 6-Digit OTP Boxes */}
+            <form onSubmit={handleVerifyOtpAndPay} className="space-y-4">
+              <div className="flex justify-center gap-2 md:gap-3">
+                {otpCode.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`otp-input-${index}`}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                    className="w-11 h-12 text-center text-lg font-bold font-mono bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 text-on-surface transition-all"
+                  />
+                ))}
+              </div>
+
+              {otpError && (
+                <p className="text-xs text-error font-medium text-center flex items-center justify-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" /> {otpError}
+                </p>
+              )}
+
+              {/* Quick Auto-fill button helper */}
+              <div className="flex items-center justify-between text-xs pt-1">
+                <button
+                  type="button"
+                  onClick={handleAutoFillOtp}
+                  className="text-primary font-semibold hover:underline flex items-center gap-1 text-[11px]"
+                >
+                  <KeyRound className="w-3 h-3" /> Auto-fill code (123456)
+                </button>
+                <span className="text-[11px] text-outline">
+                  Resend in <strong>0:{resendTimer}s</strong>
+                </span>
+              </div>
+
+              {/* Submit / Authorize Button */}
+              <button
+                type="submit"
+                disabled={isVerifyingOtp}
+                className="w-full py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-bold text-xs shadow-elevation-1 flex items-center justify-center gap-2 transition-all disabled:opacity-75"
+              >
+                {isVerifyingOtp ? (
+                  <span className="inline-flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span>Validating Passcode...</span>
+                  </span>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Authorize & Confirm Payment</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowOtpModal(false)}
+                className="w-full py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container text-xs font-semibold transition-colors"
+              >
+                Cancel Transaction
+              </button>
+            </form>
+
+          </div>
+        </div>
+      )}
+
     </PageLayout>
   );
 }
