@@ -18,7 +18,8 @@ import {
   ChevronRight,
   Sparkles,
   Layers,
-  ArrowUpRight
+  ArrowUpRight,
+  Mail
 } from 'lucide-react';
 import { orgData } from '../../data/orgData';
 import { useToast } from '../common/Toast';
@@ -34,7 +35,7 @@ export default function OrgSidebar() {
       items: [
         { name: 'Dashboard', path: '/org/dashboard', icon: LayoutDashboard },
         { name: 'Instructors', path: '/org/instructors', icon: GraduationCap },
-        { name: 'Instructor Requests', path: '/org/instructor-requests', icon: UserCheck, badge: orgData.stats.pendingRequests },
+        { name: 'Instructor Invitations', path: '/org/instructor-requests', icon: Mail, badge: orgData.instructorRequests.filter(r => r.status === 'Invite Sent').length },
         { name: 'Learners', path: '/org/learners', icon: Users },
       ]
     },

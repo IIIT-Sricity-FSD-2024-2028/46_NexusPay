@@ -142,10 +142,16 @@ export const orgData = {
       qualification: "PhD Computer Science, MIT",
       experience: "8 years teaching, 12 published IEEE papers",
       submittedDate: "August 20, 2026",
-      status: "Pending",
-      bio: "Passionate about applied deep learning in high-frequency trading and predictive risk modeling.",
+      sentDate: "August 20, 2026",
+      status: "Invite Sent",
+      outreachMethod: "Sent request by mail",
+      mailSubject: "NexusPay Enterprise Academy: Faculty Leadership Invitation",
+      description: "Organization has sent an official invitation request by mail to Dr. Sarah Mitchell to lead the Distributed Deep Learning & Quantitative Finance masterclass track.",
+      bio: "Distinguished researcher at MIT Computer Science & AI Lab (CSAIL) specializing in deep learning algorithms for financial systems.",
       sampleSyllabus: "12-week intensive masterclass on Transformers in Quantitative Finance",
-      adminNotes: "Credentials verified with MIT department chair. Excellent candidate for ML specialization."
+      proposedTerms: "70/30 gross royalty distribution + $12,500 curriculum development grant",
+      trackingStatus: "Delivered via Mail • Invitation link opened by recipient",
+      adminNotes: "Official outreach request sent via mail by Dean's office on Aug 20, 2026. Awaiting faculty confirmation."
     },
     {
       id: "req-102",
@@ -157,10 +163,16 @@ export const orgData = {
       qualification: "DPhil Oxford University",
       experience: "10 years research fellow",
       submittedDate: "August 22, 2026",
-      status: "Pending",
-      bio: "Pioneering post-quantum lattice-based encryption algorithms for future-proof financial networks.",
+      sentDate: "August 22, 2026",
+      status: "Invite Sent",
+      outreachMethod: "Sent request by mail",
+      mailSubject: "Faculty Recruitment: Lead Quantum Cryptography at NexusPay",
+      description: "Organization has sent an official invitation request by mail inviting Dr. Emily Rogers to design and instruct our Post-Quantum Banking Cryptography curriculum.",
+      bio: "Pioneering post-quantum lattice-based encryption algorithms for future-proof financial networks and secure ledger protocols.",
       sampleSyllabus: "Introduction to Post-Quantum Resilient Ledger Protocols",
-      adminNotes: "Under preliminary syllabus review by Senior Security panel."
+      proposedTerms: "75/25 royalty structure + dedicated cloud lab provisioning",
+      trackingStatus: "Delivered via Mail • Awaiting educator signature",
+      adminNotes: "Dispatched recruitment request by email to Cambridge department inbox on Aug 22, 2026."
     },
     {
       id: "req-103",
@@ -172,10 +184,16 @@ export const orgData = {
       qualification: "MSc Finance, LSE",
       experience: "15 years central bank advisory",
       submittedDate: "August 24, 2026",
-      status: "Pending",
-      bio: "Global architect for real-time gross settlement (RTGS) systems and ISO 20022 messaging integrations.",
+      sentDate: "August 24, 2026",
+      status: "Invite Sent",
+      outreachMethod: "Sent request by mail",
+      mailSubject: "NexusPay Academy: Invitation to Author Cross-Border Settlement Series",
+      description: "Organization has sent an official invitation request by mail to Tariq Al-Mansoor to establish the ISO 20022 and Real-Time Gross Settlement training cohort.",
+      bio: "Global architect for real-time gross settlement (RTGS) systems and ISO 20022 messaging integrations across MENA banking networks.",
       sampleSyllabus: "Modernizing Global Financial Messaging with ISO 20022 Standards",
-      adminNotes: "Awaiting final identity verification documents."
+      proposedTerms: "Corporate cohort licensing fees + $15,000 authoring fee",
+      trackingStatus: "Delivered via Mail • Second reminder scheduled for Aug 29",
+      adminNotes: "Formal invitation email sent by Academic Director on Aug 24, 2026."
     },
     {
       id: "req-104",
@@ -187,10 +205,16 @@ export const orgData = {
       qualification: "JD Harvard Law School",
       experience: "12 years chief compliance officer",
       submittedDate: "August 10, 2026",
-      status: "Approved",
-      bio: "Expert on international regulatory frameworks governing algorithmic payments and AI auditing.",
+      sentDate: "August 10, 2026",
+      status: "Accepted",
+      outreachMethod: "Sent request by mail",
+      mailSubject: "Welcome to NexusPay Faculty: Compliance Track Appointment",
+      description: "Organization sent an official invitation request by mail on Aug 10, 2026. Educator accepted the appointment and onboarding is completed.",
+      bio: "Expert on international regulatory frameworks governing algorithmic payments, AML pipelines, and automated banking audits.",
       sampleSyllabus: "Automated Regulatory Compliance & AML Pipelines",
-      adminNotes: "Approved unanimously on Aug 14, 2026."
+      proposedTerms: "Accepted 70/30 faculty agreement",
+      trackingStatus: "Accepted & Onboarded • Contract countersigned",
+      adminNotes: "Invitation sent via mail on Aug 10; Accepted and countersigned on Aug 14, 2026."
     },
     {
       id: "req-105",
@@ -202,10 +226,16 @@ export const orgData = {
       qualification: "BSc Computer Science, Trinity College",
       experience: "2 years freelance",
       submittedDate: "July 28, 2026",
+      sentDate: "July 28, 2026",
       status: "Declined",
-      bio: "NFT gaming developer interested in creating beginner intro courses.",
+      outreachMethod: "Sent request by mail",
+      mailSubject: "NexusPay Faculty Outreach: Web3 Gaming Inquiry",
+      description: "Organization sent an exploratory invitation request by mail. Educator declined due to scheduling conflicts with ongoing advisory work.",
+      bio: "NFT gaming developer interested in creating decentralized game economy tracks.",
       sampleSyllabus: "Building your first NFT marketplace",
-      adminNotes: "Declined: Content does not align with enterprise architecture specialization criteria."
+      proposedTerms: "Standard faculty rate",
+      trackingStatus: "Declined by recipient (Scheduling conflict)",
+      adminNotes: "Organization outreach sent July 28; Candidate politely declined on Aug 02 citing consulting commitments."
     }
   ],
 

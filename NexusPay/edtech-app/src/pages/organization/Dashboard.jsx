@@ -13,7 +13,10 @@ import {
   Plus,
   Sparkles,
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  Mail,
+  Send,
+  RotateCcw
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
 import { orgData } from '../../data/orgData';
@@ -22,12 +25,16 @@ import { useToast } from '../../components/common/Toast';
 export default function OrgDashboard() {
   const { addToast } = useToast();
 
-  const handleApprove = (name) => {
-    addToast(`Approved instructor application for ${name}`, 'success');
+  const handleResendMail = (email) => {
+    addToast(`Resent invitation request email to ${email}!`, 'info');
   };
 
-  const handleDecline = (name) => {
-    addToast(`Declined instructor application for ${name}`, 'error');
+  const handleWithdrawInvitation = (name) => {
+    addToast(`Withdrew recruitment invitation for ${name}`, 'error');
+  };
+
+  const handleMarkAccepted = (name) => {
+    addToast(`${name} confirmed and accepted faculty invitation!`, 'success');
   };
 
   return (
@@ -300,56 +307,77 @@ export default function OrgDashboard() {
 
       </div>
 
-      {/* Pending Instructor Applications Row */}
+      {/* Outbound Faculty Invitations Sent by Organization */}
       <section className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1">
         <div className="flex items-center justify-between pb-4 border-b border-outline-variant mb-6">
           <div>
             <h2 className="text-base font-bold text-on-surface flex items-center gap-2">
-              <span>Pending Instructor Applications</span>
+              <Mail className="w-5 h-5 text-primary" />
+              <span>Faculty Invitations Sent by Organization</span>
               <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 text-xs font-bold">
-                {orgData.instructorRequests.filter(r => r.status === 'Pending').length} Pending
+                {orgData.instructorRequests.filter(r => r.status === 'Invite Sent').length} Awaiting Acceptance
               </span>
             </h2>
-            <p className="text-xs text-on-surface-variant">Review educator credentials and approve curriculum access</p>
+            <p className="text-xs text-on-surface-variant">Recruitment requests sent by mail to prospective educators</p>
           </div>
-          <Link to="/instructor-requests" className="text-xs font-bold text-primary hover:underline">
-            Manage All Requests →
+          <Link to="/instructor-requests" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+            <span>Manage All Invitations</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {orgData.instructorRequests.filter(r => r.status === 'Pending').map((req) => (
-            <div key={req.id} className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant/80 flex flex-col justify-between space-y-4">
+          {orgData.instructorRequests.filter(r => r.status === 'Invite Sent').map((inv) => (
+            <div key={inv.id} className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant/80 flex flex-col justify-between space-y-4">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <img src={req.avatar} alt={req.name} className="w-12 h-12 rounded-2xl object-cover" />
+                  <img src={inv.avatar} alt={inv.name} className="w-12 h-12 rounded-2xl object-cover" />
                   <div>
-                    <h3 className="font-bold text-sm text-on-surface">{req.name}</h3>
-                    <p className="text-[11px] text-outline">{req.email}</p>
-                    <span className="inline-block text-[10px] font-bold text-primary mt-0.5">{req.specialization}</span>
+                    <h3 className="font-bold text-sm text-on-surface">{inv.name}</h3>
+                    <p className="text-[11px] text-outline">{inv.email}</p>
+                    <span className="inline-block text-[10px] font-bold text-primary mt-0.5">{inv.specialization}</span>
                   </div>
                 </div>
+
+                <div className="p-2.5 rounded-xl bg-blue-50/80 border border-blue-200/60 mb-2">
+                  <span className="text-[10px] font-bold text-blue-900 flex items-center gap-1">
+                    <Mail className="w-3 h-3 text-primary" />
+                    <span>Sent request by mail</span>
+                  </span>
+                  <p className="text-[11px] text-blue-950 font-medium line-clamp-2 mt-0.5">
+                    {inv.description}
+                  </p>
+                </div>
+
                 <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
-                  {req.bio}
+                  {inv.bio}
                 </p>
               </div>
 
               <div className="pt-3 border-t border-outline-variant/60 flex items-center gap-2">
                 <button
-                  onClick={() => handleApprove(req.name)}
+                  title="Resend invitation request email"
+                  onClick={() => handleResendMail(inv.email)}
+                  className="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant transition-colors"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => handleMarkAccepted(inv.name)}
                   className="flex-1 py-2 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
                 >
                   <Check className="w-3.5 h-3.5" />
-                  <span>Approve</span>
+                  <span>Mark Accepted</span>
                 </button>
                 <button
-                  onClick={() => handleDecline(req.name)}
+                  title="Withdraw invitation"
+                  onClick={() => handleWithdrawInvitation(inv.name)}
                   className="py-2 px-3 rounded-xl bg-surface-container hover:bg-red-50 text-red-600 text-xs font-bold border border-outline-variant transition-colors"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
                 <Link
-                  to={`/instructor-requests/${req.id}`}
+                  to={`/instructor-requests/${inv.id}`}
                   className="py-2 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold transition-colors"
                 >
                   Details
