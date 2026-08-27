@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ChevronLeft,
   Mail,
   Send,
-  Check,
-  X,
   RotateCcw,
   Bell,
   Calendar,
-  BookOpen
+  BookOpen,
+  GraduationCap
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
 import { useOrg } from '../../context/OrgContext';
@@ -18,25 +17,15 @@ import { useToast } from '../../components/common/Toast';
 export default function InstructorRequestDetails() {
   const { id } = useParams();
   const { addToast } = useToast();
-  const { instructorRequests, respondToTeachingRequest } = useOrg();
+  const { instructorRequests } = useOrg();
 
   const request = instructorRequests.find(r => r.id === id) || instructorRequests[0];
-  const [adminNotes, setAdminNotes] = useState(request?.adminNotes || '');
 
   const isAccepted = request?.status?.includes('Accepted');
   const isPending = request?.status?.includes('Pending');
 
-  const handleProfessorResponse = (decision) => {
-    const res = respondToTeachingRequest(request.id, decision);
-    if (decision === 'Accepted') {
-      addToast(`Professor ${res.instructorName} accepted to teach "${res.courseName}"! College notification dispatched.`, 'success');
-    } else {
-      addToast(`Professor ${res.instructorName} declined. College notification dispatched.`, 'info');
-    }
-  };
-
   const handleResendMail = () => {
-    addToast(`Resent teaching request email to ${request.email}!`, 'info');
+    addToast(`Resent course teaching request email to ${request.email}!`, 'info');
   };
 
   return (
@@ -96,7 +85,7 @@ export default function InstructorRequestDetails() {
                 </div>
               </div>
 
-              {/* Course Details Requested */}
+              {/* Course Assignment Details */}
               <div className="py-6 border-b border-outline-variant space-y-4">
                 <h2 className="text-xs font-bold text-outline uppercase tracking-wider">Course Assignment Specification</h2>
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 space-y-2">
@@ -124,42 +113,41 @@ export default function InstructorRequestDetails() {
           <div className="lg:col-span-4 space-y-6">
             <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 space-y-5">
               <h2 className="text-base font-bold text-on-surface pb-3 border-b border-outline-variant">
-                Professor's Decision Controls
+                Request Status & Actions
               </h2>
 
-              <p className="text-xs text-on-surface-variant">
-                The professor receives this request by mail and decides whether to teach. You can simulate the professor's decision here to see college notifications in action:
-              </p>
-
-              <div className="space-y-2.5">
-                <button
-                  onClick={() => handleProfessorResponse('Accepted')}
-                  className="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-colors"
-                >
-                  <Check className="w-4 h-4" />
-                  <span>Professor Accepts (Notify College)</span>
-                </button>
-
-                <button
-                  onClick={() => handleProfessorResponse('Declined')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-red-50 text-red-600 font-bold text-xs border border-outline-variant flex items-center justify-center gap-2 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                  <span>Professor Declines (Notify College)</span>
-                </button>
-
-                <button
-                  onClick={handleResendMail}
-                  className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-bold text-xs border border-outline-variant flex items-center justify-center gap-2 transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  <span>Resend Request by Mail</span>
-                </button>
+              <div className="space-y-2 text-xs">
+                <span className="text-[10px] text-outline uppercase font-bold tracking-wider block">Decision Status</span>
+                <p className="font-bold text-on-surface bg-surface-container-low p-3 rounded-xl border border-outline-variant/60">
+                  {request.status}
+                </p>
+                <p className="text-[11px] text-outline">
+                  {isAccepted
+                    ? 'Professor accepted this teaching assignment. The college has been officially notified and the course is scheduled.'
+                    : isPending
+                    ? 'Awaiting instructor response. The instructor will review and make their choice via their official email link.'
+                    : 'Professor declined this teaching request.'}
+                </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 text-[11px] text-outline space-y-1">
-                <span className="font-bold text-on-surface block">Notification Protocol:</span>
-                <span>When the professor accepts, a high-priority notification is dispatched to the college admin notification drawer.</span>
+              <div className="space-y-2.5 pt-2">
+                {isPending && (
+                  <button
+                    onClick={handleResendMail}
+                    className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-bold text-xs border border-outline-variant flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    <span>Resend Request Email</span>
+                  </button>
+                )}
+
+                <Link
+                  to={`/instructors/${request.instructorId || 'inst-1'}`}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#255ea6] hover:bg-[#356ea8] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  <span>View Instructor Full Profile</span>
+                </Link>
               </div>
             </div>
           </div>

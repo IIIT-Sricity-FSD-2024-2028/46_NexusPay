@@ -4,19 +4,16 @@ import {
   Mail,
   Send,
   Search,
-  Check,
-  X,
   Eye,
   Clock,
   CheckCircle2,
   XCircle,
-  Plus,
   RotateCcw,
   BookOpen,
-  GraduationCap,
   Calendar,
   Sparkles,
-  Bell
+  Bell,
+  X
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
 import { useOrg } from '../../context/OrgContext';
@@ -24,20 +21,9 @@ import { useToast } from '../../components/common/Toast';
 
 export default function InstructorRequests() {
   const { addToast } = useToast();
-  const { instructors, instructorRequests, sendCourseTeachingRequest, respondToTeachingRequest } = useOrg();
+  const { instructorRequests } = useOrg();
   const [filter, setFilter] = useState('All');
   const [search, setSearch] = useState('');
-  const [showModal, setShowModal] = useState(false);
-
-  // New Course Teaching Request Form (targeting EXISTING college instructors)
-  const [requestForm, setRequestForm] = useState({
-    instructorId: instructors[0]?.id || 'inst-1',
-    courseTitle: 'Distributed High-Throughput Settlement Engines',
-    semester: 'Fall 2026',
-    creditHours: '4 Academic Credits',
-    proposedTerms: 'Academic Honorarium + 70/30 faculty course royalty',
-    message: 'The Academic Council requests you to lead and teach this course for the upcoming term.'
-  });
 
   const filteredRequests = instructorRequests.filter(req => {
     const matchesFilter = filter === 'All' ||
@@ -51,22 +37,6 @@ export default function InstructorRequests() {
     return matchesFilter && matchesSearch;
   });
 
-  const handleSendRequest = (e) => {
-    e.preventDefault();
-    const created = sendCourseTeachingRequest(requestForm);
-    setShowModal(false);
-    addToast(`College sent course teaching request by mail to ${created.name} for "${created.courseTitle}"!`, 'success');
-  };
-
-  const handleProfessorResponse = (id, decision) => {
-    const res = respondToTeachingRequest(id, decision);
-    if (decision === 'Accepted') {
-      addToast(`Professor ${res.instructorName} accepted to teach "${res.courseName}"! College has been notified.`, 'success');
-    } else {
-      addToast(`Professor ${res.instructorName} declined to teach "${res.courseName}". College has been notified.`, 'info');
-    }
-  };
-
   const handleResendMail = (email, courseTitle) => {
     addToast(`Resent teaching request email to ${email} for "${courseTitle}"!`, 'info');
   };
@@ -79,13 +49,13 @@ export default function InstructorRequests() {
     <OrgLayout
       breadcrumbs={[{ label: 'Course Teaching Requests' }]}
       actions={
-        <button
-          onClick={() => setShowModal(true)}
+        <Link
+          to="/assign-courses"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#255ea6] hover:bg-[#356ea8] text-white text-xs font-bold shadow-sm transition-all"
         >
           <Send className="w-4 h-4" />
-          <span>Send Course Teaching Request by Mail</span>
-        </button>
+          <span>Assign Course & Send Request</span>
+        </Link>
       }
     >
       <div className="space-y-6">
@@ -95,7 +65,7 @@ export default function InstructorRequests() {
           <div>
             <h1 className="text-2xl font-bold text-on-surface">Faculty Course Teaching Requests</h1>
             <p className="text-xs text-on-surface-variant mt-0.5 max-w-2xl">
-              The college manages its existing faculty instructors. Send formal requests to professors to teach courses. When a professor accepts, the college is immediately notified.
+              All formal course teaching requests dispatched by mail to college professors. When a professor accepts, the college is immediately notified.
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -229,41 +199,24 @@ export default function InstructorRequests() {
                         )}
                       </td>
 
-                      {/* Actions */}
+                      {/* Actions: View Details and Resend Mail (No Accept/Decline here, as that is the instructor's choice) */}
                       <td className="py-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-2">
                           {isPending && (
-                            <>
-                              <button
-                                title="Professor Accepts Teaching Request (Simulate acceptance & notify college)"
-                                onClick={() => handleProfessorResponse(req.id, 'Accepted')}
-                                className="px-2.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[11px] flex items-center gap-1 transition-colors shadow-xs"
-                              >
-                                <Check className="w-3.5 h-3.5" />
-                                <span>Accept</span>
-                              </button>
-                              <button
-                                title="Professor Declines Teaching Request"
-                                onClick={() => handleProfessorResponse(req.id, 'Declined')}
-                                className="p-1.5 rounded-xl bg-surface-container hover:bg-red-50 text-red-600 border border-outline-variant transition-colors"
-                              >
-                                <X className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                title="Resend course teaching request email to professor"
-                                onClick={() => handleResendMail(req.email, req.courseTitle)}
-                                className="p-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant transition-colors"
-                              >
-                                <RotateCcw className="w-3.5 h-3.5" />
-                              </button>
-                            </>
+                            <button
+                              title="Resend teaching request email to professor"
+                              onClick={() => handleResendMail(req.email, req.courseTitle)}
+                              className="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant transition-colors"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                            </button>
                           )}
                           <Link
                             to={`/instructor-requests/${req.id}`}
-                            className="px-3 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-xs inline-flex items-center gap-1 transition-colors"
+                            className="px-3.5 py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs inline-flex items-center gap-1.5 transition-colors border border-outline-variant/60"
                           >
-                            <Eye className="w-3.5 h-3.5" />
-                            <span>Details</span>
+                            <Eye className="w-3.5 h-3.5 text-primary" />
+                            <span>View Details</span>
                           </Link>
                         </div>
                       </td>
@@ -275,126 +228,6 @@ export default function InstructorRequests() {
             </table>
           </div>
         </div>
-
-        {/* Modal: Send Course Teaching Request to Existing Instructor */}
-        {showModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-elevation-3 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-outline-variant">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                    <Send className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h2 className="text-base font-bold text-on-surface">Send Course Teaching Request by Mail</h2>
-                    <p className="text-xs text-on-surface-variant">Request an existing college professor to teach a course</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="p-1.5 rounded-xl hover:bg-surface-container text-outline"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <form onSubmit={handleSendRequest} className="space-y-3.5 text-xs">
-                <div>
-                  <label className="font-bold text-on-surface block mb-1">Select College Faculty Member</label>
-                  <select
-                    value={requestForm.instructorId}
-                    onChange={(e) => setRequestForm({ ...requestForm, instructorId: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-surface-container-low border border-outline-variant rounded-xl text-on-surface font-medium"
-                  >
-                    {instructors.map((inst) => (
-                      <option key={inst.id} value={inst.id}>
-                        {inst.name} — {inst.specialization} ({inst.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="font-bold text-on-surface block mb-1">Target Course to Teach</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Distributed High-Throughput Settlement Engines"
-                    value={requestForm.courseTitle}
-                    onChange={(e) => setRequestForm({ ...requestForm, courseTitle: e.target.value })}
-                    className="w-full px-3.5 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-on-surface font-medium"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-bold text-on-surface block mb-1">Academic Term / Semester</label>
-                    <select
-                      value={requestForm.semester}
-                      onChange={(e) => setRequestForm({ ...requestForm, semester: e.target.value })}
-                      className="w-full px-3.5 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-on-surface font-medium"
-                    >
-                      <option>Fall 2026</option>
-                      <option>Spring 2027</option>
-                      <option>Summer Intensive 2027</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="font-bold text-on-surface block mb-1">Academic Credits</label>
-                    <input
-                      type="text"
-                      value={requestForm.creditHours}
-                      onChange={(e) => setRequestForm({ ...requestForm, creditHours: e.target.value })}
-                      className="w-full px-3.5 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-on-surface font-medium"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="font-bold text-on-surface block mb-1">Honorarium & Teaching Royalty Terms</label>
-                  <input
-                    type="text"
-                    value={requestForm.proposedTerms}
-                    onChange={(e) => setRequestForm({ ...requestForm, proposedTerms: e.target.value })}
-                    className="w-full px-3.5 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-on-surface font-medium"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-bold text-on-surface block mb-1">Invitation Letter / Mail Body</label>
-                  <textarea
-                    rows={3}
-                    value={requestForm.message}
-                    onChange={(e) => setRequestForm({ ...requestForm, message: e.target.value })}
-                    className="w-full p-3 bg-surface-container-low border border-outline-variant rounded-xl text-on-surface font-medium"
-                  />
-                </div>
-
-                <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-[11px] flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-primary flex-shrink-0" />
-                  <span>The college mail server will dispatch this course assignment request to the professor. The instructor can choose to accept or decline. When accepted, the college will be notified.</span>
-                </div>
-
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 rounded-xl bg-surface-container text-on-surface font-semibold"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-5 py-2 rounded-xl bg-[#255ea6] hover:bg-[#356ea8] text-white font-bold flex items-center gap-2"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>Send Request by Mail</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
       </div>
     </OrgLayout>

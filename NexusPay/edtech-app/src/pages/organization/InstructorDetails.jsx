@@ -23,6 +23,15 @@ export default function InstructorDetails() {
         { label: 'Instructors', path: '/instructors' },
         { label: instructor.name }
       ]}
+      actions={
+        <Link
+          to={`/assign-courses?instructorId=${instructor.id}`}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#255ea6] hover:bg-[#356ea8] text-white text-xs font-bold shadow-sm transition-all"
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Assign Course to {instructor.name.split(' ')[0]}</span>
+        </Link>
+      }
     >
       <div className="space-y-6">
         <Link to="/instructors" className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline">
