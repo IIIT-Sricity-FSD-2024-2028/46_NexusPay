@@ -24,11 +24,11 @@ import {
   ThumbsUp,
   HelpCircle
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import RatingStars from '../components/common/RatingStars';
-import Badge from '../components/common/Badge';
-import { coursesData } from '../data/coursesData';
-import { useToast } from '../components/common/Toast';
+import PageLayout from '../../components/layout/PageLayout';
+import RatingStars from '../../components/common/RatingStars';
+import Badge from '../../components/common/Badge';
+import { coursesData } from '../../data/coursesData';
+import { useToast } from '../../components/common/Toast';
 
 export default function CourseDetails() {
   const { id } = useParams();

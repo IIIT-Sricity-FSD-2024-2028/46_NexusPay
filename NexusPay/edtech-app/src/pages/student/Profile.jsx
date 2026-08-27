@@ -17,10 +17,10 @@ import {
   Lock,
   ChevronRight
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import Badge from '../components/common/Badge';
-import { userData } from '../data/userData';
-import { useToast } from '../components/common/Toast';
+import PageLayout from '../../components/layout/PageLayout';
+import Badge from '../../components/common/Badge';
+import { userData } from '../../data/userData';
+import { useToast } from '../../components/common/Toast';
 
 export default function Profile() {
   const { addToast } = useToast();

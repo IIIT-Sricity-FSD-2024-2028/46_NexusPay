@@ -28,9 +28,9 @@ import {
   Layers,
   Check
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import Badge from '../components/common/Badge';
-import { useToast } from '../components/common/Toast';
+import PageLayout from '../../components/layout/PageLayout';
+import Badge from '../../components/common/Badge';
+import { useToast } from '../../components/common/Toast';
 
 export default function LearningPlayer() {
   const { addToast } = useToast();

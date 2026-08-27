@@ -17,11 +17,11 @@ import {
   BarChart2,
   BookOpen
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import Badge from '../components/common/Badge';
-import { CircularProgress } from '../components/common/ProgressBar';
-import { quizData } from '../data/quizData';
-import { useToast } from '../components/common/Toast';
+import PageLayout from '../../components/layout/PageLayout';
+import Badge from '../../components/common/Badge';
+import { CircularProgress } from '../../components/common/ProgressBar';
+import { quizData } from '../../data/quizData';
+import { useToast } from '../../components/common/Toast';
 
 export default function Quiz() {
   const navigate = useNavigate();

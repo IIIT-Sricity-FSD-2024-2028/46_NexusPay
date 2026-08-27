@@ -15,9 +15,9 @@ import {
   X,
   KeyRound
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import RatingStars from '../components/common/RatingStars';
-import { useToast } from '../components/common/Toast';
+import PageLayout from '../../components/layout/PageLayout';
+import RatingStars from '../../components/common/RatingStars';
+import { useToast } from '../../components/common/Toast';
 
 export default function Checkout() {
   const navigate = useNavigate();

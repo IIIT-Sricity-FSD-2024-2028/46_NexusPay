@@ -11,10 +11,10 @@ import {
   Filter,
   Plus
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import Badge from '../components/common/Badge';
-import CertificateModal from '../components/common/CertificateModal';
-import { certificatesData } from '../data/certificatesData';
+import PageLayout from '../../components/layout/PageLayout';
+import Badge from '../../components/common/Badge';
+import CertificateModal from '../../components/common/CertificateModal';
+import { certificatesData } from '../../data/certificatesData';
 
 export default function Certificates() {
   const [activeCategory, setActiveCategory] = useState('All');

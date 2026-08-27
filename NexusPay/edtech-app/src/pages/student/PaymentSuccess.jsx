@@ -10,9 +10,9 @@ import {
   Sparkles,
   ChevronRight
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import CourseCard from '../components/common/CourseCard';
-import { coursesData } from '../data/coursesData';
+import PageLayout from '../../components/layout/PageLayout';
+import CourseCard from '../../components/common/CourseCard';
+import { coursesData } from '../../data/coursesData';
 
 export default function PaymentSuccess() {
   const location = useLocation();

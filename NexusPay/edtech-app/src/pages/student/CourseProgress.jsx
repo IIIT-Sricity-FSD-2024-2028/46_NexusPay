@@ -15,10 +15,10 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import { LinearProgressBar, CircularProgress } from '../components/common/ProgressBar';
-import Badge from '../components/common/Badge';
-import { courseProgressData } from '../data/progressData';
+import PageLayout from '../../components/layout/PageLayout';
+import { LinearProgressBar, CircularProgress } from '../../components/common/ProgressBar';
+import Badge from '../../components/common/Badge';
+import { courseProgressData } from '../../data/progressData';
 
 export default function CourseProgress() {
   const [openModules, setOpenModules] = useState([1, 2]);

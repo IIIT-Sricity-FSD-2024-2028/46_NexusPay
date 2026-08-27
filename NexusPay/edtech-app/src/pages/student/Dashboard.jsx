@@ -13,12 +13,12 @@ import {
   ChevronRight,
   Target
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import CourseCard from '../components/common/CourseCard';
-import Badge from '../components/common/Badge';
-import { LinearProgressBar } from '../components/common/ProgressBar';
-import { coursesData } from '../data/coursesData';
-import { userData } from '../data/userData';
+import PageLayout from '../../components/layout/PageLayout';
+import CourseCard from '../../components/common/CourseCard';
+import Badge from '../../components/common/Badge';
+import { LinearProgressBar } from '../../components/common/ProgressBar';
+import { coursesData } from '../../data/coursesData';
+import { userData } from '../../data/userData';
 
 export default function Dashboard() {
   const activeCourse = coursesData.find(c => c.id === 'aws-solutions-architect') || coursesData[1];

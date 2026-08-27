@@ -13,11 +13,11 @@ import {
   RotateCcw,
   Sparkles
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import CourseCard from '../components/common/CourseCard';
-import Badge from '../components/common/Badge';
-import { coursesData, exploreCategories } from '../data/coursesData';
-import { useToast } from '../components/common/Toast';
+import PageLayout from '../../components/layout/PageLayout';
+import CourseCard from '../../components/common/CourseCard';
+import Badge from '../../components/common/Badge';
+import { coursesData, exploreCategories } from '../../data/coursesData';
+import { useToast } from '../../components/common/Toast';
 
 export default function ExploreCourses() {
   const [searchParams, setSearchParams] = useSearchParams();

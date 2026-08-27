@@ -13,10 +13,10 @@ import {
   MoreVertical,
   BookOpen
 } from 'lucide-react';
-import PageLayout from '../components/layout/PageLayout';
-import { LinearProgressBar, CircularProgress } from '../components/common/ProgressBar';
-import Badge from '../components/common/Badge';
-import { coursesData } from '../data/coursesData';
+import PageLayout from '../../components/layout/PageLayout';
+import { LinearProgressBar, CircularProgress } from '../../components/common/ProgressBar';
+import Badge from '../../components/common/Badge';
+import { coursesData } from '../../data/coursesData';
 
 export default function MyLearning() {
   const [activeTab, setActiveTab] = useState('in-progress'); // 'in-progress' | 'completed' | 'saved'
