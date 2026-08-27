@@ -306,10 +306,10 @@ export default function OrgDashboard() {
                   {pendingInvitations.length} Awaiting Acceptance
                 </span>
               </h2>
-              <p className="text-xs text-on-surface-variant">Recruitment requests sent by mail to prospective educators</p>
+              <p className="text-xs text-on-surface-variant">Requests sent by mail to existing college faculty to teach specific courses</p>
             </div>
             <Link to="/instructor-requests" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
-              <span>Manage All Invitations</span>
+              <span>Manage All Teaching Requests</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>

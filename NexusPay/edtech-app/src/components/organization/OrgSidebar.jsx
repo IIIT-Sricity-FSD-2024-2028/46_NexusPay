@@ -35,7 +35,7 @@ export default function OrgSidebar() {
       items: [
         { name: 'Dashboard', path: '/org/dashboard', icon: LayoutDashboard },
         { name: 'Instructors', path: '/org/instructors', icon: GraduationCap },
-        { name: 'Instructor Invitations', path: '/org/instructor-requests', icon: Mail, badge: stats.pendingRequests },
+        { name: 'Course Teaching Requests', path: '/org/instructor-requests', icon: BookOpen, badge: stats.pendingRequests },
         { name: 'Learners', path: '/org/learners', icon: Users },
       ]
     },

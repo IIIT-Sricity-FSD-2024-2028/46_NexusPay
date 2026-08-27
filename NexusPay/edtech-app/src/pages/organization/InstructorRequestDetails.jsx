@@ -7,12 +7,9 @@ import {
   Check,
   X,
   RotateCcw,
-  ShieldCheck,
+  Bell,
   Calendar,
-  Award,
-  Clock,
-  CheckCircle2,
-  FileText
+  BookOpen
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
 import { useOrg } from '../../context/OrgContext';
@@ -21,45 +18,41 @@ import { useToast } from '../../components/common/Toast';
 export default function InstructorRequestDetails() {
   const { id } = useParams();
   const { addToast } = useToast();
-  const { instructorRequests, updateInvitationStatus } = useOrg();
+  const { instructorRequests, respondToTeachingRequest } = useOrg();
 
   const request = instructorRequests.find(r => r.id === id) || instructorRequests[0];
   const [adminNotes, setAdminNotes] = useState(request?.adminNotes || '');
-  const status = request?.status || 'Invite Sent';
+
+  const isAccepted = request?.status?.includes('Accepted');
+  const isPending = request?.status?.includes('Pending');
+
+  const handleProfessorResponse = (decision) => {
+    const res = respondToTeachingRequest(request.id, decision);
+    if (decision === 'Accepted') {
+      addToast(`Professor ${res.instructorName} accepted to teach "${res.courseName}"! College notification dispatched.`, 'success');
+    } else {
+      addToast(`Professor ${res.instructorName} declined. College notification dispatched.`, 'info');
+    }
+  };
 
   const handleResendMail = () => {
-    addToast(`Resent invitation request email to ${request.email}!`, 'info');
-  };
-
-  const handleMarkAccepted = () => {
-    updateInvitationStatus(request.id, 'Accepted', 'Accepted by educator • Onboarded');
-    addToast(`Marked invitation as accepted by ${request.name}! Onboarding activated.`, 'success');
-  };
-
-  const handleWithdraw = () => {
-    updateInvitationStatus(request.id, 'Declined', 'Invitation withdrawn by organization');
-    addToast(`Withdrew recruitment invitation for ${request.name}.`, 'error');
+    addToast(`Resent teaching request email to ${request.email}!`, 'info');
   };
 
   return (
     <OrgLayout
       breadcrumbs={[
-        { label: 'Instructor Invitations', path: '/instructor-requests' },
+        { label: 'Course Teaching Requests', path: '/instructor-requests' },
         { label: request.name }
       ]}
     >
       <div className="max-w-5xl mx-auto space-y-6">
-        
-        {/* Back Link */}
         <Link to="/instructor-requests" className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline">
           <ChevronLeft className="w-4 h-4" />
-          <span>Back to All Invitations</span>
+          <span>Back to All Teaching Requests</span>
         </Link>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column (8 cols): Outreach Details & Candidate Profile */}
           <div className="lg:col-span-8 space-y-6">
             
             {/* Header Card */}
@@ -70,111 +63,91 @@ export default function InstructorRequestDetails() {
                   <div className="flex items-center gap-3">
                     <h1 className="text-xl md:text-2xl font-bold text-on-surface">{request.name}</h1>
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      status === 'Accepted' ? 'bg-emerald-100 text-emerald-800' :
-                      status === 'Invite Sent' ? 'bg-amber-100 text-amber-900' : 'bg-red-100 text-red-800'
+                      isAccepted ? 'bg-emerald-100 text-emerald-800' :
+                      isPending ? 'bg-amber-100 text-amber-900' : 'bg-red-100 text-red-800'
                     }`}>
-                      {status === 'Invite Sent' ? 'Awaiting Educator Acceptance' : status}
+                      {request.status}
                     </span>
                   </div>
                   <p className="text-xs text-primary font-bold">{request.specialization}</p>
                   <p className="text-xs text-outline">
-                    Recruitment request dispatched on {request.sentDate || request.submittedDate}
+                    Dispatched on {request.sentDate || request.submittedDate} • Recipient: {request.email}
                   </p>
                 </div>
               </div>
 
-              {/* Sent by Mail Highlight Banner */}
+              {/* Sent by Mail Banner */}
               <div className="mt-6 p-4 rounded-2xl bg-blue-50/80 border border-blue-200/80 space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-xl bg-[#255ea6] text-white flex items-center justify-center">
                     <Mail className="w-4 h-4" />
                   </div>
                   <span className="text-xs font-bold text-blue-950 uppercase tracking-wider">
-                    Organization Outreach Status: Sent request by mail
+                    College Teaching Request: Sent request by mail
                   </span>
                 </div>
                 <p className="text-xs text-blue-900 leading-relaxed pl-9">
-                  {request.description || `Organization has sent an official invitation request by mail to ${request.name} to lead the ${request.specialization} track.`}
+                  {request.description}
                 </p>
                 <div className="pl-9 flex flex-wrap gap-4 text-[11px] text-blue-800 pt-1 font-medium">
-                  <span>Recipient: <strong>{request.email}</strong></span>
-                  <span>Method: <strong>Direct SMTP Mail Dispatch</strong></span>
-                  <span>Tracking: <strong>{request.trackingStatus || 'Delivered via Mail'}</strong></span>
+                  <span>Professor Email: <strong>{request.email}</strong></span>
+                  <span>Semester: <strong>{request.semester || 'Fall 2026'}</strong></span>
+                  <span>Tracking: <strong>{request.trackingStatus}</strong></span>
                 </div>
               </div>
 
-              {/* Bio & Academic Credentials */}
+              {/* Course Details Requested */}
               <div className="py-6 border-b border-outline-variant space-y-4">
-                <h2 className="text-xs font-bold text-outline uppercase tracking-wider">Candidate Background & Experience</h2>
-                <p className="text-xs text-on-surface leading-relaxed">{request.bio}</p>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
-                  <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/60">
-                    <span className="text-[10px] text-outline uppercase font-bold block">Academic Qualification</span>
-                    <span className="font-semibold text-on-surface">{request.qualification}</span>
+                <h2 className="text-xs font-bold text-outline uppercase tracking-wider">Course Assignment Specification</h2>
+                <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 space-y-2">
+                  <h3 className="text-sm font-bold text-on-surface">{request.courseTitle || request.sampleSyllabus}</h3>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {request.sampleSyllabus}
+                  </p>
+                  <div className="flex items-center gap-4 text-xs font-semibold pt-1">
+                    <span className="text-primary">{request.creditHours || '4 Credits'}</span>
+                    <span className="text-emerald-700">{request.proposedTerms}</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/60">
-                    <span className="text-[10px] text-outline uppercase font-bold block">Industry & Teaching Tenure</span>
-                    <span className="font-semibold text-on-surface">{request.experience}</span>
-                  </div>
-                </div>
-
-                <h3 className="text-xs font-bold text-outline uppercase tracking-wider pt-2">Specialized Skill Tags</h3>
-                <div className="flex flex-wrap gap-2">
-                  {request.expertise.map((exp, idx) => (
-                    <span key={idx} className="px-3 py-1 rounded-xl bg-surface-container-high text-xs font-semibold text-on-surface">
-                      {exp}
-                    </span>
-                  ))}
                 </div>
               </div>
 
-              {/* Proposed Track & Compensation Offer */}
-              <div className="pt-6 space-y-3">
-                <h2 className="text-xs font-bold text-outline uppercase tracking-wider">Proposed Curriculum Track & Terms</h2>
-                <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-bold text-on-surface">{request.sampleSyllabus}</h3>
-                    <span className="text-xs font-bold text-emerald-700">{request.proposedTerms || '70/30 Revenue Share'}</span>
-                  </div>
-                  <p className="text-[11px] text-on-surface-variant">
-                    Subject to institutional faculty standards, quarterly royalty settlement, and full courseware authoring permissions.
-                  </p>
-                </div>
+              {/* Faculty Bio */}
+              <div className="pt-6 space-y-2">
+                <h2 className="text-xs font-bold text-outline uppercase tracking-wider">College Faculty Profile</h2>
+                <p className="text-xs text-on-surface leading-relaxed">{request.bio}</p>
               </div>
 
             </div>
-
           </div>
 
-          {/* Right Column (4 cols): Dispatch Controls & Internal Notes */}
+          {/* Right Action Panel */}
           <div className="lg:col-span-4 space-y-6">
-            
             <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 space-y-5">
               <h2 className="text-base font-bold text-on-surface pb-3 border-b border-outline-variant">
-                Outreach Management
+                Professor's Decision Controls
               </h2>
 
-              <div className="space-y-2">
-                <span className="text-[10px] text-outline uppercase font-bold tracking-wider block">Email Subject</span>
-                <p className="text-xs font-medium text-on-surface bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/60">
-                  {request.mailSubject || `NexusPay Academy: Invitation to lead ${request.specialization}`}
-                </p>
-              </div>
+              <p className="text-xs text-on-surface-variant">
+                The professor receives this request by mail and decides whether to teach. You can simulate the professor's decision here to see college notifications in action:
+              </p>
 
-              <div>
-                <label className="text-xs font-bold text-on-surface block mb-1.5">Administrative Outreach Notes</label>
-                <textarea
-                  rows={4}
-                  value={adminNotes}
-                  onChange={(e) => setAdminNotes(e.target.value)}
-                  placeholder="Add internal faculty committee notes or follow-up timelines..."
-                  className="w-full p-3 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary text-on-surface font-medium"
-                />
-              </div>
+              <div className="space-y-2.5">
+                <button
+                  onClick={() => handleProfessorResponse('Accepted')}
+                  className="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Check className="w-4 h-4" />
+                  <span>Professor Accepts (Notify College)</span>
+                </button>
 
-              {/* Action Buttons */}
-              <div className="space-y-2.5 pt-2">
+                <button
+                  onClick={() => handleProfessorResponse('Declined')}
+                  className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-red-50 text-red-600 font-bold text-xs border border-outline-variant flex items-center justify-center gap-2 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Professor Declines (Notify College)</span>
+                </button>
+
                 <button
                   onClick={handleResendMail}
                   className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-bold text-xs border border-outline-variant flex items-center justify-center gap-2 transition-colors"
@@ -182,31 +155,14 @@ export default function InstructorRequestDetails() {
                   <RotateCcw className="w-4 h-4" />
                   <span>Resend Request by Mail</span>
                 </button>
-
-                {status === 'Invite Sent' && (
-                  <>
-                    <button
-                      onClick={handleMarkAccepted}
-                      className="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <Check className="w-4 h-4" />
-                      <span>Confirm Accepted by Educator</span>
-                    </button>
-                    <button
-                      onClick={handleWithdraw}
-                      className="w-full py-2.5 px-4 rounded-xl bg-surface-container hover:bg-red-50 text-red-600 font-bold text-xs border border-outline-variant flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                      <span>Withdraw Invitation</span>
-                    </button>
-                  </>
-                )}
               </div>
 
+              <div className="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 text-[11px] text-outline space-y-1">
+                <span className="font-bold text-on-surface block">Notification Protocol:</span>
+                <span>When the professor accepts, a high-priority notification is dispatched to the college admin notification drawer.</span>
+              </div>
             </div>
-
           </div>
-
         </div>
 
       </div>

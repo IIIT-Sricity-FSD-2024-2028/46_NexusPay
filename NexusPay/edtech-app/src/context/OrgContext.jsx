@@ -3,10 +3,9 @@ import { orgData as initialData } from '../data/orgData';
 
 const OrgContext = createContext();
 
-const STORAGE_KEY = 'nexuspay_org_state_v1';
+const STORAGE_KEY = 'nexuspay_college_state_v2';
 
 export function OrgProvider({ children }) {
-  // Load persisted state or fallback to initialData
   const [state, setState] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -19,7 +18,113 @@ export function OrgProvider({ children }) {
     return {
       info: { ...initialData.info },
       instructors: [...initialData.instructors],
-      instructorRequests: [...initialData.instructorRequests],
+      instructorRequests: [
+        {
+          id: "req-101",
+          instructorId: "inst-2",
+          name: "Dr. Sarah Mitchell",
+          email: "s.mitchell@stanford.edu",
+          avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80",
+          specialization: "Machine Learning & FinTech AI",
+          courseTitle: "Transformers in Quantitative Finance & Fraud Detection",
+          semester: "Fall 2026",
+          creditHours: "4 Academic Credits",
+          sentDate: "August 20, 2026",
+          status: "Pending Professor Response",
+          outreachMethod: "Sent request by mail",
+          mailSubject: "College Teaching Assignment: Transformers in Quantitative Finance",
+          description: "College administration sent formal course teaching request by mail to Dr. Sarah Mitchell to instruct 'Transformers in Quantitative Finance' for Fall 2026.",
+          bio: "Lead AI Researcher and PhD from MIT. Leads fintech fraud detection AI algorithms and predictive market analytics.",
+          sampleSyllabus: "12-week intensive masterclass on Transformers in Quantitative Finance",
+          proposedTerms: "Academic Honorarium + 70/30 faculty course royalty",
+          trackingStatus: "Awaiting professor decision • Dispatched to s.mitchell@stanford.edu",
+          adminNotes: "Dispatched by Dean of Computer Science. Awaiting professor acceptance."
+        },
+        {
+          id: "req-102",
+          instructorId: "inst-1",
+          name: "Prof. James Wilson",
+          email: "j.wilson@nexuspay.edu",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+          specialization: "Cloud Architecture & AWS",
+          courseTitle: "AWS Solutions Architect & High-Throughput Settlement Engines",
+          semester: "Fall 2026",
+          creditHours: "4 Academic Credits",
+          sentDate: "August 22, 2026",
+          status: "Pending Professor Response",
+          outreachMethod: "Sent request by mail",
+          mailSubject: "College Teaching Assignment: AWS Solutions Architect Masterclass",
+          description: "College administration sent formal course teaching request by mail to Prof. James Wilson to instruct 'AWS Solutions Architect' for Fall 2026.",
+          bio: "Former Principal Cloud Architect at AWS with 14+ years designing high-throughput transaction engines.",
+          sampleSyllabus: "Enterprise AWS cloud architecture with active-active multi-region failover",
+          proposedTerms: "Standard departmental faculty appointment",
+          trackingStatus: "Awaiting professor decision • Dispatched to j.wilson@nexuspay.edu",
+          adminNotes: "Teaching syllabus approved by College Academic Council."
+        },
+        {
+          id: "req-103",
+          instructorId: "inst-3",
+          name: "Marcus Vance",
+          email: "m.vance@nexuspay.edu",
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+          specialization: "Cybersecurity & PCI-DSS",
+          courseTitle: "Post-Quantum Cryptography & Banking Ledger Defense",
+          semester: "Fall 2026",
+          creditHours: "3 Academic Credits",
+          sentDate: "August 24, 2026",
+          status: "Pending Professor Response",
+          outreachMethod: "Sent request by mail",
+          mailSubject: "College Teaching Assignment: Post-Quantum Cryptography & Banking Defense",
+          description: "College administration sent formal course teaching request by mail to Marcus Vance to instruct 'Post-Quantum Cryptography' for Fall 2026.",
+          bio: "CISSP certified security executive overseeing institutional banking security and cryptographic key management.",
+          sampleSyllabus: "Zero-trust banking security, hardware security modules, and PCI-DSS 4.0",
+          proposedTerms: "Departmental research stipend + lab grant",
+          trackingStatus: "Awaiting professor decision • Dispatched to m.vance@nexuspay.edu",
+          adminNotes: "Sent by Academic Committee on Aug 24, 2026."
+        },
+        {
+          id: "req-104",
+          instructorId: "inst-4",
+          name: "Elena Rostova",
+          email: "e.rostova@nexuspay.edu",
+          avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
+          specialization: "DevOps & CI/CD Pipelines",
+          courseTitle: "Zero-Downtime Microservices & Kubernetes Payments Cluster",
+          semester: "Fall 2026",
+          creditHours: "4 Academic Credits",
+          sentDate: "August 10, 2026",
+          status: "Accepted by Professor",
+          outreachMethod: "Sent request by mail",
+          mailSubject: "College Teaching Assignment: Zero-Downtime Microservices",
+          description: "College sent course teaching request by mail on Aug 10. Elena Rostova accepted the teaching assignment. College received notification and course is assigned.",
+          bio: "DevOps lead with 10 years experience automating resilient payment gateways and zero-downtime microservice clusters.",
+          sampleSyllabus: "Automated GitOps, ArgoCD pipelines, and high-availability Kubernetes",
+          proposedTerms: "Accepted 70/30 faculty agreement",
+          trackingStatus: "Accepted by Professor • Official Notification Sent to College",
+          adminNotes: "Elena accepted on Aug 14; College notified and class scheduled."
+        },
+        {
+          id: "req-105",
+          instructorId: "inst-5",
+          name: "David Kalu",
+          email: "d.kalu@nexuspay.edu",
+          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+          specialization: "Blockchain & Smart Contracts",
+          courseTitle: "Programmable Settlement Smart Contracts & DeFi Rails",
+          semester: "Fall 2026",
+          creditHours: "3 Academic Credits",
+          sentDate: "July 28, 2026",
+          status: "Declined by Professor",
+          outreachMethod: "Sent request by mail",
+          mailSubject: "College Teaching Assignment: Programmable Settlement Smart Contracts",
+          description: "College sent course teaching request by mail. David Kalu declined due to academic research leave / sabbatical.",
+          bio: "Pioneer in decentralized payment protocols, liquidity pools, and programmable settlement smart contracts.",
+          sampleSyllabus: "Solidity settlement contracts and multi-sig asset custody",
+          proposedTerms: "Standard faculty honorarium",
+          trackingStatus: "Declined by Professor (Sabbatical leave)",
+          adminNotes: "Declined politely citing ongoing fellowship abroad."
+        }
+      ],
       learners: [...initialData.learners],
       courses: [...initialData.courses],
       enrollments: [...initialData.enrollments],
@@ -38,7 +143,7 @@ export function OrgProvider({ children }) {
     };
   });
 
-  // Save to localStorage whenever state changes
+  // Save to localStorage
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -53,7 +158,7 @@ export function OrgProvider({ children }) {
     totalLearners: state.learners.length,
     activeCourses: state.courses.length,
     totalEnrollments: state.enrollments.length,
-    pendingRequests: state.instructorRequests.filter(r => r.status === 'Invite Sent' || r.status === 'Pending').length,
+    pendingRequests: state.instructorRequests.filter(r => r.status === 'Pending Professor Response' || r.status === 'Invite Sent' || r.status === 'Pending').length,
     unreadNotifications: state.notifications.filter(n => !n.read).length,
     annualRevenue: state.courses.reduce((sum, c) => sum + (c.revenue || (c.price * (c.enrolledCount || 10))), 0),
     monthlyRevenue: Math.round(state.courses.reduce((sum, c) => sum + (c.revenue || (c.price * (c.enrolledCount || 10))), 0) * 0.3)
@@ -61,15 +166,12 @@ export function OrgProvider({ children }) {
 
   // --- ACTIONS ---
 
-  // 1. Organization Profile Actions
+  // 1. Organization Profile
   const updateOrgInfo = (newInfo) => {
-    setState(prev => ({
-      ...prev,
-      info: { ...prev.info, ...newInfo }
-    }));
+    setState(prev => ({ ...prev, info: { ...prev.info, ...newInfo } }));
   };
 
-  // 2. Course Management Actions
+  // 2. Course Management
   const addCourse = (courseData) => {
     const newId = `crs-${Date.now()}`;
     const instructor = state.instructors.find(i => i.id === courseData.instructorId) || state.instructors[0];
@@ -89,7 +191,7 @@ export function OrgProvider({ children }) {
       lessonsCount: (courseData.modules || []).reduce((sum, m) => sum + (m.lessons || 3), 0) || 12,
       status: 'Published',
       thumbnail: courseData.thumbnail || "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=80",
-      description: courseData.description || 'Newly authored curriculum track on enterprise architecture and cloud engineering.',
+      description: courseData.description || 'Newly authored curriculum track on enterprise architecture.',
       modules: courseData.modules || [
         { id: 'mod-1', title: 'Module 1: Architecture Foundations', lessons: 4, duration: '3h 15m' },
         { id: 'mod-2', title: 'Module 2: High Throughput Replication', lessons: 5, duration: '4h 00m' }
@@ -118,56 +220,103 @@ export function OrgProvider({ children }) {
     }));
   };
 
-  // 3. Faculty Invitations (Outreach sent by Organization)
-  const addInvitation = (inviteData) => {
+  // 3. College Course Teaching Requests (Sent by College to Existing Instructors)
+  const sendCourseTeachingRequest = ({ instructorId, courseTitle, semester, creditHours, proposedTerms, message }) => {
+    const instructor = state.instructors.find(i => i.id === instructorId) || state.instructors[0];
     const newId = `req-${Date.now()}`;
-    const newInvite = {
+    const dateStr = "Just now";
+
+    const newRequest = {
       id: newId,
-      name: inviteData.name,
-      email: inviteData.email,
-      avatar: inviteData.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
-      specialization: inviteData.specialization,
-      expertise: [inviteData.specialization.split(' ')[0], "Enterprise", "Architecture"],
-      qualification: inviteData.qualification || "Academic Researcher / Specialist",
-      experience: inviteData.experience || "Senior Practitioner",
-      submittedDate: "Just now",
-      sentDate: "Just now",
-      status: "Invite Sent",
+      instructorId: instructor.id,
+      name: instructor.name,
+      email: instructor.email,
+      avatar: instructor.avatar,
+      specialization: instructor.specialization,
+      courseTitle: courseTitle || "Advanced Distributed Systems",
+      semester: semester || "Fall 2026",
+      creditHours: creditHours || "4 Credits",
+      sentDate: dateStr,
+      status: "Pending Professor Response",
       outreachMethod: "Sent request by mail",
-      mailSubject: `Invitation to lead ${inviteData.specialization} at NexusPay Academy`,
-      description: `Organization has sent an official invitation request by mail to ${inviteData.name} (${inviteData.email}) to lead the ${inviteData.specialization} track.`,
-      bio: inviteData.bio || "Invited faculty prospect.",
-      sampleSyllabus: inviteData.sampleSyllabus || "Masterclass curriculum track",
-      proposedTerms: inviteData.proposedTerms || "70/30 gross royalty distribution + authoring stipend",
-      trackingStatus: "Dispatched via Mail • Awaiting educator acceptance",
-      adminNotes: "Dispatched via official NexusPay mail server."
+      mailSubject: `College Teaching Request: ${courseTitle} (${semester || "Fall 2026"})`,
+      description: `College administration sent formal course teaching request by mail to ${instructor.name} to teach '${courseTitle}' for ${semester || "Fall 2026"}.`,
+      bio: instructor.bio,
+      sampleSyllabus: `Curriculum and lab syllabus for ${courseTitle}`,
+      proposedTerms: proposedTerms || "Departmental faculty honorarium + course royalties",
+      trackingStatus: `Awaiting professor decision • Dispatched to ${instructor.email}`,
+      adminNotes: "Dispatched by Academic Dean via college mail server."
     };
 
     setState(prev => ({
       ...prev,
-      instructorRequests: [newInvite, ...prev.instructorRequests]
+      instructorRequests: [newRequest, ...prev.instructorRequests]
     }));
 
-    return newInvite;
+    return newRequest;
   };
 
-  const updateInvitationStatus = (id, status, trackingStatus) => {
-    setState(prev => ({
-      ...prev,
-      instructorRequests: prev.instructorRequests.map(inv => {
-        if (inv.id === id) {
+  // Instructor responds: Accept or Decline. If accepted, NOTIFY COLLEGE!
+  const respondToTeachingRequest = (requestId, decision) => {
+    let instructorName = "Faculty Member";
+    let courseName = "Assigned Course";
+    let semesterName = "upcoming semester";
+
+    setState(prev => {
+      const updatedRequests = prev.instructorRequests.map(req => {
+        if (req.id === requestId) {
+          instructorName = req.name;
+          courseName = req.courseTitle || req.sampleSyllabus;
+          semesterName = req.semester || "Fall 2026";
+          const newStatus = decision === 'Accepted' ? 'Accepted by Professor' : 'Declined by Professor';
+          const tracking = decision === 'Accepted'
+            ? 'Accepted by Professor • Official Notification Sent to College'
+            : 'Declined by Professor (Sabbatical/Schedule conflict)';
           return {
-            ...inv,
-            status,
-            trackingStatus: trackingStatus || (status === 'Accepted' ? 'Accepted by educator • Onboarded' : 'Invitation withdrawn')
+            ...req,
+            status: newStatus,
+            trackingStatus: tracking
           };
         }
-        return inv;
-      })
-    }));
+        return req;
+      });
+
+      // Create official notification sent to college
+      const newNotification = {
+        id: `notif-${Date.now()}`,
+        title: decision === 'Accepted'
+          ? `Professor ${instructorName} Accepted Course Assignment`
+          : `Teaching Request Declined: ${instructorName}`,
+        desc: decision === 'Accepted'
+          ? `Great news! ${instructorName} has accepted the college request to teach "${courseName}" for ${semesterName}. The course is now officially scheduled.`
+          : `${instructorName} declined the college teaching request for "${courseName}" due to semester scheduling constraints.`,
+        time: 'Just now',
+        read: false
+      };
+
+      // If accepted, update the course in catalog to assign this instructor!
+      let updatedCourses = prev.courses;
+      if (decision === 'Accepted') {
+        updatedCourses = prev.courses.map(c => {
+          if (c.title.toLowerCase() === courseName.toLowerCase()) {
+            return { ...c, instructorName: instructorName };
+          }
+          return c;
+        });
+      }
+
+      return {
+        ...prev,
+        instructorRequests: updatedRequests,
+        courses: updatedCourses,
+        notifications: [newNotification, ...prev.notifications]
+      };
+    });
+
+    return { instructorName, courseName, decision };
   };
 
-  // 4. Enrollments & Course Assignment Action
+  // 4. Enrollments & Course Assignment
   const assignCoursesToLearners = (courseIds, learnerIds) => {
     const newEnrollments = [];
     const newTransactions = [];
@@ -195,7 +344,6 @@ export function OrgProvider({ children }) {
           lastAccessed: dateStr
         });
 
-        // Add corresponding transaction ledger entry
         newTransactions.push({
           id: `TXN-${Math.floor(100000 + Math.random() * 900000)}`,
           payer: learner.name,
@@ -209,9 +357,7 @@ export function OrgProvider({ children }) {
       });
     });
 
-    // Update state: add enrollments, transactions, update course enrolled counts, and update learner counts
     setState(prev => {
-      // Update courses with new enrolled counts
       const updatedCourses = prev.courses.map(c => {
         if (courseIds.includes(c.id)) {
           const addedSeats = learnerIds.length;
@@ -224,7 +370,6 @@ export function OrgProvider({ children }) {
         return c;
       });
 
-      // Update learners with new enrolled course count
       const updatedLearners = prev.learners.map(l => {
         if (learnerIds.includes(l.id)) {
           return {
@@ -247,7 +392,7 @@ export function OrgProvider({ children }) {
     return { totalAssigned: newEnrollments.length };
   };
 
-  // 5. Reports Actions
+  // 5. Reports
   const generateReport = (reportTitle, reportType) => {
     const newReport = {
       id: `rep-${Date.now()}`,
@@ -266,7 +411,7 @@ export function OrgProvider({ children }) {
     return newReport;
   };
 
-  // 6. Notifications Actions
+  // 6. Notifications
   const markNotificationRead = (id) => {
     setState(prev => ({
       ...prev,
@@ -281,7 +426,7 @@ export function OrgProvider({ children }) {
     }));
   };
 
-  // 7. Settings Actions
+  // 7. Settings
   const updateSettings = (newSettings) => {
     setState(prev => ({
       ...prev,
@@ -289,29 +434,10 @@ export function OrgProvider({ children }) {
     }));
   };
 
-  // Reset to default factory state
+  // Reset
   const resetToDefault = () => {
     localStorage.removeItem(STORAGE_KEY);
-    setState({
-      info: { ...initialData.info },
-      instructors: [...initialData.instructors],
-      instructorRequests: [...initialData.instructorRequests],
-      learners: [...initialData.learners],
-      courses: [...initialData.courses],
-      enrollments: [...initialData.enrollments],
-      transactions: [...initialData.transactions],
-      reports: [...initialData.reports],
-      notifications: [...initialData.notifications],
-      settings: {
-        autoApproveEnrollments: true,
-        emailAlerts: true,
-        royaltyAlerts: true,
-        weeklyDigest: false,
-        requireTwoFactor: true,
-        defaultCurrency: 'USD',
-        defaultAccessType: 'Paid Masterclass'
-      }
-    });
+    window.location.reload();
   };
 
   return (
@@ -333,8 +459,8 @@ export function OrgProvider({ children }) {
         addCourse,
         updateCourse,
         deleteCourse,
-        addInvitation,
-        updateInvitationStatus,
+        sendCourseTeachingRequest,
+        respondToTeachingRequest,
         assignCoursesToLearners,
         generateReport,
         markNotificationRead,
