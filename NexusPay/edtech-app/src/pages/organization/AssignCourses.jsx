@@ -4,18 +4,21 @@ import {
   ChevronLeft,
   Search,
   Check,
-  CheckCircle2
+  CheckCircle2,
+  Users,
+  BookOpen
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { useToast } from '../../components/common/Toast';
 
 export default function AssignCourses() {
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { courses, learners, assignCoursesToLearners } = useOrg();
 
-  const [selectedCourses, setSelectedCourses] = useState(['crs-1']);
-  const [selectedLearners, setSelectedLearners] = useState(['lrn-1', 'lrn-2']);
+  const [selectedCourses, setSelectedCourses] = useState([courses[0]?.id || 'crs-1']);
+  const [selectedLearners, setSelectedLearners] = useState([learners[0]?.id || 'lrn-1', learners[1]?.id || 'lrn-2']);
   const [courseSearch, setCourseSearch] = useState('');
   const [learnerSearch, setLearnerSearch] = useState('');
 
@@ -32,7 +35,7 @@ export default function AssignCourses() {
   };
 
   const totalCourseCost = selectedCourses.reduce((sum, cId) => {
-    const course = orgData.courses.find(c => c.id === cId);
+    const course = courses.find(c => c.id === cId);
     return sum + (course ? course.price : 0);
   }, 0) * selectedLearners.length;
 
@@ -41,9 +44,14 @@ export default function AssignCourses() {
       addToast('Please select at least 1 course and 1 learner', 'error');
       return;
     }
-    addToast(`Successfully assigned ${selectedCourses.length} course(s) to ${selectedLearners.length} student(s)!`, 'success');
+
+    const res = assignCoursesToLearners(selectedCourses, selectedLearners);
+    addToast(`Successfully assigned ${selectedCourses.length} course(s) to ${selectedLearners.length} student(s) (${res.totalAssigned} active seats provisioned)!`, 'success');
     navigate('/enrollments');
   };
+
+  const filteredCourses = courses.filter(c => c.title.toLowerCase().includes(courseSearch.toLowerCase()));
+  const filteredLearners = learners.filter(l => l.name.toLowerCase().includes(learnerSearch.toLowerCase()) || l.email.toLowerCase().includes(learnerSearch.toLowerCase()));
 
   return (
     <OrgLayout
@@ -66,6 +74,8 @@ export default function AssignCourses() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* 1. Courses Selection Panel */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant">
               <h2 className="text-base font-bold text-on-surface">1. Select Target Courses</h2>
@@ -81,8 +91,8 @@ export default function AssignCourses() {
                 className="w-full pl-9 pr-3 py-2 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary text-on-surface font-medium"
               />
             </div>
-            <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
-              {orgData.courses.filter(c => c.title.toLowerCase().includes(courseSearch.toLowerCase())).map((course) => {
+            <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1 custom-scrollbar">
+              {filteredCourses.map((course) => {
                 const isSelected = selectedCourses.includes(course.id);
                 return (
                   <div
@@ -102,7 +112,7 @@ export default function AssignCourses() {
                       </div>
                       <div>
                         <h3 className="font-bold text-xs text-on-surface line-clamp-1">{course.title}</h3>
-                        <p className="text-[10px] text-outline">{course.instructorName} • {course.level}</p>
+                        <p className="text-[10px] text-outline">{course.instructorName} • {course.category}</p>
                       </div>
                     </div>
                     <span className="font-bold text-xs text-emerald-700">${course.price}</span>
@@ -112,6 +122,7 @@ export default function AssignCourses() {
             </div>
           </div>
 
+          {/* 2. Learners Selection Panel */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant">
               <h2 className="text-base font-bold text-on-surface">2. Select Student Cohort</h2>
@@ -121,14 +132,14 @@ export default function AssignCourses() {
               <Search className="w-4 h-4 text-outline absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Filter students..."
+                placeholder="Filter students by name, email..."
                 value={learnerSearch}
                 onChange={(e) => setLearnerSearch(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary text-on-surface font-medium"
               />
             </div>
-            <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
-              {orgData.learners.filter(l => l.name.toLowerCase().includes(learnerSearch.toLowerCase()) || l.email.toLowerCase().includes(learnerSearch.toLowerCase())).map((learner) => {
+            <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1 custom-scrollbar">
+              {filteredLearners.map((learner) => {
                 const isSelected = selectedLearners.includes(learner.id);
                 return (
                   <div
@@ -160,16 +171,18 @@ export default function AssignCourses() {
               })}
             </div>
           </div>
+
         </div>
 
+        {/* Assignment Summary Bar */}
         <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <span className="text-xs text-outline font-medium">Assignment Summary:</span>
+            <span className="text-xs text-outline font-medium">Assignment Plan Summary:</span>
             <p className="text-sm font-bold text-on-surface">
               Assigning <strong className="text-primary">{selectedCourses.length} course(s)</strong> to <strong className="text-primary">{selectedLearners.length} learner(s)</strong>
             </p>
             <p className="text-xs text-emerald-700 font-bold mt-0.5">
-              Total Organization Cost: ${totalCourseCost.toFixed(2)}
+              Calculated Institutional Tuition Value: ${totalCourseCost.toFixed(2)}
             </p>
           </div>
           <button
@@ -180,6 +193,7 @@ export default function AssignCourses() {
             <span>Confirm & Provision Enrollments</span>
           </button>
         </div>
+
       </div>
     </OrgLayout>
   );

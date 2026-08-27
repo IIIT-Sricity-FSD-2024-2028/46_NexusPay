@@ -6,14 +6,15 @@ import {
   UserPlus
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { LinearProgressBar } from '../../components/common/ProgressBar';
 
 export default function Enrollments() {
+  const { enrollments } = useOrg();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const filteredEnrollments = orgData.enrollments.filter(e => {
+  const filteredEnrollments = enrollments.filter(e => {
     const matchesStatus = statusFilter === 'All' || e.status === statusFilter;
     const matchesSearch = e.learnerName.toLowerCase().includes(search.toLowerCase()) ||
                           e.courseTitle.toLowerCase().includes(search.toLowerCase()) ||
@@ -35,23 +36,26 @@ export default function Enrollments() {
       }
     >
       <div className="space-y-6">
+        
+        {/* Header & Stats */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-on-surface">Course Enrollments Ledger</h1>
             <p className="text-xs text-on-surface-variant mt-0.5">
-              Live tracking of {orgData.enrollments.length} active course seats and student completion progression.
+              Live tracking of {enrollments.length} active course seats and student completion progression.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-              Active: 2,104
+              Active: {enrollments.filter(e => e.status === 'Active').length}
             </span>
             <span className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-900 text-xs font-bold border border-blue-200">
-              Completed: 612
+              Completed: {enrollments.filter(e => e.status === 'Completed').length}
             </span>
           </div>
         </div>
 
+        {/* Filter Pills & Search */}
         <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-4 shadow-elevation-1 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
             {['All', 'Active', 'Completed', 'Dropped'].map((tab) => (
@@ -80,6 +84,7 @@ export default function Enrollments() {
           </div>
         </div>
 
+        {/* Enrollments Table */}
         <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
@@ -94,35 +99,44 @@ export default function Enrollments() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/40">
-                {filteredEnrollments.map((enr) => (
-                  <tr key={enr.id} className="hover:bg-surface-container-low/50 transition-colors">
-                    <td className="py-4 font-mono font-bold text-primary">{enr.id}</td>
-                    <td className="py-4">
-                      <div className="flex items-center gap-2.5">
-                        <img src={enr.learnerAvatar} alt={enr.learnerName} className="w-8 h-8 rounded-full object-cover" />
-                        <span className="font-bold text-on-surface">{enr.learnerName}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 font-medium text-on-surface-variant max-w-[240px] truncate">{enr.courseTitle}</td>
-                    <td className="py-4 text-outline">{enr.enrolledDate}</td>
-                    <td className="py-4 w-40">
-                      <LinearProgressBar progress={enr.progress} showLabel={true} height="h-2" />
-                    </td>
-                    <td className="py-4 text-right">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                        enr.status === 'Completed' ? 'bg-blue-100 text-blue-900' :
-                        enr.status === 'Active' ? 'bg-emerald-100 text-emerald-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {enr.status}
-                      </span>
+                {filteredEnrollments.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-outline">
+                      No enrollments found matching your query.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredEnrollments.map((enr) => (
+                    <tr key={enr.id} className="hover:bg-surface-container-low/50 transition-colors">
+                      <td className="py-4 font-mono font-bold text-primary">{enr.id}</td>
+                      <td className="py-4">
+                        <div className="flex items-center gap-2.5">
+                          <img src={enr.learnerAvatar} alt={enr.learnerName} className="w-8 h-8 rounded-full object-cover" />
+                          <span className="font-bold text-on-surface">{enr.learnerName}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 font-medium text-on-surface-variant max-w-[240px] truncate">{enr.courseTitle}</td>
+                      <td className="py-4 text-outline">{enr.enrolledDate}</td>
+                      <td className="py-4 w-40">
+                        <LinearProgressBar progress={enr.progress} showLabel={true} height="h-2" />
+                      </td>
+                      <td className="py-4 text-right">
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          enr.status === 'Completed' ? 'bg-blue-100 text-blue-900' :
+                          enr.status === 'Active' ? 'bg-emerald-100 text-emerald-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {enr.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
+
       </div>
     </OrgLayout>
   );

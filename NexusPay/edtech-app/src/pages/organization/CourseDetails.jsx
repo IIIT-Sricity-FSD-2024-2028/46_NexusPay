@@ -3,14 +3,31 @@ import { useParams, Link } from 'react-router-dom';
 import {
   ChevronLeft,
   Edit,
-  Star
+  Star,
+  Users,
+  BookOpen,
+  DollarSign
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 
 export default function CourseDetails() {
   const { id } = useParams();
-  const course = orgData.courses.find(c => c.id === id) || orgData.courses[0];
+  const { courses } = useOrg();
+  const course = courses.find(c => c.id === id) || courses[0];
+
+  if (!course) {
+    return (
+      <OrgLayout breadcrumbs={[{ label: 'Courses', path: '/courses' }, { label: 'Course Not Found' }]}>
+        <div className="p-8 text-center">
+          <p className="text-sm font-bold text-on-surface">Course not found</p>
+          <Link to="/courses" className="text-xs text-primary font-bold hover:underline mt-2 inline-block">
+            Return to Courses
+          </Link>
+        </div>
+      </OrgLayout>
+    );
+  }
 
   return (
     <OrgLayout
@@ -34,6 +51,7 @@ export default function CourseDetails() {
           <span>Back to Course Catalog</span>
         </Link>
 
+        {/* Course Banner */}
         <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 md:p-8 shadow-elevation-1 flex flex-col md:flex-row items-center gap-6">
           <img src={course.thumbnail} alt={course.title} className="w-full md:w-64 h-40 rounded-2xl object-cover shadow-sm flex-shrink-0" />
           <div className="flex-1 space-y-2">
@@ -54,10 +72,11 @@ export default function CourseDetails() {
           </div>
         </div>
 
+        {/* 4 Stat Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 shadow-sm text-center">
             <span className="text-[10px] text-outline uppercase font-bold tracking-wider">Total Enrolled</span>
-            <p className="text-xl font-bold text-primary mt-1">{course.enrolledCount} learners</p>
+            <p className="text-xl font-bold text-primary mt-1">{course.enrolledCount || 0} learners</p>
           </div>
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 shadow-sm text-center">
             <span className="text-[10px] text-outline uppercase font-bold tracking-wider">Completion Rate</span>
@@ -66,34 +85,35 @@ export default function CourseDetails() {
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 shadow-sm text-center">
             <span className="text-[10px] text-outline uppercase font-bold tracking-wider">Student Rating</span>
             <p className="text-xl font-bold text-amber-600 mt-1 flex items-center justify-center gap-1">
-              <Star className="w-4 h-4 fill-current" /> {course.rating}
+              <Star className="w-4 h-4 fill-current" /> {course.rating || 5.0}
             </p>
           </div>
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 shadow-sm text-center">
             <span className="text-[10px] text-outline uppercase font-bold tracking-wider">Gross Revenue</span>
-            <p className="text-xl font-bold text-on-surface mt-1">${course.revenue.toLocaleString()}</p>
+            <p className="text-xl font-bold text-on-surface mt-1">${(course.revenue || (course.price * (course.enrolledCount || 0))).toLocaleString()}</p>
           </div>
         </div>
 
+        {/* Modules & Lessons */}
         <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 shadow-elevation-1 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-outline-variant">
             <h2 className="text-base font-bold text-on-surface">Curriculum Modules & Lessons</h2>
-            <span className="text-xs text-outline">{course.modules?.length || 5} Total Modules</span>
+            <span className="text-xs text-outline">{course.modules?.length || 3} Total Modules</span>
           </div>
           <div className="space-y-3">
             {(course.modules || [
-              { id: 'mod-1', title: 'Distributed Consensus & Two-Phase Commit', lessons: 4, duration: '3h 15m' },
-              { id: 'mod-2', title: 'AWS Multi-Region Active-Active Replication', lessons: 6, duration: '4h 30m' },
-              { id: 'mod-3', title: 'PCI-DSS Level 1 Cryptographic Key Management', lessons: 5, duration: '3h 45m' }
+              { id: 'mod-1', title: 'Module 1: Distributed Consensus & Two-Phase Commit', lessons: 4, duration: '3h 15m' },
+              { id: 'mod-2', title: 'Module 2: AWS Multi-Region Active-Active Replication', lessons: 6, duration: '4h 30m' },
+              { id: 'mod-3', title: 'Module 3: PCI-DSS Level 1 Cryptographic Key Management', lessons: 5, duration: '3h 45m' }
             ]).map((mod, idx) => (
-              <div key={mod.id} className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between">
+              <div key={mod.id || idx} className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary font-bold text-xs flex items-center justify-center">
                     {idx + 1}
                   </div>
                   <div>
                     <h3 className="font-bold text-xs text-on-surface">{mod.title}</h3>
-                    <p className="text-[11px] text-outline">{mod.lessons} Lessons • {mod.duration}</p>
+                    <p className="text-[11px] text-outline">{mod.lessons || 3} Lessons • {mod.duration || '2h 30m'}</p>
                   </div>
                 </div>
                 <span className="px-3 py-1 rounded-xl bg-surface-container text-xs font-semibold text-on-surface-variant">
@@ -103,6 +123,7 @@ export default function CourseDetails() {
             ))}
           </div>
         </div>
+
       </div>
     </OrgLayout>
   );

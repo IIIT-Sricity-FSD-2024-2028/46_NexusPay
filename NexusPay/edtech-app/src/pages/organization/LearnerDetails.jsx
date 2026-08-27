@@ -12,13 +12,14 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { LinearProgressBar } from '../../components/common/ProgressBar';
 
 export default function LearnerDetails() {
   const { id } = useParams();
-  const learner = orgData.learners.find(l => l.id === id) || orgData.learners[0];
-  const learnerTransactions = orgData.transactions.filter(t => t.payer === learner.name);
+  const { learners, transactions } = useOrg();
+  const learner = learners.find(l => l.id === id) || learners[0];
+  const learnerTransactions = transactions.filter(t => t.payer === learner.name);
 
   return (
     <OrgLayout

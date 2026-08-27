@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
-  UserCheck,
   GraduationCap,
   BookOpen,
   UserPlus,
@@ -21,13 +20,14 @@ import {
   ArrowUpRight,
   Mail
 } from 'lucide-react';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { useToast } from '../common/Toast';
 
 export default function OrgSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { stats, info } = useOrg();
 
   const navGroups = [
     {
@@ -35,7 +35,7 @@ export default function OrgSidebar() {
       items: [
         { name: 'Dashboard', path: '/org/dashboard', icon: LayoutDashboard },
         { name: 'Instructors', path: '/org/instructors', icon: GraduationCap },
-        { name: 'Instructor Invitations', path: '/org/instructor-requests', icon: Mail, badge: orgData.instructorRequests.filter(r => r.status === 'Invite Sent').length },
+        { name: 'Instructor Invitations', path: '/org/instructor-requests', icon: Mail, badge: stats.pendingRequests },
         { name: 'Learners', path: '/org/learners', icon: Users },
       ]
     },
@@ -57,9 +57,9 @@ export default function OrgSidebar() {
       ]
     },
     {
-      group: "System & Settings",
+      group: "System & Governance",
       items: [
-        { name: 'Notifications', path: '/org/notifications', icon: Bell, unread: 3 },
+        { name: 'Notifications', path: '/org/notifications', icon: Bell, unread: stats.unreadNotifications },
         { name: 'Organization Settings', path: '/org/settings', icon: Settings },
         { name: 'Org Profile', path: '/org/profile', icon: Building2 },
       ]
@@ -67,8 +67,21 @@ export default function OrgSidebar() {
   ];
 
   const isActive = (path) => {
-    if (path === '/org/dashboard' && (location.pathname === '/org' || location.pathname === '/org/dashboard' || location.pathname === '/organization')) return true;
-    return location.pathname === path || (path !== '/org/dashboard' && location.pathname.startsWith(path));
+    if (path === '/org/dashboard' && (location.pathname === '/' || location.pathname === '/org' || location.pathname === '/org/dashboard' || location.pathname === '/dashboard')) return true;
+    if (path === '/org/courses' && (location.pathname === '/courses' || location.pathname === '/org/courses')) return true;
+    if (path === '/org/instructors' && (location.pathname === '/instructors' || location.pathname === '/org/instructors')) return true;
+    if (path === '/org/instructor-requests' && (location.pathname === '/instructor-requests' || location.pathname === '/org/instructor-requests')) return true;
+    if (path === '/org/learners' && (location.pathname === '/learners' || location.pathname === '/org/learners')) return true;
+    if (path === '/org/enrollments' && (location.pathname === '/enrollments' || location.pathname === '/org/enrollments')) return true;
+    if (path === '/org/assign-courses' && (location.pathname === '/assign-courses' || location.pathname === '/org/assign-courses')) return true;
+    if (path === '/org/payments' && (location.pathname === '/payments' || location.pathname === '/org/payments')) return true;
+    if (path === '/org/transactions' && (location.pathname === '/transactions' || location.pathname === '/org/transactions')) return true;
+    if (path === '/org/reports' && (location.pathname === '/reports' || location.pathname === '/org/reports')) return true;
+    if (path === '/org/analytics' && (location.pathname === '/analytics' || location.pathname === '/org/analytics')) return true;
+    if (path === '/org/notifications' && (location.pathname === '/notifications' || location.pathname === '/org/notifications')) return true;
+    if (path === '/org/settings' && (location.pathname === '/settings' || location.pathname === '/org/settings')) return true;
+    if (path === '/org/profile' && (location.pathname === '/org/profile' || location.pathname === '/profile')) return true;
+    return location.pathname.startsWith(path);
   };
 
   return (
@@ -83,7 +96,7 @@ export default function OrgSidebar() {
             </div>
             <div>
               <h2 className="font-extrabold text-sm tracking-tight text-white leading-none">
-                NexusPay <span className="text-[#bcd3f2] font-semibold text-xs block mt-0.5">Enterprise Admin</span>
+                {info.name ? info.name.split(' ')[0] : 'NexusPay'} <span className="text-[#bcd3f2] font-semibold text-xs block mt-0.5">Enterprise Admin</span>
               </h2>
             </div>
           </Link>
@@ -110,20 +123,21 @@ export default function OrgSidebar() {
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-white/60 group-hover:text-white'}`} />
-                      <span className="truncate">{item.name}</span>
+                      <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${active ? 'text-white' : 'text-white/70 group-hover:text-white'}`} />
+                      <span>{item.name}</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
-                      {item.badge !== undefined && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-amber-500/30 text-amber-300 text-[10px] font-bold border border-amber-500/40">
-                          {item.badge}
-                        </span>
-                      )}
-                      {item.unread !== undefined && (
-                        <span className="w-2 h-2 rounded-full bg-[#356ea8]"></span>
-                      )}
-                    </div>
+                    {/* Numeric Badge (e.g. Pending Invitations) */}
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <span className="px-2 py-0.5 text-[10px] font-extrabold bg-amber-400 text-amber-950 rounded-full shadow-xs">
+                        {item.badge}
+                      </span>
+                    )}
+
+                    {/* Unread Alert Dot */}
+                    {item.unread !== undefined && item.unread > 0 && (
+                      <span className="w-2 h-2 rounded-full bg-red-400 ring-2 ring-[#0B1E36]" />
+                    )}
                   </Link>
                 );
               })}
@@ -132,28 +146,24 @@ export default function OrgSidebar() {
         </nav>
       </div>
 
-      {/* Sidebar Footer User Card */}
-      <div className="p-3 border-t border-white/10 bg-black/20">
-        <div className="flex items-center justify-between p-2 rounded-2xl bg-white/5 border border-white/10">
+      {/* Sidebar Footer / Admin Identity */}
+      <div className="p-3 border-t border-white/10 bg-white/2">
+        <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-bold text-xs text-white flex-shrink-0 shadow-xs">
-              OA
+            <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-xs">
+              NP
             </div>
-            <div className="overflow-hidden">
-              <p className="text-xs font-bold text-white truncate">Org Admin</p>
-              <p className="text-[10px] text-white/50 truncate">admin@nexuspay.edu</p>
+            <div className="truncate">
+              <p className="text-xs font-bold text-white truncate leading-none">{info.name || 'NexusPay Academy'}</p>
+              <p className="text-[10px] text-white/50 truncate mt-0.5">{info.email || 'admin@nexuspay.edu'}</p>
             </div>
           </div>
-
           <button
-            onClick={() => {
-              addToast('Signed out from Organization Admin session', 'info');
-              navigate('/');
-            }}
-            title="Sign Out"
-            className="p-1.5 rounded-xl hover:bg-red-500/20 text-white/60 hover:text-red-300 transition-colors"
+            onClick={() => addToast('Administrative session active & verified.', 'info')}
+            className="p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+            title="Account Status"
           >
-            <LogOut className="w-4 h-4" />
+            <Sparkles className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

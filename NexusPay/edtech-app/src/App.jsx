@@ -75,6 +75,9 @@ export default function App() {
       <Route path="/org/courses/:id" element={<OrgCourseDetails />} />
       <Route path="/org/courses/:id/edit" element={<OrgEditCourse />} />
       <Route path="/courses" element={<OrgCourses />} />
+      <Route path="/courses/create" element={<OrgCreateCourse />} />
+      <Route path="/courses/:id" element={<OrgCourseDetails />} />
+      <Route path="/courses/:id/edit" element={<OrgEditCourse />} />
 
       {/* 7. Enrollments & Course Assignment */}
       <Route path="/org/enrollments" element={<OrgEnrollments />} />
@@ -116,6 +119,18 @@ export default function App() {
       <Route path="/student/quiz" element={<StudentQuiz />} />
       <Route path="/student/certificates" element={<StudentCertificates />} />
       <Route path="/student/profile" element={<StudentProfile />} />
+
+      {/* Student Direct URL Aliases */}
+      <Route path="/explore" element={<StudentExplore />} />
+      <Route path="/course-details" element={<StudentCourseDetails />} />
+      <Route path="/course/:id" element={<StudentCourseDetails />} />
+      <Route path="/checkout" element={<StudentCheckout />} />
+      <Route path="/payment-success" element={<StudentPaymentSuccess />} />
+      <Route path="/my-learning" element={<StudentMyLearning />} />
+      <Route path="/course-progress" element={<StudentCourseProgress />} />
+      <Route path="/player" element={<StudentLearningPlayer />} />
+      <Route path="/quiz" element={<StudentQuiz />} />
+      <Route path="/certificates" element={<StudentCertificates />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -15,14 +15,14 @@ import {
   Sparkles
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { useToast } from '../../components/common/Toast';
 
 export default function InstructorRequests() {
   const { addToast } = useToast();
+  const { instructorRequests, addInvitation, updateInvitationStatus } = useOrg();
   const [filter, setFilter] = useState('All');
   const [search, setSearch] = useState('');
-  const [invitations, setInvitations] = useState(orgData.instructorRequests);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
   // New Invitation Form State
@@ -35,7 +35,7 @@ export default function InstructorRequests() {
     customMessage: 'We would be honored to invite you to join the NexusPay Enterprise Academy faculty as Lead Instructor for our enterprise payment engineering cohort.'
   });
 
-  const filteredInvitations = invitations.filter(inv => {
+  const filteredInvitations = instructorRequests.filter(inv => {
     const matchesFilter = filter === 'All' || inv.status === filter;
     const matchesSearch = inv.name.toLowerCase().includes(search.toLowerCase()) ||
                           inv.specialization.toLowerCase().includes(search.toLowerCase()) ||
@@ -51,29 +51,7 @@ export default function InstructorRequests() {
       return;
     }
 
-    const createdInvite = {
-      id: `req-${Date.now()}`,
-      name: newInvite.name,
-      email: newInvite.email,
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
-      specialization: newInvite.specialization,
-      expertise: [newInvite.specialization.split(' ')[0], "Enterprise", "Systems"],
-      qualification: "Academic Fellow / Industry Specialist",
-      experience: "Senior Practitioner",
-      submittedDate: "Just now",
-      sentDate: "Just now",
-      status: "Invite Sent",
-      outreachMethod: "Sent request by mail",
-      mailSubject: `Invitation to lead ${newInvite.specialization} at NexusPay Academy`,
-      description: `Organization has sent an official invitation request by mail to ${newInvite.name} (${newInvite.email}) to lead the ${newInvite.specialization} track.`,
-      bio: "Invited faculty prospect.",
-      sampleSyllabus: newInvite.sampleSyllabus,
-      proposedTerms: newInvite.proposedTerms,
-      trackingStatus: "Dispatched via Mail • Awaiting educator acceptance",
-      adminNotes: "Outbound invitation dispatched via official NexusPay mail server."
-    };
-
-    setInvitations([createdInvite, ...invitations]);
+    addInvitation(newInvite);
     setShowInviteModal(false);
     setNewInvite({
       name: '',
@@ -92,12 +70,12 @@ export default function InstructorRequests() {
   };
 
   const handleWithdraw = (id, name) => {
-    setInvitations(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Declined', trackingStatus: 'Invitation withdrawn by organization' } : inv));
+    updateInvitationStatus(id, 'Declined', 'Invitation withdrawn by organization');
     addToast(`Withdrew invitation sent to ${name}`, 'error');
   };
 
   const handleMarkAccepted = (id, name) => {
-    setInvitations(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Accepted', trackingStatus: 'Accepted by educator • Onboarded' } : inv));
+    updateInvitationStatus(id, 'Accepted', 'Accepted by educator • Onboarded');
     addToast(`${name} confirmed and accepted faculty invitation!`, 'success');
   };
 

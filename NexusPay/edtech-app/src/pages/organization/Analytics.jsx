@@ -8,9 +8,10 @@ import {
   DollarSign
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 
 export default function Analytics() {
+  const { courses, instructors, stats } = useOrg();
   const [timeframe, setTimeframe] = useState('30d');
 
   return (
@@ -245,7 +246,7 @@ export default function Analytics() {
               Top Performing Courses
             </h2>
             <div className="divide-y divide-outline-variant/40">
-              {orgData.courses.slice(0, 4).map((c, rank) => (
+              {courses.slice(0, 4).map((c, rank) => (
                 <div key={c.id} className="py-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="w-6 h-6 rounded-lg bg-surface-container text-outline font-bold text-xs flex items-center justify-center">
@@ -258,8 +259,8 @@ export default function Analytics() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-bold text-emerald-700">${c.revenue.toLocaleString()}</span>
-                    <span className="text-[10px] text-outline block">{c.enrolledCount} learners</span>
+                    <span className="text-xs font-bold text-emerald-700">${(c.revenue || (c.price * (c.enrolledCount || 0))).toLocaleString()}</span>
+                    <span className="text-[10px] text-outline block">{c.enrolledCount || 0} learners</span>
                   </div>
                 </div>
               ))}
@@ -272,7 +273,7 @@ export default function Analytics() {
               Top Faculty Instructors
             </h2>
             <div className="divide-y divide-outline-variant/40">
-              {orgData.instructors.slice(0, 4).map((inst, rank) => (
+              {instructors.slice(0, 4).map((inst, rank) => (
                 <div key={inst.id} className="py-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="w-6 h-6 rounded-lg bg-surface-container text-outline font-bold text-xs flex items-center justify-center">

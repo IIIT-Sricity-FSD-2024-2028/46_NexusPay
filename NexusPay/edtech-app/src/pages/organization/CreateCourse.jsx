@@ -4,25 +4,28 @@ import {
   ChevronLeft,
   Plus,
   Trash2,
-  Save
+  Save,
+  BookOpen
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { useToast } from '../../components/common/Toast';
 
 export default function CreateCourse() {
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { instructors, addCourse } = useOrg();
 
   const [courseForm, setCourseForm] = useState({
     title: '',
     category: 'Cloud Architecture',
     level: 'Advanced',
-    instructorId: 'inst-1',
+    instructorId: instructors[0]?.id || 'inst-1',
     price: '89.99',
     description: '',
     modules: [
-      { id: 1, title: 'Module 1: Introduction to Architecture Patterns', lessons: 3, duration: '2h 15m' }
+      { id: 1, title: 'Module 1: Introduction to Architecture Patterns', lessons: 3, duration: '2h 15m' },
+      { id: 2, title: 'Module 2: High Throughput Consensus & Failover', lessons: 4, duration: '3h 30m' }
     ]
   });
 
@@ -32,7 +35,7 @@ export default function CreateCourse() {
       ...courseForm,
       modules: [
         ...courseForm.modules,
-        { id: nextId, title: `Module ${nextId}: New Section`, lessons: 2, duration: '1h 30m' }
+        { id: nextId, title: `Module ${nextId}: Advanced Implementation`, lessons: 3, duration: '2h 00m' }
       ]
     });
   };
@@ -46,7 +49,13 @@ export default function CreateCourse() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addToast(`Course "${courseForm.title || 'New Course'}" created & submitted for review!`, 'success');
+    if (!courseForm.title.trim()) {
+      addToast('Please enter a course title', 'error');
+      return;
+    }
+
+    const created = addCourse(courseForm);
+    addToast(`Course "${created.title}" successfully authored & published into the catalog!`, 'success');
     navigate('/courses');
   };
 
@@ -60,7 +69,7 @@ export default function CreateCourse() {
       <div className="max-w-4xl mx-auto space-y-6">
         <Link to="/courses" className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline">
           <ChevronLeft className="w-4 h-4" />
-          <span>Back to Courses</span>
+          <span>Back to Course Catalog</span>
         </Link>
 
         <div>
@@ -71,6 +80,8 @@ export default function CreateCourse() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          
+          {/* 1. Basic Details */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 md:p-8 shadow-elevation-1 space-y-4">
             <h2 className="text-base font-bold text-on-surface pb-3 border-b border-outline-variant">
               1. Basic Course Details
@@ -126,17 +137,19 @@ export default function CreateCourse() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-bold text-on-surface block mb-1.5">Course Summary</label>
+              <label className="text-xs font-bold text-on-surface block mb-1.5">Course Summary & Syllabus Overview</label>
               <textarea
                 rows={3}
                 required
                 value={courseForm.description}
                 onChange={(e) => setCourseForm({ ...courseForm, description: e.target.value })}
+                placeholder="Comprehensive technical breakdown of the course syllabus and hands-on lab projects..."
                 className="w-full px-4 py-2.5 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary text-on-surface font-medium"
               />
             </div>
           </div>
 
+          {/* 2. Assign Instructor */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 md:p-8 shadow-elevation-1 space-y-4">
             <h2 className="text-base font-bold text-on-surface pb-3 border-b border-outline-variant">
               2. Assign Primary Faculty Member
@@ -148,7 +161,7 @@ export default function CreateCourse() {
                 onChange={(e) => setCourseForm({ ...courseForm, instructorId: e.target.value })}
                 className="w-full px-4 py-2.5 text-xs bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary text-on-surface font-medium"
               >
-                {orgData.instructors.map((inst) => (
+                {instructors.map((inst) => (
                   <option key={inst.id} value={inst.id}>
                     {inst.name} ({inst.specialization})
                   </option>
@@ -157,6 +170,7 @@ export default function CreateCourse() {
             </div>
           </div>
 
+          {/* 3. Curriculum Modules */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 md:p-8 shadow-elevation-1 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-outline-variant">
               <h2 className="text-base font-bold text-on-surface">3. Curriculum Modules</h2>
@@ -171,7 +185,7 @@ export default function CreateCourse() {
             </div>
             <div className="space-y-3">
               {courseForm.modules.map((m, idx) => (
-                <div key={m.id} className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center gap-3">
+                <div key={m.id || idx} className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center gap-3">
                   <span className="w-7 h-7 rounded-lg bg-primary/10 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0">
                     {idx + 1}
                   </span>
@@ -199,6 +213,7 @@ export default function CreateCourse() {
             </div>
           </div>
 
+          {/* Submission Bar */}
           <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
@@ -212,9 +227,10 @@ export default function CreateCourse() {
               className="px-6 py-2.5 rounded-xl bg-[#255ea6] hover:bg-[#356ea8] text-white font-bold text-xs shadow-sm flex items-center gap-2 transition-all"
             >
               <Save className="w-4 h-4" />
-              <span>Publish Course</span>
+              <span>Publish Course to Catalog</span>
             </button>
           </div>
+
         </form>
       </div>
     </OrgLayout>

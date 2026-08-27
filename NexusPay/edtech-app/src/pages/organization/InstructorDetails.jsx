@@ -3,15 +3,19 @@ import { useParams, Link } from 'react-router-dom';
 import {
   ChevronLeft,
   Mail,
-  Star
+  Star,
+  BookOpen,
+  Users,
+  DollarSign
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 
 export default function InstructorDetails() {
   const { id } = useParams();
-  const instructor = orgData.instructors.find(inst => inst.id === id) || orgData.instructors[0];
-  const instructorCourses = orgData.courses.filter(c => c.instructorId === instructor.id);
+  const { instructors, courses } = useOrg();
+  const instructor = instructors.find(inst => inst.id === id) || instructors[0];
+  const instructorCourses = courses.filter(c => c.instructorId === instructor.id || c.instructorName === instructor.name);
 
   return (
     <OrgLayout
@@ -49,7 +53,7 @@ export default function InstructorDetails() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 shadow-sm text-center">
             <span className="text-[10px] text-outline uppercase font-bold tracking-wider">Authored Tracks</span>
-            <p className="text-xl font-bold text-on-surface mt-1">{instructor.coursesCount}</p>
+            <p className="text-xl font-bold text-on-surface mt-1">{instructorCourses.length || instructor.coursesCount}</p>
           </div>
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 shadow-sm text-center">
             <span className="text-[10px] text-outline uppercase font-bold tracking-wider">Enrolled Learners</span>
@@ -89,7 +93,9 @@ export default function InstructorDetails() {
                       <div className="flex items-center gap-3">
                         <img src={c.thumbnail} alt={c.title} className="w-12 h-9 rounded-lg object-cover" />
                         <div>
-                          <p className="font-bold text-sm text-on-surface">{c.title}</p>
+                          <Link to={`/courses/${c.id}`} className="font-bold text-sm text-on-surface hover:text-primary transition-colors">
+                            {c.title}
+                          </Link>
                           <p className="text-[10px] text-outline">{c.totalHours} • {c.lessonsCount} lessons</p>
                         </div>
                       </div>

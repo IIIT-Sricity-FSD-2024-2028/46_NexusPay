@@ -15,28 +15,29 @@ import {
   FileText
 } from 'lucide-react';
 import OrgLayout from '../../components/organization/OrgLayout';
-import { orgData } from '../../data/orgData';
+import { useOrg } from '../../context/OrgContext';
 import { useToast } from '../../components/common/Toast';
 
 export default function InstructorRequestDetails() {
   const { id } = useParams();
   const { addToast } = useToast();
+  const { instructorRequests, updateInvitationStatus } = useOrg();
 
-  const request = orgData.instructorRequests.find(r => r.id === id) || orgData.instructorRequests[0];
-  const [adminNotes, setAdminNotes] = useState(request.adminNotes || '');
-  const [status, setStatus] = useState(request.status || 'Invite Sent');
+  const request = instructorRequests.find(r => r.id === id) || instructorRequests[0];
+  const [adminNotes, setAdminNotes] = useState(request?.adminNotes || '');
+  const status = request?.status || 'Invite Sent';
 
   const handleResendMail = () => {
     addToast(`Resent invitation request email to ${request.email}!`, 'info');
   };
 
   const handleMarkAccepted = () => {
-    setStatus('Accepted');
+    updateInvitationStatus(request.id, 'Accepted', 'Accepted by educator • Onboarded');
     addToast(`Marked invitation as accepted by ${request.name}! Onboarding activated.`, 'success');
   };
 
   const handleWithdraw = () => {
-    setStatus('Declined');
+    updateInvitationStatus(request.id, 'Declined', 'Invitation withdrawn by organization');
     addToast(`Withdrew recruitment invitation for ${request.name}.`, 'error');
   };
 
